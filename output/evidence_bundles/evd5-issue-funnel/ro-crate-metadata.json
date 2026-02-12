@@ -1,0 +1,134 @@
+{
+  "@context": "https://w3id.org/ro/crate/1.1/context",
+  "@graph": [
+    {
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
+      "about": {
+        "@id": "./"
+      },
+      "conformsTo": {
+        "@id": "https://w3id.org/ro/crate/1.1"
+      }
+    },
+    {
+      "@id": "./",
+      "@type": "Dataset",
+      "name": "EVD 5: Issue-to-Experiment-to-Result Conversion Funnel — MATSUlab Discourse Graph",
+      "description": "Evidence bundle for the finding that 29% of MATSUlab issues (n=434) were claimed as experiments and 11% produced at least one formal result node, yielding 136 total RES nodes. Contains the evidence statement, figure, underlying data, and methodological documentation.",
+      "datePublished": "2026-01-27",
+      "creator": [
+        {
+          "@id": "#matt-akamatsu"
+        }
+      ],
+      "license": {
+        "@id": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "hasPart": [
+        {
+          "@id": "evidence.jsonld"
+        },
+        {
+          "@id": "fig5_alluvial_flow.png"
+        },
+        {
+          "@id": "fig5_alluvial_flow.html"
+        },
+        {
+          "@id": "fig5_funnel_supplemental.png"
+        },
+        {
+          "@id": "data/funnel_summary.json"
+        },
+        {
+          "@id": "data/experiment_details.csv"
+        },
+        {
+          "@id": "docs/evidence_statement.md"
+        },
+        {
+          "@id": "docs/methods_excerpt.md"
+        }
+      ]
+    },
+    {
+      "@id": "#matt-akamatsu",
+      "@type": "Person",
+      "name": "Matt Akamatsu",
+      "affiliation": {
+        "@id": "#uw"
+      }
+    },
+    {
+      "@id": "#uw",
+      "@type": "Organization",
+      "name": "University of Washington"
+    },
+    {
+      "@id": "evidence.jsonld",
+      "@type": "File",
+      "name": "Evidence Bundle Metadata (JSON-LD)",
+      "description": "Canonical evidence bundle metadata using the dge: (Discourse Graph Evidence) vocabulary. Contains the evidence statement, observable/method/system attributes, provenance, and references to all bundle contents.",
+      "encodingFormat": "application/ld+json"
+    },
+    {
+      "@id": "fig5_alluvial_flow.png",
+      "@type": [
+        "File",
+        "ImageObject"
+      ],
+      "name": "Figure 5: Issue-to-Experiment-to-Result Alluvial Flow",
+      "description": "Alluvial (Sankey) diagram showing all claimed experiments flowing through three stages: Issue Created → Issue Claimed → Result Created. Band width proportional to experiment count; color indicates self-claim (green) vs cross-person claim (purple). Researcher names anonymized.",
+      "encodingFormat": "image/png"
+    },
+    {
+      "@id": "fig5_alluvial_flow.html",
+      "@type": [
+        "File",
+        "ImageObject"
+      ],
+      "name": "Figure 5 (interactive): Alluvial Flow Diagram",
+      "description": "Interactive Plotly version of the alluvial flow diagram. Hover to see experiment counts per flow path.",
+      "encodingFormat": "text/html"
+    },
+    {
+      "@id": "fig5_funnel_supplemental.png",
+      "@type": [
+        "File",
+        "ImageObject"
+      ],
+      "name": "Supplemental: Issue-to-Experiment-to-Result Conversion Funnel",
+      "description": "Supplemental aggregate view. Left: horizontal funnel bar chart showing progressive attrition. Right: stage-by-stage composition breakdown by claim type and result status.",
+      "encodingFormat": "image/png"
+    },
+    {
+      "@id": "data/funnel_summary.json",
+      "@type": "File",
+      "name": "Funnel Summary Data",
+      "description": "Aggregated funnel counts, conversion rates, claim type breakdown, and result statistics.",
+      "encodingFormat": "application/json"
+    },
+    {
+      "@id": "data/experiment_details.csv",
+      "@type": "File",
+      "name": "Experiment Details",
+      "description": "Per-experiment rows with title, creator, claimer, claim type, timestamps, result counts, and time metrics.",
+      "encodingFormat": "text/csv"
+    },
+    {
+      "@id": "docs/evidence_statement.md",
+      "@type": "File",
+      "name": "Evidence Statement and Figure Legend",
+      "description": "EVD 5 evidence statement, evidence description, and figure legend in markdown.",
+      "encodingFormat": "text/markdown"
+    },
+    {
+      "@id": "docs/methods_excerpt.md",
+      "@type": "File",
+      "name": "Methods Excerpt",
+      "description": "Relevant sections from the full methods document covering node identification, claim detection, RES linking, and metric definitions.",
+      "encodingFormat": "text/markdown"
+    }
+  ]
+}

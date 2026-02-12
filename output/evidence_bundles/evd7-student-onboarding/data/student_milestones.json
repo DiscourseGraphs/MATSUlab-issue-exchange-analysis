@@ -1,0 +1,30 @@
+{
+  "A": {
+    "first_day": "2024-02-23",
+    "days_to_experiment": 42,
+    "days_to_plot": 118,
+    "days_to_res": 125,
+    "pathway": "Self-directed exploration"
+  },
+  "B": {
+    "first_day": "2024-10-10",
+    "days_to_experiment": 5,
+    "days_to_plot": 5,
+    "days_to_res": 47,
+    "pathway": "Assigned entry project"
+  },
+  "C": {
+    "first_day": "2025-06-23",
+    "days_to_experiment": 7,
+    "days_to_plot": 14,
+    "days_to_res": 36,
+    "pathway": "Direct assignment"
+  },
+  "_summary": {
+    "mean_days_to_res": 69.3,
+    "min_days_to_res": 36,
+    "max_days_to_res": 125,
+    "lab_average_days_to_res": 88.3,
+    "note": "Researcher identities anonymized in visualizations"
+  }
+}

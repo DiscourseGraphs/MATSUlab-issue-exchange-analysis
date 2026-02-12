@@ -1,0 +1,88 @@
+{
+  "@context": "https://w3id.org/ro/crate/1.1/context",
+  "@graph": [
+    {
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
+      "about": {
+        "@id": "./"
+      },
+      "conformsTo": {
+        "@id": "https://w3id.org/ro/crate/1.1"
+      }
+    },
+    {
+      "@id": "./",
+      "@type": "Dataset",
+      "name": "EVD 7: Undergraduate Researcher Onboarding Timeline — MATSUlab Discourse Graph",
+      "description": "Evidence bundle for the finding that all three undergraduate researchers generated an original result from their analysis projects within ~4 months of joining the lab, with two creating a result within ~1 month. Contains the evidence statement, figure, underlying data, and methodological documentation.",
+      "datePublished": "2026-01-31",
+      "creator": [
+        {
+          "@id": "#matt-akamatsu"
+        }
+      ],
+      "license": {
+        "@id": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "hasPart": [
+        {
+          "@id": "evidence.jsonld"
+        },
+        {
+          "@id": "fig7_student_timelines.png"
+        },
+        {
+          "@id": "data/student_milestones.json"
+        },
+        {
+          "@id": "docs/evidence_statement.md"
+        }
+      ]
+    },
+    {
+      "@id": "#matt-akamatsu",
+      "@type": "Person",
+      "name": "Matt Akamatsu",
+      "affiliation": {
+        "@id": "#uw"
+      }
+    },
+    {
+      "@id": "#uw",
+      "@type": "Organization",
+      "name": "University of Washington"
+    },
+    {
+      "@id": "evidence.jsonld",
+      "@type": "File",
+      "name": "Evidence Bundle Metadata (JSON-LD)",
+      "description": "Canonical evidence bundle metadata using the dge: (Discourse Graph Evidence) vocabulary.",
+      "encodingFormat": "application/ld+json"
+    },
+    {
+      "@id": "fig7_student_timelines.png",
+      "@type": [
+        "File",
+        "ImageObject"
+      ],
+      "name": "Figure 7: Undergraduate Researcher Onboarding Timeline",
+      "description": "Gantt-style chart showing progression of three anonymized undergraduate researchers from lab start to first RES node.",
+      "encodingFormat": "image/png"
+    },
+    {
+      "@id": "data/student_milestones.json",
+      "@type": "File",
+      "name": "Student Milestones Data",
+      "description": "Per-researcher milestone data including days to experiment, days to plot, days to RES, and onboarding pathway type.",
+      "encodingFormat": "application/json"
+    },
+    {
+      "@id": "docs/evidence_statement.md",
+      "@type": "File",
+      "name": "Evidence Statement and Figure Legend",
+      "description": "EVD 7 evidence statement, evidence description, and figure legend in markdown.",
+      "encodingFormat": "text/markdown"
+    }
+  ]
+}

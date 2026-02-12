@@ -1,0 +1,96 @@
+{
+  "@context": {
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "prov": "http://www.w3.org/ns/prov#",
+    "schema": "https://schema.org/",
+    "dgb": "https://discoursegraphs.com/schema/dg_base/",
+    "dge": "https://discoursegraphs.com/schema/dg_evidence/"
+  },
+  "@type": "dge:EvidenceBundle",
+  "@id": "evd7-student-onboarding",
+  "dc:title": "[[RES]] - All three undergraduate researchers generated an original result from their analysis projects within ~4 months of joining the lab, with two creating a result within ~1 month - [[@analysis/quantify researcher onboarding from MATSUlab]]",
+  "dc:creator": "Matt Akamatsu",
+  "dc:date": "2026-01-31",
+  "dcterms:license": "https://creativecommons.org/licenses/by/4.0/",
+  "dge:evidenceStatement": "All three undergraduate researchers generated an original result from their analysis projects within ~4 months of joining the lab, with two creating a result within ~1 month.",
+  "dge:observable": {
+    "@type": "dge:Observable",
+    "dc:title": "Undergraduate researcher onboarding time-to-result",
+    "dc:description": "The time from a researcher's first day in the lab to their first formal result (RES node) creation, measured for three undergraduate researchers following different onboarding pathways."
+  },
+  "dge:method": {
+    "@type": "dge:Method",
+    "dc:title": "Discourse graph milestone tracing",
+    "dc:description": "Manual extraction of key milestones from daily notes exports and experiment page metadata. Milestones tracked: (1) first day in lab, (2) first experiment reference in daily notes, (3) first plot (linked image), (4) first RES node creation date. Researchers anonymized as A, B, C in outputs.",
+    "prov:used": [
+      {
+        "@id": "src/student_timeline_analysis.py",
+        "dc:description": "Timeline extraction and visualization"
+      }
+    ],
+    "schema:codeRepository": "node-metrics"
+  },
+  "dge:system": {
+    "@type": "dge:System",
+    "dc:title": "MATSUlab discourse graph",
+    "dc:description": "Akamatsu Lab Roam Research discourse graph, January 2026 snapshot. Includes daily notes, experiment pages, and result nodes for three undergraduate researchers spanning February 2024 to July 2025.",
+    "schema:memberOf": "Akamatsu Lab, University of Washington",
+    "dcterms:temporal": "2026-01-31"
+  },
+  "dge:figure": {
+    "@type": "schema:ImageObject",
+    "schema:contentUrl": "fig7_student_timelines.png",
+    "schema:encodingFormat": "image/png",
+    "dge:figureLegend": "Figure 7. Undergraduate researcher onboarding timeline in the MATSUlab discourse graph. Gantt-style chart showing the progression of three anonymized undergraduate researchers (A, B, C) from lab start to first formal result (RES node). Researcher A: 41 days to experiment, 125 days to RES. Researcher B: 5 days to experiment, 47 days to RES. Researcher C: 7 days to experiment, 36 days to RES."
+  },
+  "dge:groundingData": [
+    {
+      "@type": "schema:DataDownload",
+      "schema:contentUrl": "data/student_milestones.json",
+      "schema:encodingFormat": "application/json",
+      "dc:description": "Per-researcher milestone data with days from start and pathway type"
+    }
+  ],
+  "dge:documentation": [
+    {
+      "@type": "schema:TextDigitalDocument",
+      "schema:contentUrl": "docs/evidence_statement.md",
+      "dc:description": "Evidence statement, evidence description, and figure legend"
+    }
+  ],
+  "prov:wasGeneratedBy": {
+    "@type": "prov:Activity",
+    "prov:startedAtTime": "2026-01-31",
+    "prov:endedAtTime": "2026-01-31",
+    "prov:used": [
+      "Researcher A daily notes (anonymized)",
+      "Researcher B daily notes (anonymized)",
+      "Researcher C daily notes (anonymized)"
+    ],
+    "prov:wasAssociatedWith": [
+      {
+        "@type": "prov:Agent",
+        "dc:title": "Matt Akamatsu",
+        "schema:affiliation": "University of Washington"
+      },
+      {
+        "@type": "prov:SoftwareAgent",
+        "dc:title": "Claude",
+        "schema:provider": "Anthropic"
+      }
+    ]
+  },
+  "dge:summaryMetrics": {
+    "researchers_analyzed": 3,
+    "mean_days_to_res": 69.3,
+    "min_days_to_res": 36,
+    "max_days_to_res": 125,
+    "lab_average_days_to_res": 151.7,
+    "pathways_identified": [
+      "Self-directed exploration",
+      "Assigned entry project",
+      "Direct assignment"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+# Raw data (large, contains identifiable information)
+graph raw data/
+early_versions_of_lab-graph-exports/
+
+# Project context and drafts
+project context/
+draft/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
+
+# Claude IDE / prompt files
+.claude/
+CLAUDE_CODE_PROMPT.md
+
+# Output files not tracked (contain real names or are intermediate)
+output/metrics_report.md
+output/executive_summary.md
+output/evidence_statements.md
+output/lab_notebook.md
+output/conversation_log.md
+output/methods.md
+output/metrics_data.json
+output/student_milestones.json
+
+# Visualizations outside evidence bundles (intermediate)
+output/visualizations/

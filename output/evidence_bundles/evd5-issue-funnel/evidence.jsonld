@@ -1,0 +1,128 @@
+{
+  "@context": {
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "prov": "http://www.w3.org/ns/prov#",
+    "schema": "https://schema.org/",
+    "dgb": "https://discoursegraphs.com/schema/dg_base/",
+    "dge": "https://discoursegraphs.com/schema/dg_evidence/"
+  },
+  "@type": "dge:EvidenceBundle",
+  "@id": "evd5-issue-funnel",
+  "dc:title": "[[RES]] - 18% of MATSUlab issues (n=389) were claimed as experiments and 36% of those claimed at least one formal result node, yielding 44 total RES nodes - [[@analysis/quantify issue claiming from MATSUlab]]",
+  "dc:creator": "Matt Akamatsu",
+  "dc:date": "2026-02-12",
+  "dcterms:license": "https://creativecommons.org/licenses/by/4.0/",
+  "dge:evidenceStatement": "Of 389 total issues in the MATSUlab discourse graph, 69 (18%) were claimed as experiments and 25 (6%) produced at least one formal result node, yielding 44 total RES nodes (avg 1.8 per result-producing experiment).",
+  "dge:observable": {
+    "@type": "dge:Observable",
+    "dc:title": "Issue-to-experiment-to-result conversion rate",
+    "dc:description": "The proportion of issues that progress through claiming and result production stages in a discourse graph, measuring the funnel from issue creation (n=389) through experiment claiming (n=69) to formal result production (n=25, yielding 44 RES nodes)."
+  },
+  "dge:method": {
+    "@type": "dge:Method",
+    "dc:title": "Discourse graph funnel analysis",
+    "dc:description": "Automated pipeline parsing JSON-LD and Roam JSON exports to identify issue nodes, detect claims (explicit via Claimed By:: field and inferred via experimental log presence), link result nodes using a 3-tier matching strategy (relation instances, backreference matching, full description matching), and compute stage-by-stage attrition rates.",
+    "prov:used": [
+      {
+        "@id": "src/calculate_metrics.py",
+        "dc:description": "Metric calculation and data merging"
+      },
+      {
+        "@id": "src/parse_jsonld.py",
+        "dc:description": "JSON-LD export parser"
+      },
+      {
+        "@id": "src/parse_roam_json.py",
+        "dc:description": "Roam JSON streaming parser"
+      },
+      {
+        "@id": "src/generate_visualizations.py",
+        "dc:description": "Funnel visualization generator"
+      },
+      {
+        "@id": "src/handoff_visualizations.py",
+        "dc:description": "Alluvial flow diagram generator"
+      }
+    ],
+    "schema:codeRepository": "node-metrics"
+  },
+  "dge:system": {
+    "@type": "dge:System",
+    "dc:title": "MATSUlab discourse graph",
+    "dc:description": "Akamatsu Lab Roam Research discourse graph, February 2026 snapshot. Contains 389 identifiable issues (320 formal ISS nodes + 0 experiment pages), 69 claimed experiments, and 323 result nodes.",
+    "schema:memberOf": "Akamatsu Lab, University of Washington",
+    "dcterms:temporal": "2026-02-12"
+  },
+  "dge:figure": {
+    "@type": "schema:ImageObject",
+    "schema:contentUrl": "fig5_alluvial_flow.png",
+    "schema:encodingFormat": "image/png",
+    "schema:alternateName": "fig5_alluvial_flow.html",
+    "dge:figureLegend": "Figure 5. Issue-to-experiment-to-result flow in the MATSUlab discourse graph. Alluvial (Sankey) diagram showing all 69 claimed experiments flowing through three stages: Issue Created (left, who created the issue), Issue Claimed (center, who claimed the experiment), and Result Created (right, who created the first formal result). Band width is proportional to number of experiments. Green bands indicate self-claims; purple bands indicate cross-person claims (idea exchange). Of the 69 claimed experiments, 25 produced at least one formal result node. Researcher names are anonymized (R1–R11); PI (Matt Akamatsu) is identified. An interactive HTML version is included."
+  },
+  "dge:supplementalFigure": {
+    "@type": "schema:ImageObject",
+    "schema:contentUrl": "fig5_funnel_supplemental.png",
+    "schema:encodingFormat": "image/png",
+    "dge:figureLegend": "Supplemental Figure. Issue-to-experiment-to-result conversion funnel (aggregate view). (Left) Horizontal bar chart showing progressive attrition across three stages: all issues (n=389), claimed experiments (n=69, 18%), and experiments with at least one formal result (n=25, 6%). (Right) Stage-by-stage breakdown showing composition at each level."
+  },
+  "dge:groundingData": [
+    {
+      "@type": "schema:DataDownload",
+      "schema:contentUrl": "data/funnel_summary.json",
+      "schema:encodingFormat": "application/json",
+      "dc:description": "Aggregated funnel data with stage counts, conversion rates, and breakdowns"
+    },
+    {
+      "@type": "schema:DataDownload",
+      "schema:contentUrl": "data/experiment_details.csv",
+      "schema:encodingFormat": "text/csv",
+      "dc:description": "Per-experiment detail rows with claim type, timestamps, and result counts"
+    }
+  ],
+  "dge:documentation": [
+    {
+      "@type": "schema:TextDigitalDocument",
+      "schema:contentUrl": "docs/evidence_statement.md",
+      "dc:description": "Evidence statement, evidence description, and figure legend"
+    },
+    {
+      "@type": "schema:TextDigitalDocument",
+      "schema:contentUrl": "docs/methods_excerpt.md",
+      "dc:description": "Relevant methods sections for claim detection, RES linking, and metric calculation"
+    }
+  ],
+  "prov:wasGeneratedBy": {
+    "@type": "prov:Activity",
+    "prov:startedAtTime": "2026-01-25",
+    "prov:endedAtTime": "2026-02-12",
+    "prov:used": [
+      "akamatsulab_discourse-graph-json-LD202602112140.json",
+      "akamatsulab-whole-graph-json-2026-02-11-21-45-17.json"
+    ],
+    "prov:wasAssociatedWith": [
+      {
+        "@type": "prov:Agent",
+        "dc:title": "Matt Akamatsu",
+        "schema:affiliation": "University of Washington"
+      },
+      {
+        "@type": "prov:SoftwareAgent",
+        "dc:title": "Claude",
+        "schema:provider": "Anthropic"
+      }
+    ]
+  },
+  "dge:summaryMetrics": {
+    "total_issues": 389,
+    "claimed_experiments": 69,
+    "explicit_claims": 0,
+    "inferred_claims": 0,
+    "iss_with_activity": 0,
+    "experiments_with_results": 25,
+    "total_res_nodes": 44,
+    "conversion_rate_percent": 17.7,
+    "claim_to_result_percent": 36.2
+  }
+}

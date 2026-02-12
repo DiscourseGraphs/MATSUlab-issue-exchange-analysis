@@ -1,0 +1,34 @@
+{
+  "description": "Aggregated conversion rate data for EVD 1: Issue Conversion Rate",
+  "snapshot_date": "2026-02-12",
+  "system": "MATSUlab discourse graph",
+  "conversion": {
+    "total_issues": 389,
+    "total_claimed": 69,
+    "conversion_rate_percent": 17.7,
+    "unclaimed_iss": 320
+  },
+  "claim_type_breakdown": {
+    "explicit_claims": 0,
+    "inferred_claims": 0,
+    "iss_with_activity": 0
+  },
+  "claim_authorship": {
+    "self_claims": 50,
+    "cross_person_claims": 19,
+    "experiment_claims_with_known_authorship": 69,
+    "idea_exchange_rate_percent": 27.5
+  },
+  "result_production": {
+    "claimed_with_results": 25,
+    "claimed_without_results": 44,
+    "claim_to_result_percent": 36.2,
+    "total_res_nodes": 44,
+    "avg_res_per_producing_experiment": 1.8
+  },
+  "issue_composition": {
+    "formal_iss_nodes": 320,
+    "experiment_pages_with_inferred_claims": 0,
+    "description": "Total issues = 320 formal ISS nodes + 0 experiment pages = 389"
+  }
+}

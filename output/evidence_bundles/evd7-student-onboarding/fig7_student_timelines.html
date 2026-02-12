@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Figure 7: Undergraduate Researcher Onboarding Timeline</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            background: rgba(15, 23, 42, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 50;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center py-10 px-4">
+
+    <!-- Header & Controls -->
+    <div class="w-full max-w-6xl mb-6 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6">
+        <div>
+            <h1 class="text-3xl font-bold text-slate-800 tracking-tight">Figure 7: Undergraduate Researcher Onboarding Timeline</h1>
+            <p class="text-slate-500 text-sm mt-1">Multi-entity progress tracking across research phases</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+            <!-- View Controls -->
+            <div class="flex items-center gap-3 bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-200">
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                    <input checked="" class="accent-blue-600 w-4 h-4" id="toggleLabels" type="checkbox">
+                    <span class="text-sm font-medium text-slate-700">Detailed Labels</span>
+                </label>
+                <div class="h-5 w-px bg-slate-200"></div>
+                <button class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors" onclick="resetAnimation()">
+                    Replay
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart Card -->
+    <div class="w-full max-w-6xl bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden">
+        <!-- Legend -->
+        <div class="border-b border-slate-100 p-4 flex gap-6 items-center text-xs font-semibold text-slate-600 bg-slate-50/80 overflow-x-auto">
+            <span class="flex items-center gap-2 min-w-max"><span class="material-symbols-outlined text-lg">play_circle</span> Start</span>
+            <span class="flex items-center gap-2 min-w-max"><span class="material-symbols-outlined text-lg">science</span> Experiment</span>
+            <span class="flex items-center gap-2 min-w-max"><span class="material-symbols-outlined text-lg">show_chart</span> First Plot</span>
+            <span class="flex items-center gap-2 min-w-max"><span class="material-symbols-outlined text-lg">verified</span> Result (RES)</span>
+        </div>
+
+        <!-- Canvas -->
+        <div class="w-full overflow-x-auto p-8 relative bg-white" id="chart-wrapper">
+            <svg class="mx-auto select-none" height="650" id="gantt-chart" width="1000"></svg>
+            <div class="tooltip" id="tooltip"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-slate-50 p-4 text-center border-t border-slate-200 flex flex-wrap justify-center items-center gap-6">
+            <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Phase Key</span>
+            <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-[#C6D8F0]"></span>
+                <span class="text-xs font-bold text-slate-600">Onboarding</span>
+            </div>
+            <span class="text-slate-300">&rarr;</span>
+            <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-[#C1E1C1]"></span>
+                <span class="text-xs font-bold text-slate-600">Development</span>
+            </div>
+            <span class="text-slate-300">&rarr;</span>
+            <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-[#D8BFD8]"></span>
+                <span class="text-xs font-bold text-slate-600">Result</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Figure Legend -->
+    <div class="w-full max-w-6xl mt-6 bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <p class="text-sm text-slate-700 leading-relaxed">
+            <strong class="text-slate-900">Figure 7.</strong> Three undergraduate researchers generated an original result from their analysis projects within ~4 months of joining the lab, with two creating a result within ~1 month.
+        </p>
+    </div>
+
+    <script>
+        // --- DATA & CONFIG ---
+        const COLORS = {
+            A: '#4169E1', B: '#3CB371', C: '#DAA520',
+            PHASE_1: '#C6D8F0', PHASE_2: '#C1E1C1', PHASE_3: '#D8BFD8'
+        };
+
+        const DATA = [
+            {
+                id: 'A', name: 'Researcher A', sub: 'Self-Directed', color: COLORS.A,
+                events: [
+                    { day: 0,   type: 'joined',  label: 'Joined Lab', icon: 'play_circle' },
+                    { day: 41,  type: 'exp',     label: 'Exp Claimed', icon: 'science' },
+                    { day: 118, type: 'plot',    label: 'First Plot', icon: 'show_chart' },
+                    { day: 125, type: 'res',     label: 'RES Node',   icon: 'verified' }
+                ]
+            },
+            {
+                id: 'B', name: 'Researcher B', sub: 'Entry Project', color: COLORS.B,
+                events: [
+                    { day: 0,  type: 'joined', label: 'Joined Lab', icon: 'play_circle' },
+                    { day: 5,  type: 'exp',    label: 'Exp Assigned', icon: 'science' },
+                    { day: 5,  type: 'plot',   label: 'First Plot', icon: 'show_chart' },
+                    { day: 47, type: 'res',    label: 'RES Node',   icon: 'verified' }
+                ]
+            },
+            {
+                id: 'C', name: 'Researcher C', sub: 'Direct Assign', color: COLORS.C,
+                events: [
+                    { day: 0,  type: 'joined', label: 'Joined Lab', icon: 'play_circle' },
+                    { day: 7,  type: 'exp',    label: 'Exp Assigned', icon: 'science' },
+                    { day: 14, type: 'plot',   label: 'First Plot', icon: 'show_chart' },
+                    { day: 36, type: 'res',    label: 'RES Node',   icon: 'verified' }
+                ]
+            }
+        ];
+
+        // --- CHART ENGINE ---
+        const SVG_NS = "http://www.w3.org/2000/svg";
+        const WIDTH = 1000;
+        const HEIGHT = 650;
+        const MARGIN = { top: 60, right: 120, bottom: 60, left: 160 };
+        const GRAPH_WIDTH = WIDTH - MARGIN.left - MARGIN.right;
+        const X_MAX = 140;
+
+        function scaleX(day) {
+            return (day / X_MAX) * GRAPH_WIDTH + MARGIN.left;
+        }
+
+        function createSVGElement(type, attributes = {}, textContent = '') {
+            const el = document.createElementNS(SVG_NS, type);
+            for (const [key, value] of Object.entries(attributes)) {
+                if(key === 'xlink:href') el.setAttributeNS("http://www.w3.org/1999/xlink", 'href', value);
+                else el.setAttribute(key, value);
+            }
+            if (textContent) el.textContent = textContent;
+            return el;
+        }
+
+        function drawChart() {
+            const svg = document.getElementById('gantt-chart');
+            svg.innerHTML = '';
+            // Background for SVG export
+            svg.appendChild(createSVGElement('rect', { width: "100%", height: "100%", fill: "white" }));
+
+            // Grid
+            const gridGroup = createSVGElement('g', { class: 'grid-system' });
+            for (let d = 0; d <= 140; d += 20) {
+                const x = scaleX(d);
+                gridGroup.appendChild(createSVGElement('line', {
+                    x1: x, y1: MARGIN.top - 20, x2: x, y2: HEIGHT - MARGIN.bottom,
+                    stroke: '#E2E8F0', 'stroke-width': '1', 'stroke-dasharray': '4 4'
+                }));
+                gridGroup.appendChild(createSVGElement('text', {
+                    x: x, y: HEIGHT - MARGIN.bottom + 25, 'text-anchor': 'middle',
+                    'font-size': '12', 'font-family': 'Inter, sans-serif', fill: '#64748B', 'font-weight': '500'
+                }, `${d}d`));
+            }
+            gridGroup.appendChild(createSVGElement('line', {
+                x1: MARGIN.left, y1: HEIGHT - MARGIN.bottom, x2: WIDTH - MARGIN.right, y2: HEIGHT - MARGIN.bottom,
+                stroke: '#CBD5E1', 'stroke-width': '2'
+            }));
+            svg.appendChild(gridGroup);
+
+            // Swimlanes
+            const laneHeight = (HEIGHT - MARGIN.top - MARGIN.bottom) / DATA.length;
+
+            DATA.forEach((researcher, index) => {
+                const laneY = MARGIN.top + (index * laneHeight) + (laneHeight / 2) + 20;
+                const laneGroup = createSVGElement('g', { class: `researcher-group-${index}` });
+
+                // Avatar
+                const avatarGroup = createSVGElement('g', {});
+                avatarGroup.appendChild(createSVGElement('circle', {
+                    cx: MARGIN.left - 80, cy: laneY, r: 24, fill: 'white', stroke: researcher.color, 'stroke-width': '2'
+                }));
+                avatarGroup.appendChild(createSVGElement('text', {
+                    x: MARGIN.left - 80, y: laneY + 8, 'text-anchor': 'middle', fill: researcher.color,
+                    'font-size': '20', 'font-weight': 'bold', 'font-family': 'Inter, sans-serif'
+                }, researcher.id));
+                avatarGroup.appendChild(createSVGElement('text', {
+                    x: MARGIN.left - 45, y: laneY - 5, 'font-size': '14', 'font-weight': '700',
+                    fill: '#1E293B', 'font-family': 'Inter, sans-serif'
+                }, researcher.name));
+                avatarGroup.appendChild(createSVGElement('text', {
+                    x: MARGIN.left - 45, y: laneY + 12, 'font-size': '12', fill: '#94A3B8',
+                    'font-family': 'Inter, sans-serif'
+                }, researcher.sub));
+                laneGroup.appendChild(avatarGroup);
+
+                // Phases
+                const e = researcher.events;
+                const phaseBarY = laneY - 4;
+                const barHeight = 8;
+                const animDelay = index * 200;
+
+                const makeBar = (start, end, color, delay, extraDelay=0) => {
+                    const x1 = scaleX(e[start].day);
+                    const x2 = scaleX(e[end].day);
+                    const w = Math.max(0, x2 - x1);
+                    const rect = createSVGElement('rect', {
+                        x: x1, y: phaseBarY, width: w, height: barHeight, fill: color
+                    });
+                    const anim = createSVGElement('animate', {
+                        attributeName: 'width', from: '0', to: w, dur: '0.8s',
+                        begin: `${animDelay + extraDelay}ms`, fill: 'freeze', calcMode: 'spline', keySplines: '0.4 0 0.2 1'
+                    });
+                    rect.appendChild(anim);
+                    return rect;
+                };
+
+                laneGroup.appendChild(makeBar(0, 1, COLORS.PHASE_1, animDelay));
+                laneGroup.appendChild(makeBar(1, 2, COLORS.PHASE_2, animDelay, 300));
+                laneGroup.appendChild(makeBar(2, 3, COLORS.PHASE_3, animDelay, 600));
+
+                // Events
+                e.forEach((ev, i) => {
+                    const cx = scaleX(ev.day);
+                    // Step Up Logic
+                    const yOffset = 35 + (i * 25);
+                    const iconY = laneY - yOffset;
+
+                    // Dropline
+                    const line = createSVGElement('line', {
+                        x1: cx, y1: laneY, x2: cx, y2: iconY + 14,
+                        stroke: researcher.color, 'stroke-width': '1.5', 'stroke-dasharray': '3 3', opacity: '0'
+                    });
+                    line.appendChild(createSVGElement('animate', {
+                        attributeName: 'opacity', from: '0', to: '1', dur: '0.3s', begin: `${animDelay + 800 + (i*100)}ms`, fill: 'freeze'
+                    }));
+                    laneGroup.appendChild(line);
+
+                    // Dot
+                    const dot = createSVGElement('circle', { cx: cx, cy: laneY, r: 3, fill: researcher.color, opacity: '0' });
+                    dot.appendChild(createSVGElement('animate', {
+                        attributeName: 'opacity', from: '0', to: '1', dur: '0.1s', begin: `${animDelay + 800 + (i*100)}ms`, fill: 'freeze'
+                    }));
+                    laneGroup.appendChild(dot);
+
+                    // Icon Group
+                    const iconGroup = createSVGElement('g', {
+                        class: 'event-node cursor-pointer', transform: `translate(${cx}, ${iconY})`, opacity: '0'
+                    });
+                    iconGroup.appendChild(createSVGElement('circle', {
+                        r: 14, fill: 'white', stroke: researcher.color, 'stroke-width': '2'
+                    }));
+
+                    const fo = createSVGElement('foreignObject', { x: -12, y: -12, width: 24, height: 24 });
+                    const div = document.createElement('div');
+                    div.style.cssText = `display:flex;align-items:center;justify-content:center;width:100%;height:100%;`;
+                    div.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;color:${researcher.color}">${ev.icon}</span>`;
+                    fo.appendChild(div);
+                    iconGroup.appendChild(fo);
+
+                    // Labels
+                    const labelGroup = createSVGElement('g', { class: 'label-group' });
+                    labelGroup.appendChild(createSVGElement('text', {
+                        x: 18, y: -2, 'font-size': '11', 'font-weight': '700', fill: '#334155', 'font-family': 'Inter, sans-serif'
+                    }, ev.label));
+                    labelGroup.appendChild(createSVGElement('text', {
+                        x: 18, y: 10, 'font-size': '10', 'font-weight': '700', fill: researcher.color, 'font-family': 'Inter, sans-serif'
+                    }, `${ev.day}d`));
+                    iconGroup.appendChild(labelGroup);
+
+                    // Animation
+                    const animTrans = createSVGElement('animateTransform', {
+                        attributeName: 'transform', type: 'translate', from: `${cx} ${iconY + 15}`, to: `${cx} ${iconY}`,
+                        dur: '0.4s', begin: `${animDelay + 800 + (i*100)}ms`, fill: 'freeze', calcMode: 'spline', keySplines: '0.34 1.56 0.64 1'
+                    });
+                    const animOp = createSVGElement('animate', {
+                        attributeName: 'opacity', from: '0', to: '1', dur: '0.4s', begin: `${animDelay + 800 + (i*100)}ms`, fill: 'freeze'
+                    });
+                    iconGroup.appendChild(animTrans);
+                    iconGroup.appendChild(animOp);
+
+                    iconGroup.onmouseenter = (e) => showTooltip(e, ev, researcher.name);
+                    iconGroup.onmouseleave = hideTooltip;
+
+                    laneGroup.appendChild(iconGroup);
+                });
+                svg.appendChild(laneGroup);
+            });
+        }
+
+        // --- INTERACTIVITY ---
+        function showTooltip(e, ev, name) {
+            const tt = document.getElementById('tooltip');
+            tt.innerHTML = `<div class="font-bold text-blue-100">${name}</div><div class="font-medium text-white">${ev.label}</div><div class="text-xs text-slate-400 mt-1">Day ${ev.day}</div>`;
+            tt.style.opacity = '1';
+            const r = e.currentTarget.getBoundingClientRect();
+            const p = document.getElementById('chart-wrapper').getBoundingClientRect();
+            tt.style.left = (r.left - p.left + 15) + 'px';
+            tt.style.top = (r.top - p.top - 10) + 'px';
+        }
+        function hideTooltip() { document.getElementById('tooltip').style.opacity = '0'; }
+
+        document.getElementById('toggleLabels').addEventListener('change', (e) => {
+            document.querySelectorAll('.label-group').forEach(l => l.style.opacity = e.target.checked ? '1' : '0');
+        });
+
+        function resetAnimation() {
+            drawChart();
+            setTimeout(() => {
+                const show = document.getElementById('toggleLabels').checked;
+                document.querySelectorAll('.label-group').forEach(l => l.style.opacity = show ? '1' : '0');
+            }, 100);
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            drawChart();
+        });
+
+    </script>
+
+</body>
+</html>

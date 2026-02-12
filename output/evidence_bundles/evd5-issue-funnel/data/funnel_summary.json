@@ -1,0 +1,31 @@
+{
+  "description": "Aggregated funnel data for EVD 5: Issue-to-Experiment-to-Result Conversion",
+  "snapshot_date": "2026-02-12",
+  "system": "MATSUlab discourse graph",
+  "funnel": {
+    "total_issues": 389,
+    "claimed_experiments": 69,
+    "experiments_with_results": 25,
+    "total_res_nodes": 44
+  },
+  "conversion_rates": {
+    "issue_to_claim_percent": 17.7,
+    "claim_to_result_percent": 36.2,
+    "issue_to_result_percent": 6.4
+  },
+  "claim_type_breakdown": {
+    "explicit_claims": 0,
+    "inferred_claims": 0,
+    "iss_with_activity": 0
+  },
+  "result_breakdown": {
+    "claimed_with_results": 25,
+    "claimed_without_results": 44,
+    "avg_res_per_producing_experiment": 1.8
+  },
+  "claim_authorship": {
+    "self_claims": 50,
+    "cross_person_claims": 19,
+    "idea_exchange_rate_percent": 27.5
+  }
+}
