@@ -61,11 +61,11 @@ The alluvial diagram visualizes this three-stage flow at the researcher level, m
 
 ## Methods
 
-Metrics pipeline: [`src/calculate_metrics.py`](../../src/calculate_metrics.py)
-Alluvial diagram: [`src/handoff_visualizations.py`](../../src/handoff_visualizations.py)
-Funnel chart: [`src/generate_visualizations.py`](../../src/generate_visualizations.py)
-Bundle generator: [`src/create_evidence_bundle.py`](../../src/create_evidence_bundle.py)
-Full pipeline trace: [`notebooks/evd1_evd7_analysis.ipynb`](../../notebooks/evd1_evd7_analysis.ipynb)
+Metrics pipeline: [`src/calculate_metrics.py`](../../../src/calculate_metrics.py)
+Alluvial diagram: [`src/handoff_visualizations.py`](../../../src/handoff_visualizations.py)
+Funnel chart: [`src/generate_visualizations.py`](../../../src/generate_visualizations.py)
+Bundle generator: [`src/create_evidence_bundle.py`](../../../src/create_evidence_bundle.py)
+Full pipeline trace: [`notebooks/evd1_evd7_analysis.ipynb`](../../../notebooks/evd1_evd7_analysis.ipynb)
 
 See [`docs/methods_excerpt.md`](docs/methods_excerpt.md) for detailed methodology covering node identification, claim detection, and RES linking.
 

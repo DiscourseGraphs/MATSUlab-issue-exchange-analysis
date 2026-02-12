@@ -57,9 +57,9 @@ Four milestones were tracked for each researcher:
 
 ## Methods
 
-Timeline analysis: [`src/student_timeline_analysis.py`](../../src/student_timeline_analysis.py)
-Bundle generator: [`src/create_evidence_bundle.py`](../../src/create_evidence_bundle.py)
-Full pipeline trace: [`notebooks/evd1_evd7_analysis.ipynb`](../../notebooks/evd1_evd7_analysis.ipynb)
+Timeline analysis: [`src/student_timeline_analysis.py`](../../../src/student_timeline_analysis.py)
+Bundle generator: [`src/create_evidence_bundle.py`](../../../src/create_evidence_bundle.py)
+Full pipeline trace: [`notebooks/evd1_evd7_analysis.ipynb`](../../../notebooks/evd1_evd7_analysis.ipynb)
 
 See [`docs/evidence_statement.md`](docs/evidence_statement.md) for the full evidence description.
 

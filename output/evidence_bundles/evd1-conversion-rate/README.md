@@ -40,9 +40,9 @@ An issue was counted as "claimed" if it met any of these criteria:
 
 ## Methods
 
-Claim detection: [`src/calculate_metrics.py`](../../src/calculate_metrics.py)
-Visualization: [`src/generate_visualizations.py`](../../src/generate_visualizations.py)
-Full pipeline trace: [`notebooks/evd1_evd7_analysis.ipynb`](../../notebooks/evd1_evd7_analysis.ipynb)
+Claim detection: [`src/calculate_metrics.py`](../../../src/calculate_metrics.py)
+Visualization: [`src/generate_visualizations.py`](../../../src/generate_visualizations.py)
+Full pipeline trace: [`notebooks/evd1_evd7_analysis.ipynb`](../../../notebooks/evd1_evd7_analysis.ipynb)
 
 See [`docs/methods_excerpt.md`](docs/methods_excerpt.md) for detailed methodology.
 
