@@ -71,7 +71,7 @@ def _normalize_name(name: str) -> str:
 # ────────────────────────────────────────────────
 def create_conversion_rate_figure(metrics: dict, output_dir: Path):
     """
-    Left panel:  stacked horizontal bar showing composition of all 434 issues
+    Left panel:  stacked horizontal bar — claimed experiments (blue) vs unclaimed ISS (grey)
     Right panel: donut showing self vs cross-person among claimed experiments
     """
     conv = metrics['metrics']['conversion_rate']
@@ -79,40 +79,39 @@ def create_conversion_rate_figure(metrics: dict, output_dir: Path):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5),
                                     gridspec_kw={'width_ratios': [1.4, 1]})
 
-    # --- Left: stacked horizontal bar ---
-    categories = ['Explicit\nclaims', 'Inferred\nclaims', 'ISS with\nactivity', 'Unclaimed\nISS']
-    values = [conv['explicit_claims'], conv['inferred_claims'],
-              conv['iss_with_activity'], conv['unclaimed_iss']]
-    colors = [C_EXPLICIT, C_INFERRED, C_ISS_ACT, C_UNCLAIMED]
+    # --- Left: stacked horizontal bar (claimed vs unclaimed) ---
+    claimed_total = conv['total_claimed']
+    unclaimed_total = conv['unclaimed_iss']
+    total_issues = claimed_total + unclaimed_total
+
+    categories = ['Claimed\nexperiments', 'Unclaimed\nISS']
+    values = [claimed_total, unclaimed_total]
+    colors = [C_EXPLICIT, C_UNCLAIMED]
 
     # Single stacked bar
     left = 0
     for val, color, cat in zip(values, colors, categories):
-        bar = ax1.barh(0, val, left=left, color=color, edgecolor='white',
-                       linewidth=1.5, height=0.5, label=cat)
-        # Label inside bar if wide enough
+        ax1.barh(0, val, left=left, color=color, edgecolor='white',
+                 linewidth=1.5, height=0.5, label=cat)
         if val > 20:
             ax1.text(left + val / 2, 0, str(val),
                      ha='center', va='center', fontweight='bold',
                      fontsize=12, color='white')
         left += val
 
-    # Bracket for "Claimed = 127"
-    claimed_total = conv['total_claimed']
-    claimed_width = values[0] + values[1] + values[2]
+    # Bracket annotation for claimed portion
     ax1.annotate(f'Claimed: {claimed_total}  ({conv["conversion_rate_percent"]}%)',
-                 xy=(claimed_width / 2, -0.35), fontsize=12, fontweight='bold',
+                 xy=(claimed_total / 2, -0.35), fontsize=12, fontweight='bold',
                  ha='center', va='top', color='#2c3e50')
-    # Bracket lines
-    ax1.plot([0, 0, claimed_width, claimed_width],
+    ax1.plot([0, 0, claimed_total, claimed_total],
              [-0.28, -0.31, -0.31, -0.28],
              color='#2c3e50', linewidth=1.5, clip_on=False)
 
-    ax1.set_xlim(0, sum(values))
+    ax1.set_xlim(0, total_issues)
     ax1.set_ylim(-0.6, 0.6)
     ax1.set_yticks([])
     ax1.set_xlabel('Number of Issues')
-    ax1.set_title('Issue Conversion Rate')
+    ax1.set_title(f'Issue Composition (n={total_issues})')
     ax1.legend(loc='upper right', fontsize=9, framealpha=0.9)
     ax1.spines['left'].set_visible(False)
 
@@ -133,7 +132,7 @@ def create_conversion_rate_figure(metrics: dict, output_dir: Path):
         at.set_fontweight('bold')
         at.set_fontsize(11)
 
-    ax2.set_title('Claim Authorship\n(among 122 experiment claims)')
+    ax2.set_title(f'Claim Authorship\n(among {claimed_total} experiment claims)')
 
     plt.tight_layout()
     path = output_dir / 'fig1_conversion_rate.png'
