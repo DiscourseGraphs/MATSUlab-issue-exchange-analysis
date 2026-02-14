@@ -123,12 +123,23 @@ python src/main.py
 
 > Requires the raw Roam Research exports in `graph raw data/` (not included in this repository).
 
+## Source material
+
+Contact [The Discourse Graphs Project](discoursegraphsATgmailDOTcom) for read access to the following source material:
+[Experimental log
+](https://roamresearch.com/#/app/discourse-graphs/page/E5UYzWC6b)
+[Result page: EVD 5
+](https://roamresearch.com/#/app/discourse-graphs/page/EBoRlwI78)[Result page: EVD 7
+](https://roamresearch.com/#/app/discourse-graphs/page/0FU6ssOwH)
+Raw data: MATSU lab graph in JSON-LD and JSON
+
 ## License
 
 This work is licensed under [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/). See [LICENSE](LICENSE) for the full text.
 
 ## Attribution
 
-**Analysis and evidence bundles:** Matt Akamatsu and [Claude](https://claude.ai) (Anthropic)
-**Discourse graph system:** [Akamatsu Lab](https://akamatsulab.org), University of Washington
+**Analysis and evidence bundles:** [Matt Akamatsu](https://orcid.org/0000-0002-0286-5310) and [Claude](https://claude.ai) (Anthropic)
+**Discourse graph system:** [Discourse Graphs Project](https://discoursegraphs.com/), [Joel Chan](https://orcid.org/0000-0003-3000-4160), [Matt Akamatsu](https://orcid.org/0000-0002-0286-5310)
+**Lab discourse graph data:** [Akamatsu Lab](https://matsulab.org), University of Washington
 **Discourse Graph extension:** [DiscourseGraphs](https://github.com/DiscourseGraphs/discourse-graph)
