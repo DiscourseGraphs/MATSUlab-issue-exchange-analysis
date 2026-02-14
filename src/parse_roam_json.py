@@ -395,6 +395,72 @@ def extract_timestamps_for_experiments(filepath: str, experiment_titles: list[st
     return results
 
 
+def validate_roam_export(filepath: str, jsonld_data: dict, min_match_rate: float = 0.5) -> dict:
+    """
+    Validate that a Roam JSON export comes from the same graph as the JSON-LD export.
+
+    Compares experiment page titles and ISS node titles between the two exports.
+    If the match rate is below min_match_rate, the Roam export is likely from a
+    different Roam graph.
+
+    Args:
+        filepath: Path to the Roam JSON export
+        jsonld_data: Parsed JSON-LD data (from analyze_graph())
+        min_match_rate: Minimum fraction of JSON-LD titles that must be found
+                        in the Roam export (default 0.5 = 50%)
+
+    Returns:
+        Dict with validation results including match counts and pass/fail status.
+
+    Raises:
+        ValueError: If match rate is below min_match_rate
+    """
+    jsonld_exp_titles = {e['title'] for e in jsonld_data.get('experiment_pages', [])}
+    jsonld_iss_titles = {i['title'] for i in jsonld_data.get('iss_nodes', [])}
+
+    roam_exp_titles = set()
+    roam_iss_titles = set()
+    total_roam_pages = 0
+
+    for page in load_roam_json_streaming(filepath):
+        title = page.get('title', '')
+        total_roam_pages += 1
+        if title.startswith('@'):
+            roam_exp_titles.add(title)
+        if '[[ISS]]' in title:
+            roam_iss_titles.add(title)
+
+    exp_matched = len(jsonld_exp_titles & roam_exp_titles)
+    iss_matched = len(jsonld_iss_titles & roam_iss_titles)
+    total_jsonld = len(jsonld_exp_titles) + len(jsonld_iss_titles)
+    total_matched = exp_matched + iss_matched
+    match_rate = total_matched / total_jsonld if total_jsonld > 0 else 0
+
+    result = {
+        'total_roam_pages': total_roam_pages,
+        'jsonld_experiment_pages': len(jsonld_exp_titles),
+        'roam_experiment_pages': len(roam_exp_titles),
+        'experiment_matches': exp_matched,
+        'jsonld_iss_nodes': len(jsonld_iss_titles),
+        'roam_iss_nodes': len(roam_iss_titles),
+        'iss_matches': iss_matched,
+        'match_rate': round(match_rate, 3),
+        'passed': match_rate >= min_match_rate,
+    }
+
+    if not result['passed']:
+        raise ValueError(
+            f"Roam export validation failed: only {match_rate:.1%} of JSON-LD titles "
+            f"found in Roam export ({total_matched}/{total_jsonld}). "
+            f"The Roam export ({total_roam_pages} pages, {len(roam_exp_titles)} @ pages) "
+            f"appears to be from a different Roam graph than the JSON-LD export "
+            f"({len(jsonld_exp_titles)} experiment pages, {len(jsonld_iss_titles)} ISS nodes). "
+            f"Please re-export the whole-graph JSON from the correct Roam database."
+        )
+
+    return result
+
+
 def analyze_all_experiment_pages(filepath: str) -> dict:
     """
     Analyze all experiment pages (titles starting with @) in the Roam export.

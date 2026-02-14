@@ -24,16 +24,16 @@ Each bundle contains:
 
 #### EVD 1 — Issue Conversion Rate (`evd1-conversion-rate/`)
 
-> 18% of MATSUlab issues (n=389) were claimed as experiments and 36% of those claimed at least one formal result node, yielding 44 total RES nodes.
+> 18% of MATSUlab issues (n=389) were claimed as experiments and 36% of those produced at least one formal result node, yielding 44 total RES nodes.
 
-- **Figure:** Stacked bar chart showing issue composition + donut chart for self vs. cross-person claims
+- **Figure:** Stacked bar chart showing issue composition + donut chart for self vs. cross-person claiming
 - **Data:** `conversion_data.json`
 
 #### EVD 5 — Issue-to-Result Flow (`evd5-issue-funnel/`)
 
 > Of 389 total issues, 69 (18%) were claimed as experiments and 25 (6%) produced at least one formal result node, yielding 44 total RES nodes.
 
-- **Primary figure:** Alluvial (Sankey) diagram showing researcher-level flow from Issue Created → Issue Claimed → Result Created
+- **Primary figure:** Alluvial (Sankey) diagram showing researcher-level flow from Issue Created → Claimed By → Result Created
 - **Supplemental figure:** Aggregate conversion funnel bar chart
 - **Data:** `funnel_summary.json`, `experiment_details.csv` (anonymized)
 
@@ -49,7 +49,7 @@ Each bundle contains:
 `notebooks/evd1_evd7_analysis.ipynb` is a pre-executed Jupyter notebook that walks through the full analysis pipeline, from raw data loading through metric computation to each evidence bundle. It serves as a transparent trace from data to results. The notebook:
 
 - Loads and parses the discourse graph exports (JSON-LD + Roam JSON)
-- Shows issue classification, claim detection, and attribution logic
+- Shows issue classification, claiming detection, and attribution logic
 - Computes each metric with inline commentary
 - Generates the data underlying each evidence bundle
 

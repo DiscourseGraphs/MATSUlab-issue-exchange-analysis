@@ -16,7 +16,7 @@ Experiment pages are identified by titles starting with `@` followed by a type p
 
 **Pattern:** `re.match(r'^@[a-zA-Z]+/', title)` — `src/parse_jsonld.py`, `find_experiment_pages()` (line 69)
 
-**Domain context:** When a researcher claims an Issue, the Issue page is converted to an Experiment page. The same underlying Roam page is renamed from `[[ISS]] - <description>` to `@type/<description>`. Therefore, the page's creation date reflects when the original Issue was created, not when the claim occurred.
+**Domain context:** When a researcher claims an Issue, the Issue page is converted to an Experiment page. The same underlying Roam page is renamed from `[[ISS]] - <description>` to `@type/<description>`. Therefore, the page's creation date reflects when the original Issue was created, not when claiming occurred.
 
 ### 2.2 Issue (ISS) Nodes
 
@@ -38,15 +38,15 @@ RES titles frequently contain a backreference to their source experiment in `[[@
 
 ---
 
-## 3. Claim Detection
+## 3. Claiming Detection
 
-The claim status of an experiment page is determined through a two-tier approach. Each claimed experiment is assigned a `claim_type` of either `'explicit'` or `'inferred'`.
+The claiming status of an experiment page is determined through a two-tier approach. Each claimed experiment is assigned a `claim_type` of either `'explicit'` or `'inferred'`.
 
 **Implementation:** `src/calculate_metrics.py`, `merge_experiment_data()` (line 45)
 
-### 3.1 Explicit Claims (`claim_type = 'explicit'`)
+### 3.1 Explicitly Claimed (`claim_type = 'explicit'`)
 
-An experiment page has an explicit claim if it contains a `Claimed By::` field in its content, populated with a person name in Roam's `[[Person Name]]` link format.
+An experiment page is explicitly claimed if it contains a `Claimed By::` field in its content, populated with a person name in Roam's `[[Person Name]]` link format.
 
 **Detection (JSON-LD):** Regex extraction from the page `content` field:
 ```
@@ -62,18 +62,18 @@ The `Issue Created By::` field is extracted similarly to identify the person who
 
 When both JSON-LD and Roam JSON provide a `Claimed By` value, the Roam JSON value is preferred because it also provides the block creation timestamp (used for time-to-claim).
 
-### 3.2 Inferred Claims (`claim_type = 'inferred'`)
+### 3.2 Inferred Claiming (`claim_type = 'inferred'`)
 
-Many experiment pages lack formal `Claimed By::` and `Issue Created By::` metadata fields. For these, a claim is inferred if:
+Many experiment pages lack formal `Claimed By::` and `Issue Created By::` metadata fields. For these, claiming is inferred if:
 
 1. The experiment page has an "Experimental Log" or "Experiment Log" section, AND
 2. That section contains at least one dated child block (matching the pattern `[[<date>, <year>]]`), AND
 3. The page has a known `creator` in the JSON-LD metadata
 
 When these conditions are met:
-- **Claimer** is set to the JSON-LD `creator` field value (the person who created the page)
-- **Issue Created By** is also set to the `creator` (if not already populated), since the creator of an experiment page without formal metadata is assumed to be both the issue author and claimer (self-claim)
-- **Claim timestamp** is set to the `create-time` of the earliest dated block in the experimental log
+- **Claimed By** is set to the JSON-LD `creator` field value (the person who created the page)
+- **Issue Created By** is also set to the `creator` (if not already populated), since the creator of an experiment page without formal metadata is assumed to be both the issue author and the person claiming it (self-claiming)
+- **Claiming timestamp** is set to the `create-time` of the earliest dated block in the experimental log
 
 **Rationale:** Researchers sometimes begin working on an issue directly within its page (adding experimental log entries) without formally filling in the `Claimed By::` field. The presence of substantive experimental log entries indicates active work.
 
@@ -85,7 +85,7 @@ When these conditions are met:
 
 A small number of ISS pages (pages that were never renamed to experiment format) also contain experimental log entries, indicating work was done without formal page conversion. These are counted separately in the conversion rate denominator.
 
-### 3.4 Unclaimed Issues
+### 3.4 Unclaimed
 
 ISS pages with no experimental log entries are considered unclaimed.
 
@@ -127,30 +127,30 @@ If Methods 1 and 2 yield no matches, a substring match is attempted using the ex
 
 ### 6.1 Metric 1: Issue Conversion Rate
 
-**Definition:** Percentage of all known issues that have been claimed and converted to active experiments.
+**Definition:** Percentage of all known issues that have been claimed (i.e., converted to active experiments).
 
 **Formula:**
 
 ```
-Total Claimed = Explicit Claims + Inferred Claims + ISS Pages with Activity
+Total Claimed = Explicitly Claimed + Inferred Claiming + ISS Pages with Activity
 Total Issues  = Total Claimed + Unclaimed ISS Pages
 Conversion Rate = Total Claimed / Total Issues × 100
 ```
 
 **Implementation:** `src/calculate_metrics.py`, `calculate_conversion_rate()` (line 165)
 
-### 6.2 Metric 2: Time-to-Claim
+### 6.2 Metric 2: Time-to-Claiming
 
 **Definition:** Duration (in days) from when an Issue was created to when it was claimed.
 
 **Formula:**
 
 ```
-Time-to-Claim = Claim Timestamp − Issue Creation Date
+Time-to-Claiming = Claiming Timestamp − Issue Creation Date
 ```
 
 Where:
-- **Claim Timestamp** = `create-time` of the `Claimed By::` block (explicit) or earliest experimental log entry (inferred)
+- **Claiming Timestamp** = `create-time` of the `Claimed By::` block (explicitly claimed) or earliest experimental log entry (inferred)
 - **Issue Creation Date** = minimum of (JSON-LD `created`, Roam page `create-time`, earliest block `create-time`) — see Section 4.1
 
 **Implementation:** `src/calculate_metrics.py`, `calculate_time_to_claim()` (line 221)
@@ -167,8 +167,8 @@ Time-to-First-Result = Earliest Linked RES Creation Date − Reference Timestamp
 
 Where:
 - **Reference Timestamp** =
-  - For explicit claims: `Claimed By::` block `create-time`
-  - For inferred claims: Issue creation date (page_created), since there is no formal claim event
+  - For explicitly claimed: `Claimed By::` block `create-time`
+  - For inferred claiming: Issue creation date (page_created), since there is no formal claiming event
 - **Earliest Linked RES** = the RES node with the earliest `created` date among those linked to the experiment (see Section 5 for linking methods)
 
 **Implementation:** `src/calculate_metrics.py`, `calculate_time_to_first_result()` (line 371)
@@ -185,14 +185,14 @@ Where:
 
 **Implementation:** `src/calculate_metrics.py`, `calculate_unique_contributors()` (line 446)
 
-### 6.5 Metric 5: Cross-Person Claims (Idea Exchange)
+### 6.5 Metric 5: Cross-Person Claiming (Idea Exchange)
 
 **Definition:** Cases where the person who claimed an issue (`Claimed By::`) is different from the person who created the issue (`Issue Created By::`). This is the key metric demonstrating transfer of ideas between researchers.
 
 **Formula:**
 
 ```
-Idea Exchange Rate = Cross-Person Claims / (Cross-Person Claims + Self-Claims) × 100
+Idea Exchange Rate = Cross-Person Claiming / (Cross-Person Claiming + Self-Claiming) × 100
 ```
 
 Only experiments where both `Issue Created By` and `Claimed By` are known are included in the denominator. Experiments with unknown issue creators are excluded from the rate calculation.

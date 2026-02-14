@@ -1,70 +1,126 @@
 title,creator,claimer,claim_type,issue_created_by,page_created,claimed_timestamp,has_results,num_results,first_result_date,time_to_claim_days,time_to_first_result_days
-@analysis/Quantify the percentage of simulated endocytic events that assemble detectable amounts of actin,Matt Akamatsu,R3,,Matt Akamatsu,2023-01-20,,yes,3,2024-06-28,,524
-"@analysis/Run simulations with varying (tension, viscosity) in Cytosim.",R2,R2,,R2,2025-07-22,,no,0,,,
-@PCR/Create CRISPR-off plasmid to knock down WASP or WAVE expression,Matt Akamatsu,R6,,Matt Akamatsu,2024-05-30,,yes,1,2025-06-12,,378
-@analysis/Constrain parameters in analytical model of load adaptation.,R2,R2,,R2,2025-06-25,,yes,3,2025-06-25,,0
-@analysis/Run simulations with varying Arp2/3 complex distribution and quantify the  location of the resulting actin networks relative to the endocytic bud.,R4,R2,,R4,2024-03-25,,no,0,,,
-@Imaging/Evaluate numbers of Dex+/Tf+ spots in 3kDa and 10kDa to see if there is an appreciable difference in the two.,R5,R5,,R5,2023-12-19,,no,0,,,
-@TC/FACS sorting of transfection cells to identify GFP+ MA1 (RPE1-hTERT) cells,R1,R1,,R1,2025-01-16,,no,0,,,
-@analysis/apply PINN to experimental cryo-ET datasets,Matt Akamatsu,R7,,Matt Akamatsu,2025-09-15,,yes,1,2025-11-25,,70
-"@Imaging/Inhibition of CME using small molecule inhibitors (Pitstop2, Endosidin9, Dyngo4a) and monitor its effect on lumenogenisis.",R1,R1,,R1,2025-06-10,,no,0,,,
-@analysis/Run simulations with varying Arp2/3 complex distribution and quantify the variation of endocytic internalization,R4,R3,,R4,2024-03-25,,yes,1,2025-06-20,,452
-@imaging/Measuring the extent of spherical aberration of calibration beads on the LLSM in function of aberration correction and imaging depth.,R1,R1,,R1,2025-11-14,,yes,2,2025-11-19,,4
-@Imaging/Transfect WTC-11 cells with WT-GRAF1-eGFP or GRAF1-BAR-PH-eGFP and stain for WAVE2 and IRSp53.,R5,R5,,R5,2025-03-23,,no,0,,,
-@TC/Cloning of WTC-11 ArpC3-TagGFP cells using the isocell platform,R1,R1,,R1,2024-01-05,,no,0,,,
-@Imaging/Visualize WAVE2 and IRSp53 localization in GRAF1-BAR-PH-eGFP transfected cells,R5,R5,,R5,2025-03-28,,no,0,,,
-@analysis/Analyzing the demo microscopy images for cells using MATLAB for 2 channel spot detection and tracking in 2D,R1,R1,,R1,2024-02-22,,no,0,,,
-@microscopy/Make a list of interpretation caveats at every step of the movie analysis pipeline.,R4,R4,,R4,2025-01-27,,no,0,,,
-"@analysis/Refining spotiflow 3D spot detection ""smfish_3D"" using real LLSM datasets",R1,R1,,R1,2025-02-12,,yes,1,2025-04-10,,56
-@PCR/Junctional PCR validation of ArpC3-TagGFP2 clones 1-60,R1,R1,,R1,2024-01-30,,no,0,,,
-@imaging/Treat cells with beta-cyclodextran and measure endocytic ArpC3 accumulation.,R4,R4,,R4,2026-01-14,,no,0,,,
-@PD/Plasmid Design,R1,R1,,R1,2025-01-22,,no,0,,,
-@microscopy/Clone Validation of MA7 biallelic clone candiates cl105 and cl107,R1,R1,,R1,2025-04-17,,no,0,,,
-@Imaging/Evaluate whether WTC-11 can internalize 10kDa Dextran as a readout of potential CG endocytosis.,R5,R5,,R5,2023-10-13,,no,0,,,
-@imaging/Inhibition of ArpC3 with small molecule inhibitors (CK-666 and Wiskostatin) and monitor the effect of actin pertubation on lumenogensis.,R1,R1,,R1,2025-06-10,,no,0,,,
-@analysis/Develop metrics to quantify and analyze distinguishability of endocytic clusters,R9,R2,,R9,2023-07-06,,yes,1,2024-11-26,,509
-@analysis/Plot the correlation between Wasserstein Distance and internalization for individual simulation runs,R4,R4,,R4,2024-07-08,,yes,1,2024-08-22,,45
-"@cytosim/Report the amount of actin (in monomers) at the end of the simulation, as a function of tension & FAC",Matt Akamatsu,R4,,Matt Akamatsu,2024-10-18,,yes,1,2024-10-24,,5
-@analysis/Report the percentage of sites that contain detectable actin as a function of membrane tension,Matt Akamatsu,R3,,Matt Akamatsu,2024-10-11,,yes,2,2025-06-16,,248
-@TC/Example Claimed issue,Matt Akamatsu,R8,,Matt Akamatsu,2023-11-17,,no,0,,,
-"@analysis/Test Spotiflow spot detection on our dataset, without worrying about ML (for now)",R1,R1,,R1,2025-01-22,,no,0,,,
-@Imaging/Evaluate dye-free fixed WTC-11 cells to see if nuclear staining is an artifact of fixation.,R5,R5,,R5,2023-10-18,,no,0,,,
-@TC/Transfection of MA1 (RPE1-hTERT) for insertion of TagGFP2 into ArpC3,R1,R1,,R1,2025-01-16,,no,0,,,
-@analysis/Measure the asymmetry of actin networks in super resolution endocytic actin and arp2/3 complex data from Jin 2022,Matt Akamatsu,R3,,Matt Akamatsu,2024-08-22,,no,0,,,
-@TC/Optimizing culture and imaging conditions for hiPSC lumenoids,R1,R1,,R1,2024-07-10,,yes,2,2024-07-23,,12
-@analysis/Optimizing sigma and alpha values for the pointSourceFit algorithm in µtrack3D,R1,R1,,R1,2025-12-10,,yes,1,2026-01-08,,29
-@Imaging/Perform immunofluorescence experiment to evaluate whether GRAF1 tubules are present in WTC-11 and RPE1 cells.,R5,R5,,R5,2023-11-22,,no,0,,,
-@analysis/R4 -Run image analysis pipeline on LLSM data,R4,R4,,R4,2024-07-01,,no,0,,,
-@Imaging/Immunofluorescence of WAVE and WASP on GRAF1 BAR-PH-mediated membrane tubules,Matt Akamatsu,R5,,Matt Akamatsu,2024-05-17,,no,0,,,
-@analysis/Run simulations with varying Arp2/3 complex distribution and quantify the percentage of sites which assemble a certain threshold of actin,Matt Akamatsu,R3,,R4,2024-07-24,,yes,2,2025-06-18,,329
-@microscopy/Imaging TJP-1 and membrane of a small cross section of a lumenoid to track vesicles during lumen formation and maturation,R1,R1,,R1,2024-07-10,,no,0,,,
-@TC/Grow lumenoids in confined ibidi channels,R1,R1,,R1,2023-12-04,,yes,2,2023-12-07,,3
-@analysis/Plot the number of bound Hip1R over time for different Arp2/3 distributions in endocytosis simulations,Matt Akamatsu,R2,,Matt Akamatsu,2024-10-04,,yes,3,2024-10-15,,11
-@analysis/Incorporate force flow information into graphs of the actin-arp2/3-hip1r network.,R2,R2,,R2,2025-04-03,,yes,1,2025-06-16,,74
-@PCR/Junctional PCR: Optimization for ArpC3-TagGFP,R1,R1,,R1,2023-12-29,,yes,2,2024-01-17,,18
-"@analysis/Run simulations with various (stall times, stall durations) in Cytosim.",R2,R2,,R2,2026-01-20,,no,0,,,
-@PCR/Create CRISPR-off plasmid to knock down twinfilin expression,Matt Akamatsu,R6,,Matt Akamatsu,2024-05-30,,no,0,,,
-@analysis/R1's updates to the pipeline: 3-channel spot detection and correlating detections with AP2 tracks,R1,R1,,R1,2025-12-15,,no,0,,,
-@imaging/Imaging endocytosis during lumenogenesis at 6h intervals,R1,R1,,R1,2025-11-18,,yes,1,2026-01-08,,51
-@analysis/Measure actin assembly and internalization markers at putative CME sites.,R2,R2,,R2,2025-10-17,,no,0,,,
-@microscopy/Tracking down the origin of the image jitter on the LLSM,R1,R1,,R1,2025-06-16,,no,0,,,
-@TC/Cloning 2x GFP positive WTC-11 ArpC3 TagGFP2 cells using the isoCell platform,R1,R1,,R1,2024-08-27,,yes,1,2025-02-08,,164
-@cytosim/Simulate endocytosis with Myosin-I with no power stroke and varied unbinding kinetics and catch bonding,Matt Akamatsu,Matt Akamatsu,,Matt Akamatsu,2023-12-12,,no,0,,,
-@microscopy/Imaging whole lumenoids during maturation to track lumen formation and polarity establishment,R1,R1,,R1,2024-07-10,,yes,3,2024-08-08,,28
-@TC/Piloting different coating conditions for glass coverslips to improve cell adhesion,R1,R1,,R1,2024-08-16,,yes,1,2024-08-19,,3
-@microscopy/Localize membrane aggregates in lumenoids at different stages of maturation (TJP-1 & membrane dye),R1,R1,,R1,2024-07-10,,yes,1,2025-09-17,,433
-@gDNA/gDNA extraction of (new) MA10 clones 1~45 (RPE1-hTERT ArpC3-TagGFP3) using the MN vacuum kit,R1,R1,,R1,2025-04-23,,no,0,,,
-@microscopy/Live/dead stain of forming lumenoids to asses if apoptosis plays any role in hiPSC lumen formation,Matt Akamatsu,R1,,Matt Akamatsu,2024-05-16,,no,0,,,
-@analysis/Initial analysis of 6-hour interval imaging,R1,R1,,R1,2026-01-02,,no,0,,,
-@microscopy/Compare internalization of dextrans of a wide variety of sizes through different endocytic routes,Matt Akamatsu,R5,,Matt Akamatsu,2023-11-16,,no,0,,,
-@analysis/Quantify the extent of stalling of endocytosis as a function of SiR-actin concentration,Matt Akamatsu,R1,,Matt Akamatsu,2024-09-12,,yes,2,2025-07-29,,319
-"@Imaging/WAVE2, GRAF1, and IRSp53 localization in WT hiPSCs",R5,R5,,R5,2025-02-13,,no,0,,,
-@TC/develop a WTC-11 ArpC3-TagGFP base cell line,R1,R1,,R1,2023-10-10,,no,0,,,
-@analysis/Introduce position or birth time dependant monomer potential strength. ,R2,R2,,R2,2025-07-03,,no,0,,,
-@analysis/Adressing negative values of distribution difference measures after correction,R2,R2,,R2,2025-02-13,,no,0,,,
-@analysis/Invstigate whether there are differences in ArpC3 detections when we use a TagGFP2 vs. Halo tag,R1,R1,,R1,2026-01-29,,no,0,,,
-@FACS/Troubleshooting FACS contamination,R1,R1,,R1,2024-10-18,,no,0,,,
-@PCR/Do a PCR with the RPP30 probe mix and the ArpC3 primer/probe mix with the ArpC3-tagGFP2 positive control gDNA,Matt Akamatsu,R6,,Matt Akamatsu,2023-11-14,,no,0,,,
-@analysis/Merge hipr-direct-bound-ends.pkl and branched-actin-bound-to-hip1r-ends-recalibrated.pkl,Matt Akamatsu,R4,,Matt Akamatsu,2023-11-11,,no,0,,,
-@TC/Evaluating cell and colony morphology on substrates with different stiffness and ECM coatings.,R1,R1,,R1,2024-02-14,,yes,5,2024-03-14,,28
-@microscopy/Evaluate data from [[@Imaging/Dextran uptake in WTC-11 cells]] and enumerate cases of floating/attached colonies and nuclear fluorescence.,R5,R5,,R5,2023-10-18,,no,0,,,
+@TC/Primer selection for ArpC3-TagGFP,R1,R1,inferred,R1,2023-08-22,2023-08-22,no,0,,0,
+@analysis/Systematic analysis of CME dynamics during lumenogenesis from the 6-hour interval imaging experiment,R1,R1,inferred,R1,2026-01-15,2026-01-15,no,0,,0,
+@analysis/Quantify the percentage of simulated endocytic events that assemble detectable amounts of actin,Matt Akamatsu,R3,explicit,Matt Akamatsu,2023-01-20,2024-04-05,yes,3,2024-06-28,440,83
+"@analysis/Run simulations with varying (tension, viscosity) in Cytosim.",R2,R2,explicit,R2,2025-07-22,2025-07-22,no,0,,0,
+@PCR/Create CRISPR-off plasmid to knock down WASP or WAVE expression,Matt Akamatsu,R6,explicit,Matt Akamatsu,2024-05-30,2024-07-02,yes,1,2025-06-12,33,344
+@analysis/Extracting features of the actin network from tomograms,R9,R9,inferred,R9,2025-01-07,2025-06-02,yes,2,2025-05-23,146,136
+"@analysis/Analysis of multi-field, overnight imaging of initial lumen formation and polarization (Optimization of the overall Protocol)",R1,R1,inferred,R1,2025-09-03,2025-10-27,no,0,,54,
+@cytosim/vary Arp2/3 complex periodicity and spring stiffness,Matt Akamatsu,Matt Akamatsu,inferred,Matt Akamatsu,2024-03-07,2024-03-07,yes,1,2024-04-25,0,49
+@cytosim/vary force-dependent capping in endocytosis simulation,R4,R4,inferred,R4,2023-07-07,2023-07-08,yes,46,2023-08-17,0,41
+@analysis/Constrain parameters in analytical model of load adaptation.,R2,R2,explicit,R2,2025-06-25,2025-06-25,yes,3,2025-06-25,0,0
+@analysis/Run simulations with varying Arp2/3 complex distribution and quantify the  location of the resulting actin networks relative to the endocytic bud.,R4,R2,explicit,R4,2024-03-25,2025-02-19,no,0,,331,
+@imaging/GRAF1- and WAVE2-conjugates with IRSp53 in hiPSCs,R5,R5,inferred,R5,2025-07-11,2025-08-13,yes,1,2025-08-13,32,32
+@Imaging/Evaluate numbers of Dex+/Tf+ spots in 3kDa and 10kDa to see if there is an appreciable difference in the two.,R5,R5,explicit,R5,2023-12-19,2025-01-09,no,0,,386,
+@TC/FACS sorting of transfection cells to identify GFP+ MA1 (RPE1-hTERT) cells,R1,R1,explicit,R1,2025-01-16,2025-01-16,no,0,,0,
+@analysis/apply PINN to experimental cryo-ET datasets,Matt Akamatsu,R7,explicit,Matt Akamatsu,2025-09-15,2025-09-24,yes,1,2025-11-25,8,61
+"@Imaging/Inhibition of CME using small molecule inhibitors (Pitstop2, Endosidin9, Dyngo4a) and monitor its effect on lumenogenisis.",R1,R1,explicit,R1,2025-06-10,2026-01-20,no,0,,224,
+@analysis/Testing and refining NEW pipeline (Matlab --> python) for lumenoid project,R1,R1,inferred,R1,2025-06-03,2025-07-01,no,0,,27,
+@AWS/parallel computing workflow implementation,Matt Akamatsu,Matt Akamatsu,inferred,Matt Akamatsu,2024-01-12,2024-01-12,no,0,,0,
+@analysis/Run simulations with varying Arp2/3 complex distribution and quantify the variation of endocytic internalization,R4,R3,explicit,R4,2024-03-25,2025-06-17,yes,1,2025-06-20,449,3
+@imaging/Measuring the extent of spherical aberration of calibration beads on the LLSM in function of aberration correction and imaging depth.,R1,R1,explicit,R1,2025-11-11,2025-11-14,yes,2,2025-11-19,3,4
+@cytosim/vary Arp2/3 complex distribution in endocytosis simulations,R4,R4,inferred,R4,2023-01-20,2024-03-26,yes,2,2025-02-12,431,754
+@Imaging/Transfect WTC-11 cells with WT-GRAF1-eGFP or GRAF1-BAR-PH-eGFP and stain for WAVE2 and IRSp53.,R5,R5,explicit,R5,2025-03-23,2025-03-23,no,0,,0,
+@TC/Cloning of WTC-11 ArpC3-TagGFP cells using the isocell platform,R1,R1,explicit,R1,2024-01-05,2024-01-05,no,0,,0,
+@Imaging/Visualize WAVE2 and IRSp53 localization in GRAF1-BAR-PH-eGFP transfected cells,R5,R5,explicit,R5,2025-03-28,2025-03-28,no,0,,0,
+@analysis/Analyzing the demo microscopy images for cells using MATLAB for 2 channel spot detection and tracking in 2D,R1,R1,explicit,R1,2024-02-22,2024-02-22,no,0,,0,
+@analysis/Optimize spot detection and tracking parameters for nearest-neighbor deconvolved image stacks of lumenoids,R1,R1,inferred,R1,2025-07-28,2025-07-28,no,0,,0,
+@microscopy/Make a list of interpretation caveats at every step of the movie analysis pipeline.,R4,R4,explicit,R4,2025-01-27,2025-05-01,no,0,,94,
+@Plasmids/Lundmark_GRAF1_reporters,R5,R5,inferred,R5,2024-02-08,2024-02-08,yes,2,2024-02-08,0,0
+"@analysis/Refining spotiflow 3D spot detection ""smfish_3D"" using real LLSM datasets",R1,R1,explicit,R1,2025-02-12,2025-02-12,yes,1,2025-04-10,0,56
+@PCR/Junctional PCR validation of ArpC3-TagGFP2 clones 1-60,R1,R1,explicit,R1,2024-01-30,2024-01-30,no,0,,0,
+@TC/isocell clone selection of GFP+ MA1 (RPE1-hTERT) cells,R1,R1,inferred,R1,2025-02-05,2025-02-05,yes,1,2025-02-08,0,2
+@imaging/Treat cells with beta-cyclodextran and measure endocytic ArpC3 accumulation.,R4,R4,explicit,R4,2026-01-14,2026-01-14,no,0,,0,
+@Imaging/GRAF1 expression in WTC-11 cells,R5,R5,inferred,R5,2023-10-27,2023-11-22,yes,4,2023-12-28,26,61
+@ddPCR/Clone Validation of bi-allelic ArpC3-TagGFP candidates MA7 cl33 and cl 46,R1,R1,inferred,R1,2024-12-04,2024-12-05,yes,1,2024-12-06,1,2
+@PD/Plasmid Design,R1,R1,explicit,R1,2025-01-22,2025-01-22,no,0,,0,
+@microscopy/Clone Validation of MA7 biallelic clone candiates cl105 and cl107,R1,R1,explicit,R1,2025-04-17,2025-04-17,no,0,,0,
+@Imaging/Antibody optimization on non-coated glass,R5,R5,inferred,R5,2025-04-22,2025-05-06,no,0,,14,
+@ddPCR/Primer-Probe Optimization for ArpC3-TagGFP,R1,R1,inferred,R1,2023-09-05,2023-09-05,no,0,,0,
+@Imaging/Evaluate whether WTC-11 can internalize 10kDa Dextran as a readout of potential CG endocytosis.,R5,R5,explicit,R5,2023-10-13,2023-12-19,no,0,,66,
+@analysis/migrate LLSM CME analysis to a new repository,Matt Akamatsu,Matt Akamatsu,inferred,Matt Akamatsu,2026-02-03,2026-02-03,no,0,,0,
+@imaging/Inhibition of ArpC3 with small molecule inhibitors (CK-666 and Wiskostatin) and monitor the effect of actin pertubation on lumenogensis.,R1,R1,explicit,R1,2025-06-10,2026-01-20,no,0,,224,
+@TC/gDNA extraction of cloned WTC-11 ArpC3-TagGFP bi-allelic candidates,R1,R1,inferred,R1,2024-09-10,2024-10-30,no,0,,49,
+@ddPCR/Clone validation of MA7 -- WTC11 ArpC3TagGFP clones 61-77,R1,R1,inferred,R1,2025-02-19,2025-02-19,no,0,,0,
+@analysis/Develop metrics to quantify and analyze distinguishability of endocytic clusters,R9,R2,explicit,R9,2023-07-06,2024-10-31,yes,1,2024-11-26,483,26
+@TC/Setting up and establishing RPE1-hTERT culture,R1,R1,inferred,R1,2023-06-21,2023-06-29,yes,1,2023-12-19,8,180
+@analysis/Plot the correlation between Wasserstein Distance and internalization for individual simulation runs,R4,R4,explicit,R4,2024-07-08,2024-07-08,yes,1,2024-08-22,0,45
+"@cytosim/Report the amount of actin (in monomers) at the end of the simulation, as a function of tension & FAC",Matt Akamatsu,R4,explicit,Matt Akamatsu,2024-10-18,2024-10-24,yes,1,2024-10-24,5,0
+@analysis/Report the percentage of sites that contain detectable actin as a function of membrane tension,Matt Akamatsu,R3,explicit,Matt Akamatsu,2024-10-11,2025-06-16,yes,2,2025-06-16,248,-1
+@TC/Example Claimed issue,Matt Akamatsu,R8,explicit,Matt Akamatsu,2023-11-17,2023-11-20,no,0,,3,
+@TC/Cryostore for alternative for long-term cell storage,R1,R1,inferred,R1,2023-06-21,2023-06-21,no,0,,0,
+@Analysis/Comparison of pipeline using sample data from [[@roudot2023utrack3d]],R1,R1,inferred,R1,2024-11-26,2024-11-26,no,0,,0,
+"@analysis/Test Spotiflow spot detection on our dataset, without worrying about ML (for now)",R1,R1,explicit,R1,2025-01-22,2025-01-22,no,0,,0,
+@Imaging/Evaluate dye-free fixed WTC-11 cells to see if nuclear staining is an artifact of fixation.,R5,R5,explicit,R5,2023-10-18,2023-12-19,no,0,,61,
+@TC/Transfection of MA1 (RPE1-hTERT) for insertion of TagGFP2 into ArpC3,R1,R1,explicit,R1,2025-01-16,2025-01-16,no,0,,0,
+@analysis/Measure the asymmetry of actin networks in super resolution endocytic actin and arp2/3 complex data from Jin 2022,Matt Akamatsu,R3,explicit,Matt Akamatsu,2024-08-22,2025-06-24,no,0,,305,
+@analysis/implement track filtering criteria,Matt Akamatsu,Matt Akamatsu,inferred,Matt Akamatsu,2025-08-20,2025-08-22,no,0,,1,
+@TC/Optimizing culture and imaging conditions for hiPSC lumenoids,R1,R1,explicit,R1,2024-07-10,2024-07-10,yes,2,2024-07-23,0,12
+@analysis/Optimizing sigma and alpha values for the pointSourceFit algorithm in µtrack3D,R1,R1,explicit,R1,2025-12-04,2025-12-10,yes,1,2026-01-08,6,29
+@Imaging/Perform immunofluorescence experiment to evaluate whether GRAF1 tubules are present in WTC-11 and RPE1 cells.,R5,R5,explicit,R5,2023-11-22,2023-11-22,no,0,,0,
+"@imaging/dSTORM demo - WAVE2, GRAF1, IRSp53 on RPE1 and MA-0",R5,R5,inferred,R5,2025-04-16,2025-04-16,no,0,,0,
+@analysis/Measure asymmetry of actin networks in STORM Kaplan data,Matt Akamatsu,Matt Akamatsu,inferred,Matt Akamatsu,2025-09-25,2025-10-16,yes,2,2025-10-23,20,27
+@TC/WTC-11 Clear Media Alternative for Imaging,R1,R1,inferred,R1,2023-07-03,2023-07-03,no,0,,0,
+@microscopy/Osmotic shock of hiPSCs and measurement of endocytic ArpC3 accumulation,Matt Akamatsu,Matt Akamatsu,inferred,Matt Akamatsu,2024-10-09,2024-10-09,yes,4,2024-10-09,0,0
+@analysis/R4 -Run image analysis pipeline on LLSM data,R4,R4,explicit,R4,2024-07-01,2024-07-01,no,0,,0,
+"@LLSM/Dynamics and location of Arp2/3, AP2 and DNM during and after endocytosis in WTC10 cells",R1,R1,inferred,R1,2023-10-02,2023-10-18,yes,1,2024-06-12,15,253
+@alphafold/Hip1R structure prediction,Matt Akamatsu,Matt Akamatsu,inferred,Matt Akamatsu,2024-11-18,2024-11-19,yes,1,2024-11-22,0,3
+@Imaging/Immunofluorescence of WAVE and WASP on GRAF1 BAR-PH-mediated membrane tubules,Matt Akamatsu,R5,explicit,Matt Akamatsu,2024-05-17,2024-05-25,no,0,,8,
+@ddPCR/Clone selection MA10 clones 1~45,R1,R1,inferred,R1,2025-04-24,2025-04-24,yes,1,2025-04-24,0,0
+@analysis/Run simulations with varying Arp2/3 complex distribution and quantify the percentage of sites which assemble a certain threshold of actin,Matt Akamatsu,R3,explicit,R4,2024-03-25,2024-06-20,yes,2,2025-06-18,86,363
+@TC/Mycoplasma Testing,R1,R1,inferred,R1,2023-06-16,2024-05-20,yes,1,2023-12-18,339,185
+@Imaging/Clone Validation of bi-allelic ArpC3-TagGFP2 candidate MA7cl33,R1,R1,inferred,R1,2024-12-10,2024-12-11,no,0,,0,
+@microscopy/Imaging TJP-1 and membrane of a small cross section of a lumenoid to track vesicles during lumen formation and maturation,R1,R1,explicit,R1,2024-07-10,2024-07-10,no,0,,0,
+@TC/Optimizing Janelia Fluor HaloTags for LLS microscopy,R1,R1,inferred,R1,2023-08-10,2023-09-15,yes,1,2024-09-05,36,392
+@TC/Grow lumenoids in confined ibidi channels,R1,R1,explicit,R1,2023-12-04,2023-12-04,yes,2,2023-12-07,0,3
+@analysis/Plot the number of bound Hip1R over time for different Arp2/3 distributions in endocytosis simulations,Matt Akamatsu,R2,explicit,Matt Akamatsu,2024-10-04,2024-10-15,yes,3,2024-10-15,10,0
+@imaging/TIRF_ArpC3-TagGFP_live/fixed_andWTC-11_fixed,R5,R5,inferred,R5,2025-05-28,2025-05-28,yes,1,2025-06-26,0,28
+"@imaging/WAVE2, GRAF1, GRAF1-BAR-PH, IRSp53 in MA-0 and WTC-11 ArpC3",R5,R5,inferred,R5,2025-05-22,2025-05-22,yes,3,2025-06-26,0,35
+@analysis/Incorporate force flow information into graphs of the actin-arp2/3-hip1r network.,R2,R2,explicit,R2,2025-04-03,2025-04-03,yes,1,2025-06-16,0,74
+@cytosim/vary Arp2/3 complex periodicity on endocytic actin filaments,Matt Akamatsu,Matt Akamatsu,inferred,Matt Akamatsu,2023-03-29,2023-11-27,yes,3,2023-10-25,243,209
+@TC/Testing different dissociation reagents for single cell and clump passaging of WTC-11 cells,R1,R1,inferred,R1,2023-06-15,2023-06-21,no,0,,5,
+@PCR/Junctional PCR: Optimization for ArpC3-TagGFP,R1,R1,explicit,R1,2023-12-29,2023-12-29,yes,2,2024-01-17,0,18
+"@microscopy/Multi-field, overnight imaging (5 minute time lapses at regular intervals) to capture initial lumen formation and polarization.",R1,R1,inferred,R1,2025-06-26,2025-09-18,no,0,,83,
+@TC/Comparison of Geltrex vs Matrigel to coat glass for WTC culture,R1,R1,inferred,R1,2023-06-15,2023-06-16,yes,1,2023-06-29,0,13
+"@analysis/Run simulations with various (stall times, stall durations) in Cytosim.",R2,R2,explicit,R2,2026-01-20,2026-01-20,no,0,,0,
+@analysis/MA-13_GRAF1-mEGFP-c115_Western Blot,R5,R5,inferred,R5,2026-01-08,2026-01-08,no,0,,0,
+@imaging/CRISPRoff Abi2 knockdown and Dextran uptake in WTC-11 MA-0,R5,R5,inferred,R5,2025-08-11,2025-08-13,no,0,,1,
+@PCR/Create CRISPR-off plasmid to knock down twinfilin expression,Matt Akamatsu,R6,explicit,Matt Akamatsu,2024-05-30,2024-06-27,no,0,,28,
+@ddPCR/Clone selection: ddPCR of WTC-11 ArpC3-TagGFP,R1,R1,inferred,R1,2023-09-29,2023-09-29,no,0,,0,
+@analysis/R1's updates to the pipeline: 3-channel spot detection and correlating detections with AP2 tracks,R1,R1,explicit,R1,2025-12-11,2025-12-15,no,0,,3,
+@analysis/Example experiment 3,Matt Akamatsu,Matt Akamatsu,inferred,Matt Akamatsu,2025-07-25,2025-07-25,no,0,,0,
+@imaging/Imaging endocytosis during lumenogenesis at 6h intervals,R1,R1,explicit,R1,2025-11-18,2025-11-18,yes,1,2026-01-08,0,51
+@analysis/Measure actin assembly and internalization markers at putative CME sites.,R2,R2,explicit,R2,2025-10-17,2025-10-17,no,0,,0,
+@microscopy/Tracking down the origin of the image jitter on the LLSM,R1,R1,explicit,R1,2025-06-16,2025-06-16,no,0,,0,
+@TC/Cloning 2x GFP positive WTC-11 ArpC3 TagGFP2 cells using the isoCell platform,R1,R1,explicit,R1,2024-08-27,2024-08-27,yes,1,2025-02-08,0,164
+@cytosim/Simulate endocytosis with Myosin-I with no power stroke and varied unbinding kinetics and catch bonding,Matt Akamatsu,Matt Akamatsu,explicit,Matt Akamatsu,2023-12-12,2024-02-29,no,0,,78,
+@microscopy/Imaging whole lumenoids during maturation to track lumen formation and polarity establishment,R1,R1,explicit,R1,2024-07-10,2024-07-10,yes,3,2024-08-08,0,28
+@TC/Pilot: growing WTC-10 cells in 3D culture,R1,R1,inferred,R1,2023-08-09,2023-08-09,no,0,,0,
+@analysis/scaling analysis for the data fidelity term,R10,R10,inferred,R10,2025-01-03,2025-01-03,no,0,,0,
+@TC/Piloting different coating conditions for glass coverslips to improve cell adhesion,R1,R1,explicit,R1,2024-08-16,2024-08-16,yes,1,2024-08-19,0,3
+@PCR/Junctional PCR Validation of bi-allelic ArpC3 TagGF2 candidate clone MA7 cl33,R1,R1,inferred,R1,2024-12-13,2024-12-13,no,0,,0,
+@microscopy/Localize membrane aggregates in lumenoids at different stages of maturation (TJP-1 & membrane dye),R1,R1,explicit,R1,2024-07-10,2024-07-10,yes,1,2025-09-17,0,433
+@gDNA/gDNA extraction of (new) MA10 clones 1~45 (RPE1-hTERT ArpC3-TagGFP3) using the MN vacuum kit,R1,R1,explicit,R1,2025-04-23,2025-04-23,no,0,,0,
+@PCR/Junctional and WT/insert validation of MA7 clones 105&107,R1,R1,inferred,R1,2025-04-24,2025-04-24,no,0,,0,
+@microscopy/Live/dead stain of forming lumenoids to asses if apoptosis plays any role in hiPSC lumen formation,Matt Akamatsu,R1,explicit,Matt Akamatsu,2024-05-16,2024-07-10,no,0,,55,
+@analysis/Initial analysis of 6-hour interval imaging,R1,R1,explicit,R1,2026-01-02,2026-01-02,no,0,,0,
+@microscopy/Compare internalization of dextrans of a wide variety of sizes through different endocytic routes,Matt Akamatsu,R5,explicit,Matt Akamatsu,2023-11-16,2023-11-16,no,0,,0,
+@ddPCR/ddPCR optimization: CNV for ArpC3-TagGFP,R1,R1,inferred,R1,2023-10-03,2023-10-03,no,0,,0,
+@analysis/Quantify the extent of stalling of endocytosis as a function of SiR-actin concentration,Matt Akamatsu,R1,explicit,Matt Akamatsu,2024-09-12,2025-10-09,yes,2,2025-07-29,391,-72
+"@Imaging/WAVE2, GRAF1, and IRSp53 localization in WT hiPSCs",R5,R5,explicit,R5,2025-02-13,2025-02-13,no,0,,0,
+@ddPCR/Clone validation of MA7 clones 105&107,R1,R1,inferred,R1,2025-04-24,2025-04-24,yes,1,2025-04-24,0,0
+@analysis/literature review on implicit neural representation,R10,R10,inferred,R10,2025-12-31,2025-12-31,no,0,,0,
+@TC/develop a WTC-11 ArpC3-TagGFP base cell line,R1,R1,explicit,R1,2023-10-10,2023-12-19,no,0,,69,
+@analysis/Introduce position or birth time dependant monomer potential strength. ,R2,R2,explicit,R2,2025-07-03,2025-07-03,no,0,,0,
+@analysis/Adressing negative values of distribution difference measures after correction,R2,R2,explicit,R2,2025-02-13,2025-02-13,no,0,,0,
+@analysis/Invstigate whether there are differences in ArpC3 detections when we use a TagGFP2 vs. Halo tag,R1,R1,explicit,R1,2026-01-22,2026-01-29,no,0,,6,
+@Imaging/Dextran uptake in WTC-11 cells,R5,R5,inferred,R5,2023-10-09,2025-01-09,yes,12,2023-10-18,457,8
+@FACS/Troubleshooting FACS contamination,R1,R1,explicit,R1,2024-10-18,2024-10-18,no,0,,0,
+@ddPCR/Clone Validation of MA10 -- RPE1 hTERT ArpC3 TagGFP2 clones 1-40,R1,R1,inferred,R1,2025-02-19,2025-02-19,no,0,,0,
+@PCR/Do a PCR with the RPP30 probe mix and the ArpC3 primer/probe mix with the ArpC3-tagGFP2 positive control gDNA,Matt Akamatsu,R6,explicit,Matt Akamatsu,2023-11-14,2023-11-14,no,0,,0,
+@analysis/Merge hipr-direct-bound-ends.pkl and branched-actin-bound-to-hip1r-ends-recalibrated.pkl,Matt Akamatsu,R4,explicit,Matt Akamatsu,2023-11-11,2024-06-27,no,0,,228,
+@TC/Evaluating cell and colony morphology on substrates with different stiffness and ECM coatings.,R1,R1,explicit,R1,2024-02-14,2024-02-14,yes,5,2024-03-14,0,28
+@TC/hESC Optimized Matrigel,R1,R1,inferred,R1,2025-01-15,2025-01-16,yes,1,2025-01-16,0,0
+@microscopy/Evaluate data from [[@Imaging/Dextran uptake in WTC-11 cells]] and enumerate cases of floating/attached colonies and nuclear fluorescence.,R5,R5,explicit,R5,2023-10-18,2023-10-18,no,0,,0,
+@imaging/GRAF1-mEGFP_clone115,R5,R5,inferred,R5,2025-11-25,2026-01-30,yes,1,2026-01-07,65,43
+@analysis/Inventory the spatio-temporal dynamics of endocytosis at the apical and basolateral membranes of lumenoids during lumenogenesis,R1,R1,inferred,R1,2025-01-15,2025-08-19,no,0,,215,

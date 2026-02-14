@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from calculate_metrics import calculate_all_metrics, print_metrics_summary
 from generate_visualizations import generate_all_visualizations
 from handoff_visualizations import generate_all_handoff_visualizations
-from create_evidence_bundle import create_evd5_bundle
+from create_evidence_bundle import create_evd1_bundle, create_evd5_bundle
 
 
 def generate_markdown_report(metrics: dict, output_path: Path):
@@ -52,7 +52,7 @@ def generate_markdown_report(metrics: dict, output_path: Path):
         "",
         "## Metric 1: Issue Conversion Rate",
         "",
-        "**Definition:** Percentage of issues that have been claimed and converted to active experiments.",
+        "**Definition:** Percentage of issues that have been claimed (i.e., converted to active experiments).",
         "",
     ]
 
@@ -64,39 +64,39 @@ def generate_markdown_report(metrics: dict, output_path: Path):
         f"|--------|-------|",
         f"| Conversion Rate | **{conv['conversion_rate_percent']}%** |",
         f"| Total Claimed | {conv['total_claimed']} |",
-        f"| - Explicit Claims (Claimed By:: field) | {conv['explicit_claims']} |",
-        f"| - Inferred Claims (experimental log by creator) | {conv['inferred_claims']} |",
+        f"| - Explicitly Claimed (Claimed By:: field) | {conv['explicit_claims']} |",
+        f"| - Inferred as Claimed (experimental log by creator) | {conv['inferred_claims']} |",
         f"| - ISS with Activity | {conv['iss_with_activity']} |",
         f"| Unclaimed ISS | {conv['unclaimed_iss']} |",
         f"| Total Issues | {conv['total_issues']} |",
         "",
-        "### Claim Type Breakdown",
+        "### Claiming Type Breakdown",
         "",
         f"| Type | Count |",
         f"|------|-------|",
-        f"| Cross-Person Claims | {conv['cross_person_claims']} |",
-        f"| Self-Claims | {conv['self_claims']} |",
+        f"| Cross-Person Claiming | {conv['cross_person_claims']} |",
+        f"| Self-Claiming | {conv['self_claims']} |",
         "",
     ])
 
-    # Cross-person claim examples
+    # Cross-person claiming examples
     if conv['cross_person_claim_list']:
         lines.extend([
-            "### Cross-Person Claim Examples (Idea Exchange)",
+            "### Cross-Person Claiming Examples (Idea Exchange)",
             "",
         ])
-        for claim in conv['cross_person_claim_list'][:5]:
+        for cp in conv['cross_person_claim_list'][:5]:
             lines.extend([
-                f"- **{claim['title'][:70]}...**",
-                f"  - Issue Created By: {claim.get('issue_created_by', 'Unknown')}",
-                f"  - Claimed By: {claim.get('claimed_by', 'Unknown')}",
+                f"- **{cp['title'][:70]}...**",
+                f"  - Issue Created By: {cp.get('issue_created_by', 'Unknown')}",
+                f"  - Claimed By: {cp.get('claimed_by', 'Unknown')}",
                 "",
             ])
 
     lines.extend([
         "---",
         "",
-        "## Metric 2: Time-to-Claim",
+        "## Metric 2: Time-to-Claiming",
         "",
         "**Definition:** Duration from when an Issue was created to when it was claimed.",
         "",
@@ -117,14 +117,14 @@ def generate_markdown_report(metrics: dict, output_path: Path):
             "",
         ])
     else:
-        lines.append("*No data available for time-to-claim calculation.*\n")
+        lines.append("*No data available for time-to-claiming calculation.*\n")
 
     lines.extend([
         "---",
         "",
         "## Metric 3: Time-to-First-Result",
         "",
-        "**Definition:** Duration from when an experiment was claimed to when the first Result node was created.",
+        "**Definition:** Duration from when an experiment was claimed (started) to when the first Result node was created.",
         "",
     ])
 
@@ -179,7 +179,7 @@ def generate_markdown_report(metrics: dict, output_path: Path):
     lines.extend([
         "---",
         "",
-        "## Metric 5: Cross-Person Claims (Idea Exchange)",
+        "## Metric 5: Cross-Person Claiming (Idea Exchange)",
         "",
         "**Definition:** Cases where the person who claimed an issue is different from the person who created it.",
         "This is the key metric demonstrating transfer of ideas between researchers.",
@@ -192,8 +192,8 @@ def generate_markdown_report(metrics: dict, output_path: Path):
         "",
         f"| Metric | Value |",
         f"|--------|-------|",
-        f"| Cross-Person Claims | **{xp['cross_person_count']}** |",
-        f"| Self-Claims | {xp['self_claim_count']} |",
+        f"| Cross-Person Claiming | **{xp['cross_person_count']}** |",
+        f"| Self-Claiming | {xp['self_claim_count']} |",
         f"| Idea Exchange Rate | **{xp['idea_exchange_rate']}%** |",
         "",
     ])
@@ -202,7 +202,7 @@ def generate_markdown_report(metrics: dict, output_path: Path):
         lines.extend([
             "### Idea Exchange Pairs",
             "",
-            "| From (Issue Creator) | To (Claimer) | Count |",
+            "| From (Issue Creator) | To (Claimed By) | Count |",
             "|---------------------|--------------|-------|",
         ])
         for pair in xp['exchange_pairs']:
@@ -217,8 +217,8 @@ def generate_markdown_report(metrics: dict, output_path: Path):
         "The Issues board in the Akamatsu Lab discourse graph demonstrates:",
         "",
         f"1. **{conv['conversion_rate_percent']}% conversion rate** - Issues are being actively claimed and worked on",
-        f"2. **{xp['cross_person_count']} cross-person claims** - Ideas are being transferred between researchers",
-        f"3. **{xp['idea_exchange_rate']}% idea exchange rate** - A significant portion of claims represent idea transfer",
+        f"2. **{xp['cross_person_count']} cross-person claiming instances** - Ideas are being transferred between researchers",
+        f"3. **{xp['idea_exchange_rate']}% idea exchange rate** - A significant portion of claiming represents idea transfer",
         "",
     ])
 
@@ -257,7 +257,7 @@ def run_pipeline(
     if jsonld_path is None:
         jsonld_path = str(base_path / 'graph raw data' / 'akamatsulab_discourse-graph-json-LD202602112140.json')
     if roam_json_path is None:
-        roam_json_path = str(base_path / 'graph raw data' / 'akamatsulab-whole-graph-json-2026-02-11-21-45-17.json')
+        roam_json_path = str(base_path / 'graph raw data' / 'akamatsulab-whole-graph-2026-02-13-22-24-27.json')
     if output_dir is None:
         output_dir = base_path / 'output'
     else:
@@ -333,6 +333,7 @@ def run_pipeline(
     print("-" * 40)
     print("STEP 7: Generating evidence bundles...")
     print("-" * 40)
+    evd1_dir = create_evd1_bundle(metrics, output_dir, viz_dir)
     bundle_dir = create_evd5_bundle(metrics, output_dir, viz_dir)
 
     print()

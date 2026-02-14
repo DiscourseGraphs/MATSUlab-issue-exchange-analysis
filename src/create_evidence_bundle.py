@@ -100,9 +100,9 @@ def _write_funnel_summary(metrics: dict, path: Path):
             "claim_to_result_percent": round(with_results / total_claimed * 100, 1) if total_claimed > 0 else 0,
             "issue_to_result_percent": round(with_results / total_issues * 100, 1) if total_issues > 0 else 0,
         },
-        "claim_type_breakdown": {
-            "explicit_claims": conv['explicit_claims'],
-            "inferred_claims": conv['inferred_claims'],
+        "claiming_type_breakdown": {
+            "explicitly_claimed": conv['explicit_claims'],
+            "inferred_claiming": conv['inferred_claims'],
             "iss_with_activity": conv['iss_with_activity'],
         },
         "result_breakdown": {
@@ -110,9 +110,9 @@ def _write_funnel_summary(metrics: dict, path: Path):
             "claimed_without_results": total_claimed - with_results,
             "avg_res_per_producing_experiment": round(total_res / with_results, 1) if with_results > 0 else 0,
         },
-        "claim_authorship": {
-            "self_claims": conv['self_claims'],
-            "cross_person_claims": conv['cross_person_claims'],
+        "claiming_authorship": {
+            "self_claimed": conv['self_claims'],
+            "cross_person_claiming": conv['cross_person_claims'],
             "idea_exchange_rate_percent": metrics['metrics']['cross_person_claims']['idea_exchange_rate'],
         },
     }
@@ -204,7 +204,7 @@ def _write_evidence_statement(metrics: dict, path: Path):
     iss_formal = len([i for i in range(ti) if True])  # placeholder; use unclaimed + iss_with_activity as ISS count
     # ISS formal nodes = unclaimed ISS + ISS with activity (pages still named [[ISS]])
     iss_formal_count = uc + ia
-    # Experiment pages = explicit + inferred claims
+    # Experiment pages = explicitly + inferred claiming
     exp_pages_count = ec + ic
 
     content = f"""# EVD 5 — Issue-to-Experiment-to-Result Conversion Funnel
@@ -215,7 +215,7 @@ Of {ti} total issues in the MATSUlab discourse graph, {tc} ({cr:.0f}%) were clai
 
 ## Evidence Description
 
-The issue-to-result funnel was constructed by tracking the attrition of issues through three stages: creation, claim, and result production. All {ti} identifiable issues ({iss_formal_count} formal ISS nodes plus {exp_pages_count} experiment pages with inferred claims) formed the top of the funnel. Of these, {tc} ({cr:.0f}%) were claimed through any mechanism — {ec} explicit claims (with `Claimed By::` field), {ic} inferred claims (experimental log entries by the page creator), and {ia} ISS pages with experimental log activity. This represents a {cr:.0f}% issue-to-experiment conversion rate.
+The issue-to-result funnel was constructed by tracking the attrition of issues through three stages: creation, claiming, and result production. All {ti} identifiable issues ({iss_formal_count} formal ISS nodes plus {exp_pages_count} experiment pages with inferred claiming) formed the top of the funnel. Of these, {tc} ({cr:.0f}%) were claimed through any mechanism — {ec} explicitly claimed (with `Claimed By::` field), {ic} inferred as claimed (experimental log entries by the page creator), and {ia} ISS pages with experimental log activity. This represents a {cr:.0f}% issue-to-experiment conversion rate.
 
 Of the {tc} claimed experiments, {wr} ({c2r:.0f}%) had at least one linked RES (Result) node, representing experiments that produced a formally recorded result. The remaining {no_res} claimed experiments either have work still in progress or recorded their outputs in formats other than formal `[[RES]]` pages. The {wr} result-producing experiments generated a total of {total_res} RES nodes, averaging {avg_res} results per experiment. Overall, {i2r:.0f}% of all issues progressed through the full funnel from creation to formal result production.
 
@@ -225,7 +225,7 @@ Of the {tc} claimed experiments, {wr} ({c2r:.0f}%) had at least one linked RES (
 
 ## Figure Legend
 
-**Figure 5. Issue-to-experiment-to-result flow in the MATSUlab discourse graph.** Alluvial (Sankey) diagram showing all {tc} claimed experiments flowing through three stages: Issue Created (left, who created the issue), Issue Claimed (center, who claimed the experiment), and Result Created (right, who created the first formal result). Band width is proportional to the number of experiments. Green bands indicate self-claims (same person created the issue and claimed the experiment); purple bands indicate cross-person claims (idea exchange, where a different researcher claimed the issue). Of the {tc} claimed experiments, {wr} produced at least one formal result node, yielding {total_res} total RES nodes. Researcher names are anonymized (R1–R11); the PI (Matt Akamatsu) is identified. An interactive HTML version (`fig5_alluvial_flow.html`) allows hovering to inspect individual flows.
+**Figure 5. Issue-to-experiment-to-result flow in the MATSUlab discourse graph.** Alluvial (Sankey) diagram showing all {tc} claimed experiments flowing through three stages: Issue Created (left, who created the issue), Claimed By (center, who claimed the experiment), and Result Created (right, who created the first formal result). Band width is proportional to the number of experiments. Green bands indicate self-claiming (same person created the issue and claimed the experiment); purple bands indicate cross-person claiming (idea exchange, where a different researcher claimed the issue). Of the {tc} claimed experiments, {wr} produced at least one formal result node, yielding {total_res} total RES nodes. Researcher names are anonymized (R1–R11); the PI (Matt Akamatsu) is identified. An interactive HTML version (`fig5_alluvial_flow.html`) allows hovering to inspect individual flows.
 
 ## Supplemental Figure
 
@@ -241,10 +241,10 @@ def _write_methods_excerpt(output_dir: Path, path: Path):
     """Extract relevant methods sections for the bundle."""
     methods_path = output_dir / 'methods.md'
 
-    # Sections relevant to EVD 5: conversion rate, claim detection, RES linking
+    # Sections relevant to EVD 5: conversion rate, claiming detection, RES linking
     sections_to_extract = [
         '## 2. Node Identification',
-        '## 3. Claim Detection',
+        '## 3. Claiming Detection',
         '## 5. Linking Result (RES) Nodes to Experiments',
         '## 6. Metric Definitions and Calculations',
     ]
@@ -336,7 +336,7 @@ def _write_evidence_jsonld(metrics: dict, path: Path):
             "dc:title": "Discourse graph funnel analysis",
             "dc:description": (
                 "Automated pipeline parsing JSON-LD and Roam JSON exports to identify "
-                "issue nodes, detect claims (explicit via Claimed By:: field and inferred "
+                "issue nodes, detect claiming (explicit via Claimed By:: field and inferred "
                 "via experimental log presence), link result nodes using a 3-tier matching "
                 "strategy (relation instances, backreference matching, full description "
                 "matching), and compute stage-by-stage attrition rates."
@@ -374,10 +374,10 @@ def _write_evidence_jsonld(metrics: dict, path: Path):
                 f"Figure 5. Issue-to-experiment-to-result flow in the MATSUlab discourse "
                 f"graph. Alluvial (Sankey) diagram showing all {conv['total_claimed']} claimed "
                 f"experiments flowing through three stages: Issue Created (left, who created "
-                f"the issue), Issue Claimed (center, who claimed the experiment), and Result "
+                f"the issue), Claimed By (center, who claimed the experiment), and Result "
                 f"Created (right, who created the first formal result). Band width is "
-                f"proportional to number of experiments. Green bands indicate self-claims; "
-                f"purple bands indicate cross-person claims (idea exchange). Of the "
+                f"proportional to number of experiments. Green bands indicate self-claiming; "
+                f"purple bands indicate cross-person claiming (idea exchange). Of the "
                 f"{conv['total_claimed']} claimed experiments, {ttr['count']} produced at "
                 f"least one formal result node. Researcher names are anonymized (R1–R11); "
                 f"PI (Matt Akamatsu) is identified. An interactive HTML version is included."
@@ -409,7 +409,7 @@ def _write_evidence_jsonld(metrics: dict, path: Path):
                 "@type": "schema:DataDownload",
                 "schema:contentUrl": "data/experiment_details.csv",
                 "schema:encodingFormat": "text/csv",
-                "dc:description": "Per-experiment detail rows with claim type, timestamps, and result counts",
+                "dc:description": "Per-experiment detail rows with claiming type, timestamps, and result counts",
             },
         ],
         "dge:documentation": [
@@ -421,7 +421,7 @@ def _write_evidence_jsonld(metrics: dict, path: Path):
             {
                 "@type": "schema:TextDigitalDocument",
                 "schema:contentUrl": "docs/methods_excerpt.md",
-                "dc:description": "Relevant methods sections for claim detection, RES linking, and metric calculation",
+                "dc:description": "Relevant methods sections for claiming detection, RES linking, and metric calculation",
             },
         ],
         "prov:wasGeneratedBy": {
@@ -440,13 +440,13 @@ def _write_evidence_jsonld(metrics: dict, path: Path):
         "dge:summaryMetrics": {
             "total_issues": conv['total_issues'],
             "claimed_experiments": conv['total_claimed'],
-            "explicit_claims": conv['explicit_claims'],
-            "inferred_claims": conv['inferred_claims'],
+            "explicitly_claimed": conv['explicit_claims'],
+            "inferred_claiming": conv['inferred_claims'],
             "iss_with_activity": conv['iss_with_activity'],
             "experiments_with_results": ttr['count'],
             "total_res_nodes": total_res,
             "conversion_rate_percent": conv['conversion_rate_percent'],
-            "claim_to_result_percent": round(ttr['count'] / conv['total_claimed'] * 100, 1) if conv['total_claimed'] > 0 else 0,
+            "claiming_to_result_percent": round(ttr['count'] / conv['total_claimed'] * 100, 1) if conv['total_claimed'] > 0 else 0,
         },
     }
 
@@ -524,9 +524,9 @@ def _write_ro_crate_metadata(path: Path):
                 "name": "Figure 5: Issue-to-Experiment-to-Result Alluvial Flow",
                 "description": (
                     "Alluvial (Sankey) diagram showing all claimed experiments flowing "
-                    "through three stages: Issue Created → Issue Claimed → Result Created. "
-                    "Band width proportional to experiment count; color indicates self-claim "
-                    "(green) vs cross-person claim (purple). Researcher names anonymized."
+                    "through three stages: Issue Created → Claimed By → Result Created. "
+                    "Band width proportional to experiment count; color indicates self-claiming "
+                    "(green) vs cross-person claiming (purple). Researcher names anonymized."
                 ),
                 "encodingFormat": "image/png",
             },
@@ -547,7 +547,7 @@ def _write_ro_crate_metadata(path: Path):
                 "description": (
                     "Supplemental aggregate view. Left: horizontal funnel bar chart "
                     "showing progressive attrition. Right: stage-by-stage composition "
-                    "breakdown by claim type and result status."
+                    "breakdown by claiming type and result status."
                 ),
                 "encodingFormat": "image/png",
             },
@@ -556,7 +556,7 @@ def _write_ro_crate_metadata(path: Path):
                 "@type": "File",
                 "name": "Funnel Summary Data",
                 "description": (
-                    "Aggregated funnel counts, conversion rates, claim type breakdown, "
+                    "Aggregated funnel counts, conversion rates, claiming type breakdown, "
                     "and result statistics."
                 ),
                 "encodingFormat": "application/json",
@@ -566,7 +566,7 @@ def _write_ro_crate_metadata(path: Path):
                 "@type": "File",
                 "name": "Experiment Details",
                 "description": (
-                    "Per-experiment rows with title, creator, claimer, claim type, "
+                    "Per-experiment rows with title, creator, claimed by, claiming type, "
                     "timestamps, result counts, and time metrics."
                 ),
                 "encodingFormat": "text/csv",
@@ -584,7 +584,7 @@ def _write_ro_crate_metadata(path: Path):
                 "name": "Methods Excerpt",
                 "description": (
                     "Relevant sections from the full methods document covering "
-                    "node identification, claim detection, RES linking, and metric definitions."
+                    "node identification, claiming detection, RES linking, and metric definitions."
                 ),
                 "encodingFormat": "text/markdown",
             },
@@ -654,7 +654,7 @@ All three undergraduate researchers generated an original result from their anal
 
 The onboarding timeline was reconstructed for three undergraduate researchers by tracing key milestones through their daily notes and the discourse graph: (1) first day in lab, (2) first experiment reference in daily notes, (3) first plot (linked image in notes), and (4) first formal RES node creation. Dates were extracted from Roam Research page metadata and daily log entries.
 
-Researcher A joined the lab on February 23, 2024 and claimed their first experiment (`@analysis/Quantify the percentage of simulated endocytic events that assemble detectable amounts of actin`) on April 5, 2024 (41 days). They produced their first plot on June 20, 2024 (118 days) and first RES node on June 27, 2024 (125 days). This represents a self-directed exploration pathway where the student browsed the Issues board and claimed an experiment matching their interests.
+Researcher A joined the lab on February 23, 2024 and started their first experiment (`@analysis/Quantify the percentage of simulated endocytic events that assemble detectable amounts of actin`) on April 5, 2024 (41 days). They produced their first plot on June 20, 2024 (118 days) and first RES node on June 27, 2024 (125 days). This represents a self-directed exploration pathway where the student browsed the Issues board and chose an experiment matching their interests.
 
 Researcher B joined on October 10, 2024 and was assigned an entry project (`@analysis/Plot the number of bound Hip1R over time for different Arp2/3 distributions in endocytosis simulations`) explicitly designed "to get acquainted with our simulations and the analysis framework." They began work on October 15, 2024 (5 days), producing plots the same day. Their first RES node was created November 26, 2024 (47 days).
 
@@ -943,15 +943,15 @@ def _write_evd1_conversion_data(metrics: dict, path: Path):
             "conversion_rate_percent": conv['conversion_rate_percent'],
             "unclaimed_iss": conv['unclaimed_iss'],
         },
-        "claim_type_breakdown": {
-            "explicit_claims": conv['explicit_claims'],
-            "inferred_claims": conv['inferred_claims'],
+        "claiming_type_breakdown": {
+            "explicitly_claimed": conv['explicit_claims'],
+            "inferred_claiming": conv['inferred_claims'],
             "iss_with_activity": conv['iss_with_activity'],
         },
-        "claim_authorship": {
-            "self_claims": conv['self_claims'],
-            "cross_person_claims": conv['cross_person_claims'],
-            "experiment_claims_with_known_authorship": conv['self_claims'] + conv['cross_person_claims'],
+        "claiming_authorship": {
+            "self_claimed": conv['self_claims'],
+            "cross_person_claiming": conv['cross_person_claims'],
+            "claimed_experiments_with_known_authorship": conv['self_claims'] + conv['cross_person_claims'],
             "idea_exchange_rate_percent": metrics['metrics']['cross_person_claims']['idea_exchange_rate'],
         },
         "result_production": {
@@ -963,7 +963,7 @@ def _write_evd1_conversion_data(metrics: dict, path: Path):
         },
         "issue_composition": {
             "formal_iss_nodes": conv['unclaimed_iss'] + conv['iss_with_activity'],
-            "experiment_pages_with_inferred_claims": conv['explicit_claims'] + conv['inferred_claims'],
+            "experiment_pages_with_inferred_claiming": conv['explicit_claims'] + conv['inferred_claims'],
             "description": (
                 f"Total issues = {conv['unclaimed_iss'] + conv['iss_with_activity']} formal ISS nodes + "
                 f"{conv['explicit_claims'] + conv['inferred_claims']} experiment pages = {conv['total_issues']}"
@@ -1004,17 +1004,17 @@ def _write_evd1_evidence_statement(metrics: dict, path: Path):
 
 ## Evidence Statement
 
-{cr:.0f}% of MATSUlab issues (n={ti}) were claimed as experiments and {c2r:.0f}% of those claimed at least one formal result node, yielding {total_res} total RES nodes.
+{cr:.0f}% of MATSUlab issues (n={ti}) were claimed as experiments and {c2r:.0f}% of those produced at least one formal result node, yielding {total_res} total RES nodes.
 
 ## Evidence Description
 
-The issue conversion rate was computed across all identifiable issues in the MATSUlab Roam Research discourse graph. Issues were identified as either formal ISS (Issue) nodes (n={iss_formal_count}) or experiment pages with inferred claims that lacked formal ISS metadata (n={exp_pages_count}), giving a total of {ti} issues.
+The issue conversion rate was computed across all identifiable issues in the MATSUlab Roam Research discourse graph. Issues were identified as either formal ISS (Issue) nodes (n={iss_formal_count}) or experiment pages with inferred claiming that lacked formal ISS metadata (n={exp_pages_count}), giving a total of {ti} issues.
 
-An issue was considered "claimed" if it had (a) a `Claimed By::` field populated with a researcher name (explicit claim, n={ec}), (b) experimental log entries authored by the page creator but no `Claimed By::` field (inferred claim, n={ic}), or (c) an ISS page with experimental log content indicating active work (n={ia}). This yielded {tc} claimed experiments out of {ti} total issues ({cr}%).
+An issue was considered "claimed" if it had (a) a `Claimed By::` field populated with a researcher name (explicitly claimed, n={ec}), (b) experimental log entries authored by the page creator but no `Claimed By::` field (inferred as claimed, n={ic}), or (c) an ISS page with experimental log content indicating active work (n={ia}). This yielded {tc} claimed experiments out of {ti} total issues ({cr}%).
 
 Of the {tc} claimed experiments, {wr} ({c2r:.0f}%) had at least one linked RES (Result) node, representing experiments that produced a formally recorded result. The {wr} result-producing experiments generated a total of {total_res} RES nodes, averaging {avg_res} results per experiment. The remaining {no_res} claimed experiments either have work still in progress or recorded their outputs in formats other than formal `[[RES]]` pages.
 
-Among the {known_pairs} experiment-page claims with known creator\u2013claimer pairs, {self_pct:.0f}% ({sc}) were self-claims and {xp_pct:.0f}% ({xp}) were cross-person claims where the issue creator and claimer were different people.
+Among the {known_pairs} claimed experiments with known creator–claimer pairs, {self_pct:.0f}% ({sc}) were self-claimed and {xp_pct:.0f}% ({xp}) were cross-person claiming where the issue creator and the person who claimed it were different people.
 
 ## Figures
 
@@ -1023,7 +1023,7 @@ Among the {known_pairs} experiment-page claims with known creator\u2013claimer p
 
 ## Figure Legend
 
-**Figure 1. Issue conversion rate and claim authorship in the MATSUlab discourse graph.** **(Left)** Stacked horizontal bar showing the composition of all {ti} issues. Blue: explicit claims identified via `Claimed By::` metadata field (n={ec}). Green: inferred claims identified by experimental log entries authored by the page creator (n={ic}). Amber: ISS pages with experimental log activity but no formal conversion to experiment format (n={ia}). Grey: unclaimed ISS pages with no evidence of active work (n={uc}). Bracket indicates total claimed issues ({tc}, {cr}%). **(Right)** Donut chart showing claim authorship breakdown among the {known_pairs} experiment-page claims. Orange: self-claims where the issue creator and claimer were the same person (n={sc}, {self_pct:.0f}%). Purple: cross-person claims where a different researcher claimed the issue (n={xp}, {xp_pct:.0f}%).
+**Figure 1. Issue conversion rate and claiming authorship in the MATSUlab discourse graph.** **(Left)** Stacked horizontal bar showing the composition of all {ti} issues. Blue: explicitly claimed via `Claimed By::` metadata field (n={ec}). Green: inferred as claimed based on experimental log entries authored by the page creator (n={ic}). Amber: ISS pages with experimental log activity but no formal conversion to experiment format (n={ia}). Grey: unclaimed ISS pages with no evidence of active work (n={uc}). Bracket indicates total claimed issues ({tc}, {cr}%). **(Right)** Donut chart showing claiming authorship breakdown among the {known_pairs} claimed experiments. Orange: self-claimed where the issue creator and the person claiming were the same person (n={sc}, {self_pct:.0f}%). Purple: cross-person claiming where a different researcher claimed the issue (n={xp}, {xp_pct:.0f}%).
 """
     with open(path, 'w') as f:
         f.write(content)
@@ -1035,7 +1035,7 @@ def _write_evd1_methods_excerpt(output_dir: Path, path: Path):
 
     sections_to_extract = [
         '## 2. Node Identification',
-        '## 3. Claim Detection',
+        '## 3. Claiming Detection',
         '## 6. Metric Definitions and Calculations',
     ]
 
@@ -1111,7 +1111,7 @@ def _write_evd1_evidence_jsonld(metrics: dict, path: Path):
             "dc:title": "Issue-to-experiment conversion rate and result production",
             "dc:description": (
                 f"The proportion of issues posted to a discourse graph Issues board that "
-                f"are claimed as experiments, and the subsequent proportion of claimed "
+                f"are claimed as experiments, and the subsequent proportion of those claimed "
                 f"experiments that produce formal result nodes. Measured across "
                 f"{conv['total_issues']} issues, {conv['total_claimed']} claimed experiments, "
                 f"and {total_res} RES nodes in the MATSUlab discourse graph."
@@ -1123,8 +1123,8 @@ def _write_evd1_evidence_jsonld(metrics: dict, path: Path):
             "dc:description": (
                 f"Automated pipeline parsing JSON-LD and Roam JSON exports to identify "
                 f"issue nodes ({conv['unclaimed_iss'] + conv['iss_with_activity']} formal ISS + "
-                f"{conv['explicit_claims'] + conv['inferred_claims']} experiment pages), detect claims via "
-                f"a two-tier strategy (explicit via Claimed By:: field, n={conv['explicit_claims']}; inferred via "
+                f"{conv['explicit_claims'] + conv['inferred_claims']} experiment pages), detect claiming via "
+                f"a two-tier strategy (explicitly claimed via Claimed By:: field, n={conv['explicit_claims']}; inferred via "
                 f"experimental log presence, n={conv['inferred_claims']}; plus {conv['iss_with_activity']} ISS pages "
                 f"with activity), and link result nodes using a 3-tier matching strategy (relation instances, "
                 f"backreference matching, full description matching)."
@@ -1158,18 +1158,18 @@ def _write_evd1_evidence_jsonld(metrics: dict, path: Path):
                 "schema:contentUrl": "fig1_conversion_rate.png",
                 "schema:encodingFormat": "image/png",
                 "dge:figureLegend": (
-                    f"Figure 1. Issue conversion rate and claim authorship in the MATSUlab "
+                    f"Figure 1. Issue conversion rate and claiming authorship in the MATSUlab "
                     f"discourse graph. (Left) Stacked horizontal bar showing the composition "
-                    f"of all {conv['total_issues']} issues: explicit claims ({conv['explicit_claims']}, blue), "
-                    f"inferred claims ({conv['inferred_claims']}, green), "
+                    f"of all {conv['total_issues']} issues: explicitly claimed ({conv['explicit_claims']}, blue), "
+                    f"inferred claiming ({conv['inferred_claims']}, green), "
                     f"ISS with activity ({conv['iss_with_activity']}, amber), "
                     f"unclaimed ({conv['unclaimed_iss']}, grey). Bracket indicates "
                     f"total claimed: {conv['total_claimed']} ({conv['conversion_rate_percent']}%). "
-                    f"(Right) Donut chart showing claim authorship "
-                    f"among {conv['self_claims'] + conv['cross_person_claims']} experiment-page claims: "
-                    f"self-claims ({conv['self_claims']}, "
+                    f"(Right) Donut chart showing claiming authorship "
+                    f"among {conv['self_claims'] + conv['cross_person_claims']} claimed experiments: "
+                    f"self-claimed ({conv['self_claims']}, "
                     f"{round(conv['self_claims'] / (conv['self_claims'] + conv['cross_person_claims']) * 100) if (conv['self_claims'] + conv['cross_person_claims']) > 0 else 0}%) "
-                    f"and cross-person claims ({conv['cross_person_claims']}, "
+                    f"and cross-person claiming ({conv['cross_person_claims']}, "
                     f"{round(conv['cross_person_claims'] / (conv['self_claims'] + conv['cross_person_claims']) * 100) if (conv['self_claims'] + conv['cross_person_claims']) > 0 else 0}%)."
                 ),
             },
@@ -1189,7 +1189,7 @@ def _write_evd1_evidence_jsonld(metrics: dict, path: Path):
                 "schema:contentUrl": "data/conversion_data.json",
                 "schema:encodingFormat": "application/json",
                 "dc:description": (
-                    "Aggregated conversion rate data with claim type breakdown, "
+                    "Aggregated conversion rate data with claiming type breakdown, "
                     "authorship statistics, and result production metrics"
                 ),
             },
@@ -1204,7 +1204,7 @@ def _write_evd1_evidence_jsonld(metrics: dict, path: Path):
                 "@type": "schema:TextDigitalDocument",
                 "schema:contentUrl": "docs/methods_excerpt.md",
                 "dc:description": (
-                    "Relevant methods sections for node identification, claim detection, "
+                    "Relevant methods sections for node identification, claiming detection, "
                     "and metric calculation"
                 ),
             },
@@ -1225,17 +1225,17 @@ def _write_evd1_evidence_jsonld(metrics: dict, path: Path):
         "dge:summaryMetrics": {
             "total_issues": conv['total_issues'],
             "claimed_experiments": conv['total_claimed'],
-            "explicit_claims": conv['explicit_claims'],
-            "inferred_claims": conv['inferred_claims'],
+            "explicitly_claimed": conv['explicit_claims'],
+            "inferred_claiming": conv['inferred_claims'],
             "iss_with_activity": conv['iss_with_activity'],
             "unclaimed_iss": conv['unclaimed_iss'],
             "conversion_rate_percent": conv['conversion_rate_percent'],
             "experiments_with_results": ttr['count'],
-            "claim_to_result_percent": round(ttr['count'] / conv['total_claimed'] * 100, 1) if conv['total_claimed'] > 0 else 0,
+            "claiming_to_result_percent": round(ttr['count'] / conv['total_claimed'] * 100, 1) if conv['total_claimed'] > 0 else 0,
             "total_res_nodes": total_res,
             "avg_res_per_producing_experiment": round(total_res / ttr['count'], 1) if ttr['count'] > 0 else 0,
-            "self_claims": conv['self_claims'],
-            "cross_person_claims": conv['cross_person_claims'],
+            "self_claimed": conv['self_claims'],
+            "cross_person_claiming": conv['cross_person_claims'],
             "idea_exchange_rate_percent": metrics['metrics']['cross_person_claims']['idea_exchange_rate'],
         },
     }
@@ -1310,9 +1310,9 @@ def _write_evd1_ro_crate_metadata(path: Path):
                 "name": "Figure 1: Issue Conversion Rate (static)",
                 "description": (
                     "Two-panel figure. Left: stacked horizontal bar showing 434 issues "
-                    "broken down by claim type (68 explicit, 54 inferred, 5 ISS with "
-                    "activity, 307 unclaimed). Right: donut chart of claim authorship "
-                    "(103 self-claims, 19 cross-person)."
+                    "broken down by claiming type (68 explicitly, 54 inferred, 5 ISS with "
+                    "activity, 307 unclaimed). Right: donut chart of claiming authorship "
+                    "(103 self-claimed, 19 cross-person)."
                 ),
                 "encodingFormat": "image/png",
             },
@@ -1332,7 +1332,7 @@ def _write_evd1_ro_crate_metadata(path: Path):
                 "@type": "File",
                 "name": "Conversion Rate Data",
                 "description": (
-                    "Aggregated conversion rate data with claim type breakdown, "
+                    "Aggregated conversion rate data with claiming type breakdown, "
                     "authorship statistics, and result production metrics."
                 ),
                 "encodingFormat": "application/json",
@@ -1350,7 +1350,7 @@ def _write_evd1_ro_crate_metadata(path: Path):
                 "name": "Methods Excerpt",
                 "description": (
                     "Relevant sections from the full methods document covering "
-                    "node identification, claim detection, and metric definitions."
+                    "node identification, claiming detection, and metric definitions."
                 ),
                 "encodingFormat": "text/markdown",
             },

@@ -5,7 +5,7 @@ Generate Visualizations for Issue Metrics
 Creates publication-quality figures summarizing the discourse graph metrics:
 
 Figure 1: Issue Conversion Rate (stacked bar + pie)
-Figure 2: Time-to-Claim and Time-to-First-Result distributions (paired histograms)
+Figure 2: Time-to-Claiming and Time-to-First-Result distributions (paired histograms)
 Figure 3: Contributor Breadth (bar + cumulative)
 Figure 4: Idea Exchange Network (directed graph + heatmap)
 
@@ -71,33 +71,40 @@ def _normalize_name(name: str) -> str:
 # ────────────────────────────────────────────────
 def create_conversion_rate_figure(metrics: dict, output_dir: Path):
     """
-    Left panel:  stacked horizontal bar — claimed experiments (blue) vs unclaimed ISS (grey)
-    Right panel: donut showing self vs cross-person among claimed experiments
+    Left panel:  stacked horizontal bar — explicit (blue), inferred (green),
+                 ISS with activity (amber), unclaimed ISS (grey)
+    Right panel: donut showing self vs cross-person among experiment claims
     """
     conv = metrics['metrics']['conversion_rate']
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5),
                                     gridspec_kw={'width_ratios': [1.4, 1]})
 
-    # --- Left: stacked horizontal bar (claimed vs unclaimed) ---
+    # --- Left: stacked horizontal bar with claim type breakdown ---
+    explicit = conv['explicit_claims']
+    inferred = conv['inferred_claims']
+    iss_act = conv['iss_with_activity']
+    unclaimed = conv['unclaimed_iss']
     claimed_total = conv['total_claimed']
-    unclaimed_total = conv['unclaimed_iss']
-    total_issues = claimed_total + unclaimed_total
+    total_issues = conv['total_issues']
 
-    categories = ['Claimed\nexperiments', 'Unclaimed\nISS']
-    values = [claimed_total, unclaimed_total]
-    colors = [C_EXPLICIT, C_UNCLAIMED]
+    segments = [
+        (explicit, C_EXPLICIT, 'Explicitly\nclaimed'),
+        (inferred, C_INFERRED, 'Inferred\nclaiming'),
+        (iss_act, C_ISS_ACT, 'ISS with\nactivity'),
+        (unclaimed, C_UNCLAIMED, 'Unclaimed\nISS'),
+    ]
 
-    # Single stacked bar
     left = 0
-    for val, color, cat in zip(values, colors, categories):
-        ax1.barh(0, val, left=left, color=color, edgecolor='white',
-                 linewidth=1.5, height=0.5, label=cat)
-        if val > 20:
-            ax1.text(left + val / 2, 0, str(val),
-                     ha='center', va='center', fontweight='bold',
-                     fontsize=12, color='white')
-        left += val
+    for val, color, cat in segments:
+        if val > 0:
+            ax1.barh(0, val, left=left, color=color, edgecolor='white',
+                     linewidth=1.5, height=0.5, label=cat)
+            if val > 15:
+                ax1.text(left + val / 2, 0, str(val),
+                         ha='center', va='center', fontweight='bold',
+                         fontsize=12, color='white')
+            left += val
 
     # Bracket annotation for claimed portion
     ax1.annotate(f'Claimed: {claimed_total}  ({conv["conversion_rate_percent"]}%)',
@@ -111,14 +118,16 @@ def create_conversion_rate_figure(metrics: dict, output_dir: Path):
     ax1.set_ylim(-0.6, 0.6)
     ax1.set_yticks([])
     ax1.set_xlabel('Number of Issues')
-    ax1.set_title(f'Issue Composition (n={total_issues})')
+    ax1.set_title('Issue Conversion Rate')
     ax1.legend(loc='upper right', fontsize=9, framealpha=0.9)
     ax1.spines['left'].set_visible(False)
 
     # --- Right: donut of self vs cross-person ---
+    # Use experiment claims with known creator-claimer pairs
+    known_claims = conv['self_claims'] + conv['cross_person_claims']
     sizes = [conv['self_claims'], conv['cross_person_claims']]
-    labels_pie = [f'Self-claims\n({conv["self_claims"]})',
-                  f'Cross-person\n({conv["cross_person_claims"]})']
+    labels_pie = [f'Self-claiming\n({conv["self_claims"]})',
+                  f'Cross-person\nclaiming ({conv["cross_person_claims"]})']
     colors_pie = [C_SELF, C_CROSS]
 
     wedges, texts, autotexts = ax2.pie(
@@ -132,7 +141,7 @@ def create_conversion_rate_figure(metrics: dict, output_dir: Path):
         at.set_fontweight('bold')
         at.set_fontsize(11)
 
-    ax2.set_title(f'Claim Authorship\n(among {claimed_total} experiment claims)')
+    ax2.set_title(f'Claiming Authorship\n(among {known_claims} claimed experiments)')
 
     plt.tight_layout()
     path = output_dir / 'fig1_conversion_rate.png'
@@ -146,7 +155,7 @@ def create_conversion_rate_figure(metrics: dict, output_dir: Path):
 # ────────────────────────────────────────────────
 def create_time_distributions_figure(metrics: dict, output_dir: Path):
     """
-    Top panel:  Time-to-Claim histogram (log-ish bins, plus inset of 0-day spike)
+    Top panel:  Time-to-Claiming histogram (log-ish bins, plus inset of 0-day spike)
     Bottom panel: Time-to-First-Result histogram
     """
     ttc = metrics['metrics']['time_to_claim']
@@ -154,7 +163,7 @@ def create_time_distributions_figure(metrics: dict, output_dir: Path):
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
 
-    # --- Top: Time-to-Claim ---
+    # --- Top: Time-to-Claiming ---
     if ttc['count'] > 0:
         days_claim = [d['days_to_claim'] for d in ttc['details']]
 
@@ -183,14 +192,14 @@ def create_time_distributions_figure(metrics: dict, output_dir: Path):
 
         ax1.set_xticks(x_pos)
         ax1.set_xticklabels(bin_labels)
-        ax1.set_xlabel('Days from Issue Creation to Claim')
+        ax1.set_xlabel('Days from Issue Creation to Claiming')
         ax1.set_ylabel('Number of Experiments')
-        ax1.set_title(f'Time-to-Claim Distribution  (n={ttc["count"]},  '
+        ax1.set_title(f'Time-to-Claiming Distribution  (n={ttc["count"]},  '
                       f'median={ttc["median_days"]}d,  mean={ttc["avg_days"]}d)')
 
         # Annotation for 0-day dominance
         zero_pct = counts_binned[0] / sum(counts_binned) * 100
-        ax1.annotate(f'{zero_pct:.0f}% claimed\nsame day',
+        ax1.annotate(f'{zero_pct:.0f}% claimed\non same day',
                      xy=(0, counts_binned[0]), xytext=(1.5, counts_binned[0] * 0.85),
                      fontsize=10, ha='center',
                      arrowprops=dict(arrowstyle='->', color='#555'),
@@ -223,7 +232,7 @@ def create_time_distributions_figure(metrics: dict, output_dir: Path):
 
         ax2.set_xticks(x_pos_r)
         ax2.set_xticklabels(bin_labels_r)
-        ax2.set_xlabel('Days from Claim to First Result')
+        ax2.set_xlabel('Days from Claiming to First Result')
         ax2.set_ylabel('Number of Experiments')
         ax2.set_title(f'Time-to-First-Result Distribution  (n={ttr["count"]},  '
                       f'mean={ttr["avg_days"]}d)')
@@ -300,39 +309,39 @@ def create_contributor_breadth_figure(metrics: dict, output_dir: Path):
 
     # --- Right: per-person activity summary ---
     # Count per-person roles
-    person_roles = defaultdict(lambda: {'issues_created': 0, 'claims_made': 0, 'self_claims': 0, 'cross_claims': 0})
+    person_roles = defaultdict(lambda: {'issues_created': 0, 'times_claimed': 0, 'self_claimed': 0, 'cross_claimed': 0})
 
     # From cross-person details
-    for claim in xp.get('cross_person_details', []):
-        creator = _normalize_name(claim.get('issue_created_by'))
-        claimer = _normalize_name(claim.get('claimed_by'))
+    for cp in xp.get('cross_person_details', []):
+        creator = _normalize_name(cp.get('issue_created_by'))
+        claimer = _normalize_name(cp.get('claimed_by'))
         if creator:
             person_roles[creator]['issues_created'] += 1
         if claimer:
-            person_roles[claimer]['cross_claims'] += 1
-            person_roles[claimer]['claims_made'] += 1
+            person_roles[claimer]['cross_claimed'] += 1
+            person_roles[claimer]['times_claimed'] += 1
 
-    # From self-claim details
-    for claim in xp.get('self_claim_details', []):
-        person = _normalize_name(claim.get('person'))
+    # From self-claiming details
+    for sc in xp.get('self_claim_details', []):
+        person = _normalize_name(sc.get('person'))
         if person:
-            person_roles[person]['self_claims'] += 1
-            person_roles[person]['claims_made'] += 1
+            person_roles[person]['self_claimed'] += 1
+            person_roles[person]['times_claimed'] += 1
 
     # Sort by total activity
     people = sorted(person_roles.keys(),
-                    key=lambda p: -(person_roles[p]['claims_made'] + person_roles[p]['issues_created']))
+                    key=lambda p: -(person_roles[p]['times_claimed'] + person_roles[p]['issues_created']))
 
     if people:
         y_pos = np.arange(len(people))
         iss_created = [person_roles[p]['issues_created'] for p in people]
-        self_c = [person_roles[p]['self_claims'] for p in people]
-        cross_c = [person_roles[p]['cross_claims'] for p in people]
+        self_c = [person_roles[p]['self_claimed'] for p in people]
+        cross_c = [person_roles[p]['cross_claimed'] for p in people]
 
         ax2.barh(y_pos, self_c, height=0.5, color=C_SELF, edgecolor='white',
-                 linewidth=1, label='Self-claims')
+                 linewidth=1, label='Self-claimed')
         ax2.barh(y_pos, cross_c, height=0.5, left=self_c, color=C_CROSS,
-                 edgecolor='white', linewidth=1, label='Cross-person claims')
+                 edgecolor='white', linewidth=1, label='Claimed by another')
         ax2.barh(y_pos, iss_created, height=0.5,
                  left=[s + c for s, c in zip(self_c, cross_c)],
                  color=C_EXPLICIT, edgecolor='white', linewidth=1,
@@ -429,9 +438,9 @@ def create_idea_exchange_figure(metrics: dict, output_dir: Path):
     nx.draw_networkx_edge_labels(G, pos, edge_labels, ax=ax1, font_size=9,
                                  font_color='#333', bbox=dict(alpha=0))
 
-    ax1.set_title('Idea Exchange Network\n(arrow: creator → claimer)')
+    ax1.set_title('Idea Exchange Network\n(arrow: creator → person claiming)')
     creator_patch = mpatches.Patch(color=C_INFERRED, label='Net idea creator')
-    claimer_patch = mpatches.Patch(color=C_CROSS, label='Net idea claimer')
+    claimer_patch = mpatches.Patch(color=C_CROSS, label='Net idea recipient')
     ax1.legend(handles=[creator_patch, claimer_patch], loc='lower left', fontsize=9)
     ax1.axis('off')
 
@@ -464,9 +473,9 @@ def create_idea_exchange_figure(metrics: dict, output_dir: Path):
                          fontsize=12, fontweight='bold',
                          color='white' if val >= matrix.max() * 0.6 else 'black')
 
-    ax2.set_xlabel('Claimer  →', fontweight='bold')
+    ax2.set_xlabel('Claimed By  →', fontweight='bold')
     ax2.set_ylabel('← Issue Creator', fontweight='bold')
-    ax2.set_title('Handoff Matrix\n(row creates issue, column claims)')
+    ax2.set_title('Handoff Matrix\n(row creates issue, column claims it)')
 
     cbar = plt.colorbar(im, ax=ax2, shrink=0.7, pad=0.04)
     cbar.set_label('Count', fontsize=10)
@@ -593,7 +602,7 @@ def create_funnel_figure(metrics: dict, output_dir: Path):
 
     row_labels = [
         'All issues',
-        'Claim type\nbreakdown',
+        'Claiming method\nbreakdown',
         'Result\nproduction',
         'Total results\nproduced',
     ]

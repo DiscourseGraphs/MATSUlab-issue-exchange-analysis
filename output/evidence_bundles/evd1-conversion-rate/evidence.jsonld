@@ -9,20 +9,20 @@
   },
   "@type": "dge:EvidenceBundle",
   "@id": "evd1-conversion-rate",
-  "dc:title": "[[RES]] - 18% of MATSUlab issues (n=389) were claimed as experiments and 36% of those claimed at least one formal result node, yielding 44 total RES nodes - [[@analysis/quantify issue claiming from MATSUlab]]",
+  "dc:title": "[[RES]] - 29% of MATSUlab issues (n=445) were claimed as experiments and 38% of those claimed at least one formal result node, yielding 139 total RES nodes - [[@analysis/quantify issue claiming from MATSUlab]]",
   "dc:creator": "Matt Akamatsu",
-  "dc:date": "2026-02-12",
+  "dc:date": "2026-02-14",
   "dcterms:license": "https://creativecommons.org/licenses/by/4.0/",
-  "dge:evidenceStatement": "18% of MATSUlab issues (n=389) were claimed as experiments and 36% of those claimed at least one formal result node, yielding 44 total RES nodes.",
+  "dge:evidenceStatement": "29% of MATSUlab issues (n=445) were claimed as experiments and 38% of those claimed at least one formal result node, yielding 139 total RES nodes.",
   "dge:observable": {
     "@type": "dge:Observable",
     "dc:title": "Issue-to-experiment conversion rate and result production",
-    "dc:description": "The proportion of issues posted to a discourse graph Issues board that are claimed as experiments, and the subsequent proportion of claimed experiments that produce formal result nodes. Measured across 389 issues, 69 claimed experiments, and 44 RES nodes in the MATSUlab discourse graph."
+    "dc:description": "The proportion of issues posted to a discourse graph Issues board that are claimed as experiments, and the subsequent proportion of those claimed experiments that produce formal result nodes. Measured across 445 issues, 130 claimed experiments, and 139 RES nodes in the MATSUlab discourse graph."
   },
   "dge:method": {
     "@type": "dge:Method",
     "dc:title": "Discourse graph conversion rate analysis",
-    "dc:description": "Automated pipeline parsing JSON-LD and Roam JSON exports to identify issue nodes (320 formal ISS pages + 69 experiment pages = 389 total issues), detect claims via a two-tier strategy (explicit via Claimed By:: field, or inferred via experimental log presence), and link result nodes using a 3-tier matching strategy (relation instances, backreference matching, full description matching).",
+    "dc:description": "Automated pipeline parsing JSON-LD and Roam JSON exports to identify issue nodes (320 formal ISS + 125 experiment pages), detect claiming via a two-tier strategy (explicitly claimed via Claimed By:: field, n=69; inferred via experimental log presence, n=56; plus 5 ISS pages with activity), and link result nodes using a 3-tier matching strategy (relation instances, backreference matching, full description matching).",
     "prov:used": [
       {
         "@id": "src/calculate_metrics.py",
@@ -46,16 +46,16 @@
   "dge:system": {
     "@type": "dge:System",
     "dc:title": "MATSUlab discourse graph",
-    "dc:description": "Akamatsu Lab Roam Research discourse graph, February 2026 snapshot. Contains 389 identifiable issues (320 formal ISS nodes + 69 experiment pages), 69 claimed experiments, and 44 linked RES nodes.",
+    "dc:description": "Akamatsu Lab Roam Research discourse graph, February 2026 snapshot. Contains 445 identifiable issues (320 formal ISS nodes + 125 experiment pages), 130 claimed experiments, and 323 result nodes.",
     "schema:memberOf": "Akamatsu Lab, University of Washington",
-    "dcterms:temporal": "2026-02-12"
+    "dcterms:temporal": "2026-02-14"
   },
   "dge:figure": [
     {
       "@type": "schema:ImageObject",
       "schema:contentUrl": "fig1_conversion_rate.png",
       "schema:encodingFormat": "image/png",
-      "dge:figureLegend": "Figure 1. 18% of issues (69 of 389) were claimed as experiments; 72% of claims were self-claims and 28% were cross-person idea exchanges. (Left) Stacked horizontal bar showing the composition of all 389 issues: claimed experiments (69, blue) and unclaimed ISS pages (320, grey). (Right) Donut chart showing claim authorship among 69 experiment-page claims: self-claims (50, 72%) and cross-person claims (19, 28%)."
+      "dge:figureLegend": "Figure 1. Issue conversion rate and claiming authorship in the MATSUlab discourse graph. (Left) Stacked horizontal bar showing the composition of all 445 issues: explicitly claimed (69, blue), inferred claiming (56, green), ISS with activity (5, amber), unclaimed (315, grey). Bracket indicates total claimed: 130 (29.2%). (Right) Donut chart showing claiming authorship among 125 claimed experiments: self-claimed (106, 85%) and cross-person claiming (19, 15%)."
     },
     {
       "@type": "schema:WebPage",
@@ -69,23 +69,28 @@
       "@type": "schema:DataDownload",
       "schema:contentUrl": "data/conversion_data.json",
       "schema:encodingFormat": "application/json",
-      "dc:description": "Aggregated conversion rate data with claim type breakdown, authorship statistics, and result production metrics"
+      "dc:description": "Aggregated conversion rate data with claiming type breakdown, authorship statistics, and result production metrics"
     }
   ],
   "dge:documentation": [
     {
       "@type": "schema:TextDigitalDocument",
-      "schema:contentUrl": "methods_excerpt.md",
-      "dc:description": "Relevant methods sections for node identification, claim detection, and metric calculation"
+      "schema:contentUrl": "docs/evidence_statement.md",
+      "dc:description": "Evidence statement, evidence description, and figure legend"
+    },
+    {
+      "@type": "schema:TextDigitalDocument",
+      "schema:contentUrl": "docs/methods_excerpt.md",
+      "dc:description": "Relevant methods sections for node identification, claiming detection, and metric calculation"
     }
   ],
   "prov:wasGeneratedBy": {
     "@type": "prov:Activity",
     "prov:startedAtTime": "2026-01-25",
-    "prov:endedAtTime": "2026-02-12",
+    "prov:endedAtTime": "2026-02-14",
     "prov:used": [
       "akamatsulab_discourse-graph-json-LD202602112140.json",
-      "akamatsulab-whole-graph-json-2026-02-11-21-45-17.json"
+      "akamatsulab-whole-graph-2026-02-13-22-24-27.json"
     ],
     "prov:wasAssociatedWith": [
       {
@@ -101,16 +106,19 @@
     ]
   },
   "dge:summaryMetrics": {
-    "total_issues": 389,
-    "claimed_experiments": 69,
-    "unclaimed_iss": 320,
-    "conversion_rate_percent": 17.7,
-    "experiments_with_results": 25,
-    "claim_to_result_percent": 36.2,
-    "total_res_nodes": 44,
-    "avg_res_per_producing_experiment": 1.8,
-    "self_claims": 50,
-    "cross_person_claims": 19,
-    "idea_exchange_rate_percent": 27.5
+    "total_issues": 445,
+    "claimed_experiments": 130,
+    "explicitly_claimed": 69,
+    "inferred_claiming": 56,
+    "iss_with_activity": 5,
+    "unclaimed_iss": 315,
+    "conversion_rate_percent": 29.2,
+    "experiments_with_results": 50,
+    "claiming_to_result_percent": 38.5,
+    "total_res_nodes": 139,
+    "avg_res_per_producing_experiment": 2.8,
+    "self_claimed": 106,
+    "cross_person_claiming": 19,
+    "idea_exchange_rate_percent": 15.2
   }
 }

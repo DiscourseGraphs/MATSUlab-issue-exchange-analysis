@@ -388,30 +388,30 @@
         <div class="subtitle">MATSUlab discourse graph &middot; February 2026 snapshot &middot; EVD 1</div>
 
         <div class="evidence-statement">
-            <strong>Result:</strong> 18% of MATSUlab issues (n=389) were claimed as experiments and 36% of those claimed at least one formal result node, yielding 44 total RES nodes.
+            <strong>Result:</strong> 29% of MATSUlab issues (n=445) were claimed as experiments and 38% of those claimed at least one formal result node, yielding 139 total RES nodes.
         </div>
 
         <!-- Summary cards -->
         <div class="summary-cards">
             <div class="card animate-fade animate-delay-1">
-                <div class="card-number" style="color: #6b7280;">389</div>
+                <div class="card-number" style="color: #6b7280;">445</div>
                 <div class="card-label">Total Issues</div>
-                <div class="card-sublabel">320 ISS + 69 experiments</div>
+                <div class="card-sublabel">320 ISS + 125 experiments</div>
             </div>
             <div class="card animate-fade animate-delay-2">
-                <div class="card-number" style="color: #2563eb;">69</div>
+                <div class="card-number" style="color: #2563eb;">130</div>
                 <div class="card-label">Claimed</div>
-                <div class="card-sublabel">17.7% conversion rate</div>
+                <div class="card-sublabel">29.2% conversion rate</div>
             </div>
             <div class="card animate-fade animate-delay-3">
-                <div class="card-number" style="color: #7c3aed;">25</div>
+                <div class="card-number" style="color: #7c3aed;">50</div>
                 <div class="card-label">Produced Results</div>
-                <div class="card-sublabel">36% of claimed</div>
+                <div class="card-sublabel">38% of claimed</div>
             </div>
             <div class="card animate-fade animate-delay-4">
-                <div class="card-number" style="color: #059669;">44</div>
+                <div class="card-number" style="color: #059669;">139</div>
                 <div class="card-label">Total RES Nodes</div>
-                <div class="card-sublabel">avg 1.8 per experiment</div>
+                <div class="card-sublabel">avg 2.8 per experiment</div>
             </div>
         </div>
 
@@ -419,7 +419,7 @@
         <div class="panels">
             <!-- Left panel: stacked bar -->
             <div class="panel">
-                <div class="panel-title">Issue Composition (n=389)</div>
+                <div class="panel-title">Issue Conversion Rate</div>
                 <div class="bar-container">
                     <div class="stacked-bar" id="stackedBar">
                         <!-- Segments will be rendered by JS -->
@@ -442,7 +442,7 @@
 
             <!-- Right panel: donut -->
             <div class="panel">
-                <div class="panel-title">Claim Authorship (n=69 experiment claims)</div>
+                <div class="panel-title">Claiming Authorship (n=125 claimed experiments)</div>
                 <div class="donut-wrapper">
                     <svg class="donut-svg" viewBox="0 0 220 220" id="donutSvg">
                         <!-- Donut arcs rendered by JS -->
@@ -465,22 +465,24 @@
     // ── Data ──
     const data = {
         segments: [
-            { label: 'Claimed experiments', value: 69, color: '#2980b9', desc: 'Issues that were claimed as experiments — either via explicit Claimed By:: field, inferred from experimental log entries, or ISS pages with active work.' },
-            { label: 'Unclaimed ISS', value: 320, color: '#bdc3c7', desc: 'ISS pages with no evidence of active work. Remain in the Issues board as open questions.' },
+            { label: 'Explicitly claimed', value: 69, color: '#2980b9', desc: 'Issues claimed via the Claimed By:: metadata field — formal ownership declaration with researcher name and timestamp.' },
+            { label: 'Inferred claiming', value: 56, color: '#27ae60', desc: 'Issues inferred as claimed because the page has experimental log entries authored by the creator, but no explicit Claimed By:: field.' },
+            { label: 'ISS with activity', value: 5, color: '#f39c12', desc: 'ISS pages with experimental log content indicating active work, but without formal conversion to experiment format.' },
+            { label: 'Unclaimed ISS', value: 315, color: '#bdc3c7', desc: 'ISS pages with no evidence of active work. Remain in the Issues board as open questions.' },
         ],
-        totalIssues: 389,
-        totalClaimed: 69,
-        conversionPct: 17.7,
+        totalIssues: 445,
+        totalClaimed: 130,
+        conversionPct: 29.2,
         authorship: [
-            { label: 'Self-claims', value: 50, color: '#e67e22', desc: 'Issue creator and claimer are the same person.' },
-            { label: 'Cross-person', value: 19, color: '#8e44ad', desc: 'A different researcher claimed the issue — representing idea exchange between lab members.' },
+            { label: 'Self-claimed', value: 106, color: '#e67e22', desc: 'Issue creator and the person who claimed are the same person.' },
+            { label: 'Claimed by another', value: 19, color: '#8e44ad', desc: 'A different researcher claimed the issue — representing idea exchange between lab members.' },
         ],
-        authorshipTotal: 69,
+        authorshipTotal: 125,
         funnel: [
-            { label: 'All Issues', value: 389, color: '#94a3b8', pct: '100%' },
-            { label: 'Claimed', value: 69, color: '#2563eb', pct: '18%' },
-            { label: 'With Results', value: 25, color: '#7c3aed', pct: '36% of claimed' },
-            { label: 'RES Nodes', value: 44, color: '#059669', pct: 'avg 1.8 each' },
+            { label: 'All Issues', value: 445, color: '#94a3b8', pct: '100%' },
+            { label: 'Claimed', value: 130, color: '#2563eb', pct: '29%' },
+            { label: 'With Results', value: 50, color: '#7c3aed', pct: '38% of claimed' },
+            { label: 'RES Nodes', value: 139, color: '#059669', pct: 'avg 2.8 each' },
         ],
     };
 
@@ -524,7 +526,7 @@
             el.style.backgroundColor = seg.color;
             el.style.animationDelay = (i * 0.12) + 's';
 
-            if (seg.value > 20) {
+            if (seg.value > 15) {
                 el.innerHTML = `<span class="segment-label">${seg.value}</span>`;
             }
 
@@ -646,14 +648,14 @@
         centerText1.setAttribute('x', cx);
         centerText1.setAttribute('y', cy - 6);
         centerText1.setAttribute('class', 'donut-center-number');
-        centerText1.textContent = '69';
+        centerText1.textContent = '125';
         svg.appendChild(centerText1);
 
         const centerText2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         centerText2.setAttribute('x', cx);
         centerText2.setAttribute('y', cy + 16);
         centerText2.setAttribute('class', 'donut-center-text');
-        centerText2.textContent = 'claims';
+        centerText2.textContent = 'claimed';
         svg.appendChild(centerText2);
 
         // Legend
@@ -702,9 +704,9 @@
                 arrow.className = 'funnel-arrow';
 
                 let arrowLabel = '';
-                if (i === 0) arrowLabel = '18%';
-                else if (i === 1) arrowLabel = '36%';
-                else if (i === 2) arrowLabel = '1.8x';
+                if (i === 0) arrowLabel = '29%';
+                else if (i === 1) arrowLabel = '38%';
+                else if (i === 2) arrowLabel = '2.8x';
 
                 arrow.innerHTML = `
                     <svg viewBox="0 0 32 20" fill="none">

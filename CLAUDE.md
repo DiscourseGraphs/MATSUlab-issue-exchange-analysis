@@ -6,7 +6,7 @@ This repository contains analysis tools for tracking research lab metrics from a
 ## Key Data Sources
 - **Roam Research exports**: Daily notes, experiment pages, result (RES) pages
 - **Discourse graph nodes**: ISS (Issues), RES (Results), EVD (Evidence), QUE (Questions), HYP (Hypotheses), CLM (Claims), CON (Conclusions)
-- **metrics_data.json**: Pre-extracted metrics about issues, claims, and researcher activity
+- **metrics_data.json**: Pre-extracted metrics about issues, issue claiming, and researcher activity
 
 ## Evidence Bundles (EVD)
 Evidence bundles are stored in `output/evidence_bundles/` with JSON-LD + RO-Crate metadata format:

@@ -3,7 +3,7 @@
 Handoff Visualizations for Idea Exchange
 ==========================================
 Creates specialized visualizations showing the flow of ideas between researchers:
-1. Alluvial/Flow diagram: Issue Creator → Claimer → Result Creator
+1. Alluvial/Flow diagram: Issue Creator → Issue Claimed By → Result Creator
 2. Chord diagram: Bi-directional relationships between researchers
 3. Left-to-right flow with node sizes by activity
 
@@ -96,7 +96,7 @@ def create_three_column_flow(metrics: dict, output_dir: Path):
     """
     Create a three-column flow diagram:
     Column 1: Issue Creators
-    Column 2: Claimers
+    Column 2: Claimed By
     Column 3: Result Creators
 
     Lines connect the flow with thickness proportional to count.
@@ -176,11 +176,11 @@ def create_three_column_flow(metrics: dict, output_dir: Path):
                    fontsize=9, fontweight='bold', color='white')
 
     draw_nodes(col_x[0], creator_y, creators, 'Issue Creators')
-    draw_nodes(col_x[1], claimer_y, claimers, 'Claimers')
+    draw_nodes(col_x[1], claimer_y, claimers, 'Claimed By')
     if result_y:
         draw_nodes(col_x[2], result_y, result_creators, 'Result Creators')
 
-    # Draw flow lines (Issue Creator → Claimer)
+    # Draw flow lines (Issue Creator → Claimed By)
     max_flow = max(data['issue_to_claim'].values()) if data['issue_to_claim'] else 1
     for (creator, claimer), count in data['issue_to_claim'].items():
         if creator in creator_y and claimer in claimer_y:
@@ -198,7 +198,7 @@ def create_three_column_flow(metrics: dict, output_dir: Path):
                     connectionstyle='arc3,rad=0.1'
                 ))
 
-    # Draw flow lines (Claimer → Result Creator)
+    # Draw flow lines (Claimed By → Result Creator)
     if data['claim_to_result']:
         max_flow2 = max(data['claim_to_result'].values())
         for (claimer, rc), count in data['claim_to_result'].items():
@@ -220,7 +220,7 @@ def create_three_column_flow(metrics: dict, output_dir: Path):
     # Column headers
     ax.text(col_x[0], 0.97, 'Issue\nCreators', ha='center', va='bottom',
            fontsize=14, fontweight='bold')
-    ax.text(col_x[1], 0.97, 'Claimers', ha='center', va='bottom',
+    ax.text(col_x[1], 0.97, 'Issue\nClaimed By', ha='center', va='bottom',
            fontsize=14, fontweight='bold')
     ax.text(col_x[2], 0.97, 'Result\nCreators', ha='center', va='bottom',
            fontsize=14, fontweight='bold')
@@ -236,7 +236,7 @@ def create_three_column_flow(metrics: dict, output_dir: Path):
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis('off')
-    ax.set_title('Idea Handoff Flow: Issue Creator → Claimer → Result Creator',
+    ax.set_title('Idea Handoff Flow: Issue Creator → Claimed By → Result Creator',
                 fontsize=16, fontweight='bold', pad=20)
 
     plt.tight_layout()
@@ -348,7 +348,7 @@ def create_directed_flow_diagram(metrics: dict, output_dir: Path):
 
     # Legend
     creator_patch = mpatches.Patch(color='#27ae60', label='Net Idea Creator')
-    claimer_patch = mpatches.Patch(color='#9b59b6', label='Net Idea Claimer')
+    claimer_patch = mpatches.Patch(color='#9b59b6', label='Net Idea Recipient')
     balanced_patch = mpatches.Patch(color='#3498db', label='Balanced')
     ax.legend(handles=[creator_patch, claimer_patch, balanced_patch],
              loc='upper left', fontsize=10)
@@ -482,8 +482,8 @@ def create_alluvial_sankey(metrics: dict, output_dir: Path):
     link_colors = []
 
     # Color palette for flows
-    color_self = 'rgba(149, 165, 166, 0.4)'  # Grey for self-claims
-    color_cross = 'rgba(52, 152, 219, 0.5)'  # Blue for cross-person
+    color_self = 'rgba(149, 165, 166, 0.4)'  # Grey for self-claiming
+    color_cross = 'rgba(52, 152, 219, 0.5)'  # Blue for cross-person claiming
     color_result = 'rgba(155, 89, 182, 0.5)'  # Purple for results
     color_no_result = 'rgba(189, 195, 199, 0.3)'  # Light grey for no result
 
@@ -545,25 +545,51 @@ def create_alluvial_sankey(metrics: dict, output_dir: Path):
     x_positions = []
     y_positions = []
 
+    # Manually position nodes in 3 columns, sorted by activity (largest at top).
+    # The y-position in Plotly Sankey is the node's center, and large-value nodes
+    # extend proportionally. We use a compressed y-range for columns with many
+    # nodes or large trailing nodes to prevent clipping.
+
+    def spread_y(n_nodes, y_min=0.01, y_max=0.85):
+        """Return evenly spaced y positions within [y_min, y_max]."""
+        if n_nodes <= 1:
+            return [0.5]
+        return [y_min + i * (y_max - y_min) / (n_nodes - 1) for i in range(n_nodes)]
+
+    x_positions = []
+    y_positions = []
+
     # Column 1: x=0.01
-    for i in range(n_creators):
+    for y in spread_y(n_creators):
         x_positions.append(0.01)
-        y_positions.append((i + 0.5) / max(n_creators, 1))
+        y_positions.append(y)
 
     # Column 2: x=0.5
-    for i in range(n_claimers):
+    for y in spread_y(n_claimers):
         x_positions.append(0.5)
-        y_positions.append((i + 0.5) / max(n_claimers, 1))
+        y_positions.append(y)
 
     # Column 3: x=0.99
-    for i in range(n_results):
+    # Place result-creator nodes in the upper portion, then pin "No Result Yet"
+    # near the bottom so it visually separates from the named researchers.
+    n_result_creators = len(sorted_result_creators)
+    has_no_result = 1 if total_no_result > 0 else 0
+
+    # Spread named result creators in upper range
+    result_creator_ys = spread_y(n_result_creators, y_max=0.55)
+    for y in result_creator_ys:
         x_positions.append(0.99)
-        y_positions.append((i + 0.5) / max(n_results, 1))
+        y_positions.append(y)
+
+    # Place "No Result Yet" near the bottom
+    if has_no_result:
+        x_positions.append(0.99)
+        y_positions.append(0.85)
 
     fig = go.Figure(data=[go.Sankey(
         arrangement='snap',
         node=dict(
-            pad=15,
+            pad=20,
             thickness=25,
             line=dict(color='black', width=1),
             label=nodes,
@@ -582,23 +608,24 @@ def create_alluvial_sankey(metrics: dict, output_dir: Path):
     # Add column headers using annotations
     fig.update_layout(
         title=dict(
-            text=f"Issue → Experiment → Result Flow (All {conv['total_claimed']} Claimed Experiments)",
+            text=f"Issue → Experiment → Result Flow (all {conv['total_claimed']} claimed experiments)",
             font=dict(size=16),
         ),
         font_size=11,
-        height=700,
-        width=1100,
+        height=1050,
+        width=1200,
+        margin=dict(t=80, b=80, l=50, r=150),
         annotations=[
-            dict(x=0.01, y=1.08, xref='paper', yref='paper', showarrow=False,
+            dict(x=0.01, y=1.02, xref='paper', yref='paper', showarrow=False,
                  text='<b>Issue Created</b>', font=dict(size=14)),
-            dict(x=0.5, y=1.08, xref='paper', yref='paper', showarrow=False,
-                 text='<b>Issue Claimed</b>', font=dict(size=14)),
-            dict(x=0.99, y=1.08, xref='paper', yref='paper', showarrow=False,
+            dict(x=0.5, y=1.02, xref='paper', yref='paper', showarrow=False,
+                 text='<b>Claimed By</b>', font=dict(size=14)),
+            dict(x=0.99, y=1.02, xref='paper', yref='paper', showarrow=False,
                  text='<b>Result Created</b>', font=dict(size=14)),
             # Legend
-            dict(x=0.01, y=-0.08, xref='paper', yref='paper', showarrow=False,
-                 text='<span style="color:#95a5a6">━</span> Self-claim  '
-                      '<span style="color:#3498db">━</span> Cross-person  '
+            dict(x=0.01, y=-0.06, xref='paper', yref='paper', showarrow=False,
+                 text='<span style="color:#95a5a6">━</span> Self-claimed  '
+                      '<span style="color:#3498db">━</span> Claimed by another  '
                       '<span style="color:#9b59b6">━</span> Result created',
                  font=dict(size=10), align='left'),
         ],
@@ -619,7 +646,7 @@ def create_alluvial_sankey(metrics: dict, output_dir: Path):
 def create_matrix_heatmap(metrics: dict, output_dir: Path):
     """
     Create a matrix/heatmap showing handoff counts between researchers.
-    Rows = Issue creators, Columns = Claimers
+    Rows = Issue creators, Columns = Claimed By
     """
     data = extract_handoff_data(metrics)
 
@@ -664,9 +691,9 @@ def create_matrix_heatmap(metrics: dict, output_dir: Path):
                        fontsize=12, fontweight='bold',
                        color='white' if val > matrix.max()/2 else 'black')
 
-    ax.set_xlabel('Claimer →', fontsize=12, fontweight='bold')
+    ax.set_xlabel('Claimed By →', fontsize=12, fontweight='bold')
     ax.set_ylabel('← Issue Creator', fontsize=12, fontweight='bold')
-    ax.set_title('Idea Handoff Matrix\n(Row creates issue, Column claims it)',
+    ax.set_title('Idea Handoff Matrix\n(Row creates issue, column claims it)',
                 fontsize=14, fontweight='bold')
 
     # Colorbar

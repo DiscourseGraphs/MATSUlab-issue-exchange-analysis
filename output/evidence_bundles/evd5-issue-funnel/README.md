@@ -43,14 +43,14 @@ This evidence bundle traces the full lifecycle of research questions in the MATS
 
 | Flow type | Count | Rate |
 |-----------|------:|-----:|
-| Self-claims (same person) | 50 | 72% |
-| Cross-person claims | 19 | 28% |
+| Self-claimed (same person) | 50 | 72% |
+| Cross-person claiming | 19 | 28% |
 
-The 19 cross-person claims represent **idea exchange** — cases where a researcher picked up an issue created by someone else. The alluvial diagram reveals the specific pathways: which researchers create issues that others claim, and who ultimately produces the results.
+The 19 cross-person claiming cases represent **idea exchange** — cases where a researcher picked up an issue created by someone else. The alluvial diagram reveals the specific pathways: which researchers create issues that others claim, and who ultimately produces the results.
 
 ### Key observations from the flow diagram
 
-- **R1** created the most issues (30) and claimed the most experiments (32), with most being self-claims
+- **R1** created the most issues (30) and claimed the most experiments (32), with most being self-claimed
 - **Matt Akamatsu** created issues that were claimed by multiple different researchers, serving as a hub for idea distribution
 - **44 of 69 claimed experiments** have not yet produced a formal RES node (shown as "No Result Yet" on the right), indicating work-in-progress or informal output recording
 - Cross-person flows (purple bands) connect diverse researcher pairs, with Matt Akamatsu as the primary issue source for cross-person claims
@@ -107,3 +107,4 @@ Contact [The Discourse Graphs Project](mailto:discoursegraphsATgmailDOTcom) for 
 ## License
 
 [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/)
+

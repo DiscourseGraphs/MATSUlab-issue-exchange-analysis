@@ -18,7 +18,7 @@
 
 The onboarding timeline was reconstructed for three undergraduate researchers by tracing key milestones through their daily notes and the discourse graph: (1) first day in lab, (2) first experiment reference in daily notes, (3) first plot (linked image in notes), and (4) first formal RES node creation. Dates were extracted from Roam Research page metadata and daily log entries.
 
-Researcher A joined the lab on February 23, 2024 and claimed their first experiment (`@analysis/Quantify the percentage of simulated endocytic events that assemble detectable amounts of actin`) on April 5, 2024 (42 days). They produced their first plot on June 20, 2024 (118 days) and first RES node on June 27, 2024 (125 days). This represents a self-directed exploration pathway where the student browsed the Issues board and claimed an experiment matching their interests.
+Researcher A joined the lab on February 23, 2024 and started their first experiment (`@analysis/Quantify the percentage of simulated endocytic events that assemble detectable amounts of actin`) on April 5, 2024 (42 days). They produced their first plot on June 20, 2024 (118 days) and first RES node on June 27, 2024 (125 days). This represents a self-directed exploration pathway where the student browsed the Issues board and chose an experiment matching their interests.
 
 Researcher B joined on October 10, 2024 and was assigned an entry project (`@analysis/Plot the number of bound Hip1R over time for different Arp2/3 distributions in endocytosis simulations`) explicitly designed "to get acquainted with our simulations and the analysis framework." They began work on October 15, 2024 (5 days), producing plots the same day. Their first RES node was created November 26, 2024 (47 days).
 
@@ -49,7 +49,7 @@ All three undergraduates reached their first formal result faster than the lab-w
 ### Onboarding pathways
 
 **Researcher A — Self-directed exploration (125 days)**
-Browsed the issue board independently and claimed an experiment matching their interests. Longest ramp-up time (42 days to first experiment), but produced a result autonomously with minimal direction.
+Browsed the issue board independently and chose an experiment matching their interests. Longest ramp-up time (42 days to first experiment), but produced a result autonomously with minimal direction.
 
 **Researcher B — Assigned entry project (47 days)**
 Was assigned a specific experiment designed to introduce the lab's simulation and analysis framework. Began producing plots within 5 days of starting. The structured entry point provided a clear on-ramp.
@@ -59,7 +59,7 @@ Was added as a contributor to an existing experiment via the `Possible Contribut
 
 ## Grounding context
 
-The MATSUlab discourse graph uses an **Issues board** — a shared collection of research questions (ISS nodes) that any lab member can browse and claim. This evidence bundle asks: how effectively does this system support new researcher onboarding? Four milestones were tracked for each researcher: first day in lab, first experiment, first plot, and first formal RES node.
+The MATSUlab discourse graph uses an **Issues board** — a shared collection of research questions (ISS nodes) that any lab member can browse and start working on (i.e., "claim"). This evidence bundle asks: how effectively does this system support new researcher onboarding? Four milestones were tracked for each researcher: first day in lab, first experiment, first plot, and first formal RES node.
 
 Unlike EVD 1 and EVD 5, this analysis is a manually curated case study rather than an automated pipeline output. Readers should keep the following in mind:
 
@@ -104,3 +104,4 @@ Contact [The Discourse Graphs Project](mailto:discoursegraphsATgmailDOTcom) for 
 ## License
 
 [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/)
+

@@ -15,7 +15,7 @@
       "@id": "./",
       "@type": "Dataset",
       "name": "EVD 5: Issue-to-Experiment-to-Result Conversion Funnel — MATSUlab Discourse Graph",
-      "description": "Evidence bundle for the finding that 18% of MATSUlab issues (n=389) were claimed as experiments and 36% of those produced at least one formal result node, yielding 44 total RES nodes. Contains the evidence statement, alluvial flow diagram, supplemental funnel chart, underlying data, and methodological documentation.",
+      "description": "Evidence bundle for the finding that 29% of MATSUlab issues (n=434) were claimed as experiments and 11% produced at least one formal result node, yielding 136 total RES nodes. Contains the evidence statement, figure, underlying data, and methodological documentation.",
       "datePublished": "2026-01-27",
       "creator": [
         {
@@ -45,7 +45,10 @@
           "@id": "data/experiment_details.csv"
         },
         {
-          "@id": "methods_excerpt.md"
+          "@id": "docs/evidence_statement.md"
+        },
+        {
+          "@id": "docs/methods_excerpt.md"
         }
       ]
     },
@@ -76,7 +79,7 @@
         "ImageObject"
       ],
       "name": "Figure 5: Issue-to-Experiment-to-Result Alluvial Flow",
-      "description": "Alluvial (Sankey) diagram showing all claimed experiments flowing through three stages: Issue Created → Issue Claimed → Result Created. Band width proportional to experiment count; color indicates self-claim (green) vs cross-person claim (purple). Researcher names anonymized.",
+      "description": "Alluvial (Sankey) diagram showing all claimed experiments flowing through three stages: Issue Created → Claimed By → Result Created. Band width proportional to experiment count; color indicates self-claiming (green) vs cross-person claiming (purple). Researcher names anonymized.",
       "encodingFormat": "image/png"
     },
     {
@@ -96,28 +99,35 @@
         "ImageObject"
       ],
       "name": "Supplemental: Issue-to-Experiment-to-Result Conversion Funnel",
-      "description": "Supplemental aggregate view. Left: horizontal funnel bar chart showing progressive attrition. Right: stage-by-stage composition breakdown by claim type and result status.",
+      "description": "Supplemental aggregate view. Left: horizontal funnel bar chart showing progressive attrition. Right: stage-by-stage composition breakdown by claiming type and result status.",
       "encodingFormat": "image/png"
     },
     {
       "@id": "data/funnel_summary.json",
       "@type": "File",
       "name": "Funnel Summary Data",
-      "description": "Aggregated funnel counts, conversion rates, claim type breakdown, and result statistics.",
+      "description": "Aggregated funnel counts, conversion rates, claiming type breakdown, and result statistics.",
       "encodingFormat": "application/json"
     },
     {
       "@id": "data/experiment_details.csv",
       "@type": "File",
       "name": "Experiment Details",
-      "description": "Per-experiment rows with title, creator, claimer, claim type, timestamps, result counts, and time metrics.",
+      "description": "Per-experiment rows with title, creator, claimed by, claiming type, timestamps, result counts, and time metrics.",
       "encodingFormat": "text/csv"
     },
     {
-      "@id": "methods_excerpt.md",
+      "@id": "docs/evidence_statement.md",
+      "@type": "File",
+      "name": "Evidence Statement and Figure Legend",
+      "description": "EVD 5 evidence statement, evidence description, and figure legend in markdown.",
+      "encodingFormat": "text/markdown"
+    },
+    {
+      "@id": "docs/methods_excerpt.md",
       "@type": "File",
       "name": "Methods Excerpt",
-      "description": "Relevant sections from the full methods document covering node identification, claim detection, RES linking, and metric definitions.",
+      "description": "Relevant sections from the full methods document covering node identification, claiming detection, RES linking, and metric definitions.",
       "encodingFormat": "text/markdown"
     }
   ]

@@ -43,7 +43,7 @@ Each researcher was assigned a pathway label based on the PI's recollection of h
 
 | Pathway | Description |
 |---------|------------|
-| **Self-directed exploration** | Researcher browsed the Issues board independently and claimed an experiment matching their interests |
+| **Self-directed exploration** | Researcher browsed the Issues board independently and claimed an experiment (started working on one) matching their interests |
 | **Assigned entry project** | Researcher was assigned a specific experiment designed to introduce the lab's analysis framework |
 | **Direct assignment** | Researcher was added as a contributor to an existing experiment via the `Possible Contributors::` field |
 

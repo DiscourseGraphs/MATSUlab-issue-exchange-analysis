@@ -4,10 +4,10 @@ Calculate Issue Metrics
 ========================
 Computes all 5 metrics from the parsed discourse graph data:
 1. Issue Conversion Rate
-2. Time-to-Claim
+2. Time-to-Claiming
 3. Time-to-First-Result
 4. Unique Contributors per Issue Chain
-5. Cross-Person Claims (Idea Exchange)
+5. Cross-Person Claiming (Idea Exchange)
 
 Author: Matt Akamatsu (with Claude)
 Date: 2026-01-25
@@ -39,6 +39,7 @@ from parse_roam_json import (
     load_roam_json_streaming,
     find_block_by_content,
     get_block_timestamp,
+    validate_roam_export,
 )
 
 
@@ -227,8 +228,8 @@ def calculate_conversion_rate(experiments: list[dict], iss_nodes: list[dict]) ->
     Calculate Issue Conversion Rate.
 
     Claimed issues =
-        - Experiment pages with Claimed By:: field (converted from ISS)
-        - ISS pages with experimental log entries (work done without formal conversion)
+        - Experiment pages with Claimed By:: field (explicitly claimed, converted from ISS)
+        - ISS pages with experimental log entries (informally claimed, work done without formal conversion)
 
     Total issues = Claimed + Unclaimed ISS pages
     """
@@ -237,7 +238,7 @@ def calculate_conversion_rate(experiments: list[dict], iss_nodes: list[dict]) ->
     explicit_claims = [e for e in claimed_experiments if e.get('claim_type') == 'explicit']
     inferred_claims = [e for e in claimed_experiments if e.get('claim_type') == 'inferred']
 
-    # ISS pages with experimental log = informal claiming
+    # ISS pages with experimental log = informally claimed
     iss_with_log = [i for i in iss_nodes if i['has_experimental_log']]
 
     # Unclaimed ISS = no experimental log
@@ -248,7 +249,7 @@ def calculate_conversion_rate(experiments: list[dict], iss_nodes: list[dict]) ->
 
     conversion_rate = (total_claimed / total_issues * 100) if total_issues > 0 else 0
 
-    # Cross-person vs self-claims
+    # Cross-person vs self-claiming
     cross_person_claims = [
         e for e in claimed_experiments
         if e['issue_created_by'] and e['claimed_by']
@@ -280,9 +281,9 @@ def calculate_conversion_rate(experiments: list[dict], iss_nodes: list[dict]) ->
 
 def calculate_time_to_claim(experiments: list[dict]) -> dict:
     """
-    Calculate Time-to-Claim metric.
+    Calculate Time-to-Claiming metric.
 
-    Time-to-Claim = Claimed By timestamp - Page creation timestamp
+    Time-to-Claiming = Claimed By timestamp - Page creation timestamp
     (Page creation = Issue creation since it's the same page that got renamed)
     """
     times_to_claim = []
@@ -542,7 +543,7 @@ def calculate_unique_contributors(
 
     Contributors include:
     - Issue creator (Issue Created By)
-    - Claimer (Claimed By)
+    - Person claiming the issue (Claimed By)
     - RES node creators
     """
     # Build lookup structures for RES matching
@@ -618,9 +619,9 @@ def calculate_unique_contributors(
 
 def calculate_cross_person_claims(experiments: list[dict]) -> dict:
     """
-    Identify Cross-Person Claims (Idea Exchange).
+    Identify Cross-Person Claiming (Idea Exchange).
 
-    Cross-person claim = Issue Created By != Claimed By
+    Cross-person claiming = Issue Created By != Claimed By
     These demonstrate transfer of ideas from one researcher to another.
     """
     cross_person = []
@@ -695,6 +696,12 @@ def calculate_all_metrics(
     print("Loading JSON-LD data...")
     jsonld_data = analyze_graph(jsonld_path)
 
+    print("Validating Roam export matches JSON-LD graph...")
+    validation = validate_roam_export(roam_json_path, jsonld_data)
+    print(f"  Match rate: {validation['match_rate']:.1%} "
+          f"({validation['experiment_matches']}/{validation['jsonld_experiment_pages']} experiments, "
+          f"{validation['iss_matches']}/{validation['jsonld_iss_nodes']} ISS)")
+
     print("Analyzing experiment pages in Roam JSON...")
     roam_exp_data = analyze_all_experiment_pages(roam_json_path)
 
@@ -714,7 +721,7 @@ def calculate_all_metrics(
     # Metric 1: Conversion Rate
     conversion = calculate_conversion_rate(experiments, iss_nodes)
 
-    # Metric 2: Time-to-Claim
+    # Metric 2: Time-to-Claiming
     time_to_claim = calculate_time_to_claim(experiments)
 
     # Metric 3: Time-to-First-Result
@@ -723,7 +730,7 @@ def calculate_all_metrics(
     # Metric 4: Unique Contributors
     contributors = calculate_unique_contributors(experiments, res_nodes, relation_instances)
 
-    # Metric 5: Cross-Person Claims
+    # Metric 5: Cross-Person Claiming
     cross_person = calculate_cross_person_claims(experiments)
 
     return {
@@ -766,14 +773,14 @@ def print_metrics_summary(metrics: dict):
     conv = m['conversion_rate']
     print(f"\n--- METRIC 1: Issue Conversion Rate ---")
     print(f"  Conversion rate: {conv['conversion_rate_percent']}%")
-    print(f"  Total claimed: {conv['total_claimed']} ({conv['explicit_claims']} explicit + {conv['inferred_claims']} inferred + {conv['iss_with_activity']} ISS with activity)")
+    print(f"  Total claimed: {conv['total_claimed']} ({conv['explicit_claims']} explicitly + {conv['inferred_claims']} inferred + {conv['iss_with_activity']} ISS with activity)")
     print(f"  Unclaimed ISS: {conv['unclaimed_iss']}")
-    print(f"  Cross-person claims: {conv['cross_person_claims']}")
-    print(f"  Self-claims: {conv['self_claims']}")
+    print(f"  Cross-person claiming: {conv['cross_person_claims']}")
+    print(f"  Self-claiming: {conv['self_claims']}")
 
     # Metric 2
     ttc = m['time_to_claim']
-    print(f"\n--- METRIC 2: Time-to-Claim ---")
+    print(f"\n--- METRIC 2: Time-to-Claiming ---")
     if ttc['count'] > 0:
         print(f"  Experiments with data: {ttc['count']}")
         print(f"  Average: {ttc['avg_days']} days")
@@ -806,14 +813,14 @@ def print_metrics_summary(metrics: dict):
 
     # Metric 5
     xp = m['cross_person_claims']
-    print(f"\n--- METRIC 5: Cross-Person Claims (Idea Exchange) ---")
-    print(f"  Cross-person claims: {xp['cross_person_count']}")
-    print(f"  Self-claims: {xp['self_claim_count']}")
+    print(f"\n--- METRIC 5: Cross-Person Claiming (Idea Exchange) ---")
+    print(f"  Cross-person claiming: {xp['cross_person_count']}")
+    print(f"  Self-claiming: {xp['self_claim_count']}")
     print(f"  Idea exchange rate: {xp['idea_exchange_rate']}%")
     if xp['exchange_pairs']:
         print("  Exchange pairs:")
         for pair in xp['exchange_pairs'][:5]:
-            print(f"    {pair['from']} -> {pair['to']}: {pair['count']} claims")
+            print(f"    {pair['from']} -> {pair['to']}: {pair['count']} instances")
 
     print("\n" + "=" * 80)
 

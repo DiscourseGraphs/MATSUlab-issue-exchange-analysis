@@ -4,7 +4,7 @@ This document records the iterative prompt–response specification process betw
 
 **Project:** node-metrics (MATSUlab discourse graph analysis)
 **Participants:** Matt Akamatsu (user), Claude (assistant)
-**Date range:** 2026-01-25 through 2026-02-13
+**Date range:** 2026-01-25 through 2026-02-14
 
 > **De-identification note:** Researcher names have been anonymized throughout. Lab members are labeled R1–R11; undergraduate researchers in EVD 7 are labeled A, B, C. The PI (Matt Akamatsu) remains identified as evidence bundle creator.
 
@@ -451,6 +451,57 @@ All three include the full Attribution block (Matt Akamatsu with ORCID, Claude, 
 
 ---
 
+## Session 9 — 2026-02-13 through 2026-02-14 (terminology disambiguation, new data export, EVD1 bundle fix)
+
+### Exchange 51 — Updated Roam data export
+
+> [User provided new Roam JSON and JSON-LD exports from 2026-02-11 and 2026-02-13]
+
+**Response:** Updated the pipeline to use the new data exports (`akamatsulab_discourse-graph-json-LD202602112140.json` and `akamatsu-whole-graph-2026-02-13-22-24-27.json`). Added export validation to verify the Roam JSON matches the JSON-LD graph. Re-ran pipeline — metrics updated: 445 total issues (up from 434), 130 claimed (up from 127), 323 RES nodes. Conversion rate stayed at 29.2%.
+
+**Files modified:** `src/main.py`, `src/calculate_metrics.py` (added validation)
+
+### Exchange 52 — Fix alluvial diagram clipping
+
+> [Multiple iterations fixing the alluvial/Sankey diagram where "No Result Yet" node was clipped]
+
+**Response:** Fixed SVG clipping in the alluvial diagram by adjusting figure margins, repositioning the "No Result Yet" node, and tuning the Sankey layout. Multiple iterations to get the positioning right.
+
+**Files modified:** `src/handoff_visualizations.py`
+
+### Exchange 53 — Terminology disambiguation: "claim" → "claiming"
+
+> The term 'claim' is a little confusing, because discourse graphs also use the term claim as in question-claim-evidence. so instead of using 'claim' as a noun, can you substitute for things like 'claiming' (for fig 1 and 5) as well as in the text (methods, readmes, etc)
+
+**Response:** Systematically replaced "claim" used as a noun throughout the codebase to avoid confusion with CLM (Claim) discourse graph nodes. Terminology mapping applied:
+- "Explicit Claims" → "Explicitly Claimed"
+- "Inferred Claims" → "Inferred Claiming"
+- "Self-Claims" → "Self-claiming" / "Self-claimed"
+- "Cross-Person Claims" → "Cross-Person Claiming"
+- "Claim Authorship" → "Claiming Authorship"
+- "Time-to-Claim" → "Time-to-Claiming"
+- "Net Idea Claimer" → "Net Idea Recipient"
+
+Updated 13+ files spanning source code, visualizations, evidence bundles, methods, and documentation. Preserved internal variable names (`claim_type`, `claimed_by`), Roam field names (`Claimed By::`), and verb usage ("were claimed").
+
+**Files modified:** `src/main.py`, `src/calculate_metrics.py`, `src/generate_visualizations.py`, `src/handoff_visualizations.py`, `src/create_evidence_bundle.py`, `output/methods.md`, `output/evidence_statements.md`, `output/visualizations/fig1_conversion_rate.html`, evidence bundle docs and data files, `README.md`, `CLAUDE.md`
+
+### Exchange 54 — EVD1 bundle still showing old terminology
+
+> What about figure 1? I still see the claim terminology there in evd bundle 1
+
+**Response:** Root cause: `main.py` only called `create_evd5_bundle()` — `create_evd1_bundle()` was never invoked during the pipeline, so the EVD1 bundle's PNG and generated files were stale. Fix: added `create_evd1_bundle` to the import and pipeline execution in `main.py`. Also updated `output/methods.md` (source for EVD1 methods excerpt), `output/visualizations/fig1_conversion_rate.html` (source HTML copied into bundle), and `output/evidence_statements.md`. Removed stale `methods_excerpt.md` orphaned at EVD1 bundle root. Re-ran pipeline to regenerate all EVD1 bundle files.
+
+**Files modified:** `src/main.py`, `output/methods.md`, `output/evidence_statements.md`, `output/visualizations/fig1_conversion_rate.html`, `output/evidence_bundles/evd5-issue-funnel/README.md`
+
+### Exchange 55 — Merge conversation logs and commit
+
+> Update our conversation_log (which one is being tracked?) and then commit changes to main, push changes to the remote repo
+
+**Response:** Identified that `conversation_log.md` (root) is the sole git-tracked log. Removed redundant untracked copies (`output/lab_notebook.md`, `output/conversation_log.md`). Updated conversation log with Session 9 entries. Committed and pushed.
+
+---
+
 ## Cumulative Outputs
 
 ### Scripts
@@ -458,19 +509,19 @@ All three include the full Attribution block (Matt Akamatsu with ORCID, Claude, 
 |------|---------|---------------|
 | `src/parse_jsonld.py` | Parse JSON-LD export; extract experiment pages, ISS/RES nodes, relation instances | 1 |
 | `src/parse_roam_json.py` | Stream-parse Roam JSON; extract block timestamps, experimental logs, claim metadata, earliest block timestamps | 1, 7 |
-| `src/calculate_metrics.py` | Merge data sources; compute all 5 metrics; 3-tier RES matching; inferred claims | 1, 5, 6, 7, 9, 41 |
-| `src/generate_visualizations.py` | Generate figures 1–5 (static PNGs) | 12, 14, 46 |
-| `src/handoff_visualizations.py` | Generate handoff flow diagrams (alluvial, directed, heatmap) | 3, 17, 43 |
+| `src/calculate_metrics.py` | Merge data sources; compute all 5 metrics; 3-tier RES matching; inferred claiming | 1, 5, 6, 7, 9, 41, 53 |
+| `src/generate_visualizations.py` | Generate figures 1–5 (static PNGs) | 12, 14, 46, 53 |
+| `src/handoff_visualizations.py` | Generate handoff flow diagrams (alluvial, directed, heatmap) | 3, 17, 43, 52, 53 |
 | `src/student_timeline_analysis.py` | Student onboarding timeline extraction and visualization | 19–27, 33 |
-| `src/create_evidence_bundle.py` | Generate RO-Crate evidence bundles (EVD 1, 5, 7) | 24, 31, 43 |
+| `src/create_evidence_bundle.py` | Generate RO-Crate evidence bundles (EVD 1, 5, 7) | 24, 31, 43, 53 |
 | `src/anonymize.py` | Central de-identification module (name → pseudonym mapping) | 42 |
-| `src/main.py` | Pipeline orchestrator | 1, 43 |
+| `src/main.py` | Pipeline orchestrator; runs EVD 1 and EVD 5 bundle creation | 1, 43, 54 |
 
 ### Evidence Bundles
 | Bundle | Evidence Statement | Key exchanges |
 |--------|-------------------|---------------|
-| `evd1-conversion-rate/` | 18% of MATSUlab issues (n=389) were claimed as experiments and 36% of those claimed at least one formal result node, yielding 44 total RES nodes | 31, 46, 47, 48, 49 |
-| `evd5-issue-funnel/` | Full funnel with alluvial flow diagram showing researcher-level Issue Created → Issue Claimed → Result Created flow | 14, 16, 17, 43, 47, 48, 49 |
+| `evd1-conversion-rate/` | 29% of MATSUlab issues (n=445) were claimed as experiments and 38% of those produced at least one formal result node, yielding 139 total RES nodes | 31, 46, 47, 48, 49, 53, 54 |
+| `evd5-issue-funnel/` | Full funnel with alluvial flow diagram showing researcher-level Issue Created → Claimed By → Result Created flow | 14, 16, 17, 43, 47, 48, 49, 53 |
 | `evd7-student-onboarding/` | All three undergraduate researchers generated an original result within ~4 months | 24, 27, 28, 33, 34, 47, 48, 49 |
 
 ### Key Design Decisions (traced to user prompts)
@@ -492,3 +543,5 @@ All three include the full Attribution block (Matt Akamatsu with ORCID, Claude, 
 15. **2-segment conversion bar** (Exchange 46): Simplified from 4 claim-type subcategories (all zeros) to claimed vs. unclaimed.
 16. **Observation-statement figure legends** (Exchange 47): Figure legend titles state the result, not a neutral description.
 17. **Grounding context with limitations** (Exchange 48): Each evidence bundle documents the specific methodological caveats readers need to interpret the numbers critically.
+18. **"Claiming" not "claim" terminology** (Exchange 53): Replaced "claim" nouns with "claiming" gerund forms to avoid confusion with CLM (Claim) discourse graph node type. "Claimed" as verb/adjective kept.
+19. **EVD1 bundle in pipeline** (Exchange 54): Added `create_evd1_bundle()` to `main.py` so EVD1 bundle is regenerated alongside EVD5 during pipeline runs.
