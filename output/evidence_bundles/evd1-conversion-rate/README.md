@@ -1,6 +1,6 @@
 # EVD 1 — Issue Conversion Rate
 
-> **18% of MATSUlab issues (n=389) were claimed as experiments and 36% of those claimed at least one formal result node, yielding 44 total RES nodes.**
+### 18% of MATSUlab issues were claimed as experiments, and 36% of those produced at least one formal result node
 
 ---
 
@@ -8,7 +8,7 @@
 
 ![Figure 1. Issue conversion rate and claim authorship](fig1_conversion_rate.png)
 
-**Figure 1. Issue conversion rate and claim authorship in the MATSUlab discourse graph.** (Left) Stacked horizontal bar showing the composition of all 389 issues: unclaimed ISS pages (grey, n=320) and claimed experiments (blue, n=69, 18%). (Right) Donut chart showing claim authorship: self-claims where the issue creator and claimer were the same person (orange, n=50, 72%) vs. cross-person claims where a different researcher claimed the issue (purple, n=19, 28%).
+**Figure 1. 18% of issues (69 of 389) were claimed as experiments; 72% of claims were self-claims and 28% were cross-person idea exchanges.** (Left) Stacked horizontal bar showing the composition of all 389 issues: unclaimed ISS pages (grey, n=320) and claimed experiments (blue, n=69). (Right) Donut chart showing claim authorship: self-claims where the issue creator and claimer were the same person (orange, n=50, 72%) vs. cross-person claims where a different researcher claimed the issue (purple, n=19, 28%).
 
 > An [interactive HTML version](fig1_conversion_rate.html) is also included (download and open locally).
 

@@ -1,6 +1,6 @@
 # EVD 5 — Issue-to-Experiment-to-Result Flow
 
-> **Of 389 total issues in the MATSUlab discourse graph, 69 (18%) were claimed as experiments and 25 (6%) produced at least one formal result node, yielding 44 total RES nodes.**
+### 69 of 389 issues were claimed as experiments; 25 produced formal results, with cross-person idea exchange accounting for 28% of all claims
 
 ---
 
@@ -8,7 +8,7 @@
 
 ![Figure 5. Issue-to-experiment-to-result flow](fig5_alluvial_flow.png)
 
-**Figure 5. Issue-to-experiment-to-result flow in the MATSUlab discourse graph.** Alluvial (Sankey) diagram showing all 69 claimed experiments flowing through three stages: Issue Created (left), Issue Claimed (center), and Result Created (right). Band width is proportional to the number of experiments. Green bands indicate self-claims; purple bands indicate cross-person claims (idea exchange). Of the 69 claimed experiments, 25 produced at least one formal result node, yielding 44 total RES nodes. Researcher names are anonymized (R1–R11); the PI (Matt Akamatsu) is identified.
+**Figure 5. The issue-to-result pipeline funnels 389 issues down to 69 claimed experiments and 25 with formal results, with the PI serving as the primary hub for cross-person idea exchange.** Alluvial (Sankey) diagram showing all 69 claimed experiments flowing through three stages: Issue Created (left), Issue Claimed (center), and Result Created (right). Band width is proportional to the number of experiments. Green bands indicate self-claims; purple bands indicate cross-person claims (idea exchange). Researcher names are anonymized (R1–R11); the PI (Matt Akamatsu) is identified.
 
 > An [interactive HTML version](fig5_alluvial_flow.html) allows hovering to inspect individual flows (download and open locally).
 
@@ -16,7 +16,7 @@
 
 ![Supplemental. Aggregate funnel view](fig5_funnel_supplemental.png)
 
-**Supplemental Figure.** Aggregate funnel showing progressive attrition: 389 issues → 69 claimed (18%) → 25 with results (36% of claimed). Right panel shows composition at each stage.
+**Supplemental Figure. Progressive attrition from 389 issues to 69 claimed experiments (18%) to 25 with formal results (36% of claimed).** Right panel shows composition at each stage.
 
 ---
 
