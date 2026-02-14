@@ -4,7 +4,7 @@ This document records the iterative prompt–response specification process betw
 
 **Project:** node-metrics (MATSUlab discourse graph analysis)
 **Participants:** Matt Akamatsu (user), Claude (assistant)
-**Date range:** 2026-01-25 through 2026-02-12
+**Date range:** 2026-01-25 through 2026-02-13
 
 > **De-identification note:** Researcher names have been anonymized throughout. Lab members are labeled R1–R11; undergraduate researchers in EVD 7 are labeled A, B, C. The PI (Matt Akamatsu) remains identified as evidence bundle creator.
 
@@ -389,6 +389,68 @@ This document records the iterative prompt–response specification process betw
 
 ---
 
+## Session 8 — 2026-02-13 (figure fixes, README refinement, grounding context)
+
+### Exchange 46 — Fix fig1 PNG rendering
+
+> For figure 1, the png file wasn't rendering correctly (the bar graph was only one bar), so I replaced it with a screenshot of the html file. (the html file renders great.). Can you update the plotting for fig 1 so that it generates the png file correctly.
+
+**Response:** Diagnosed the root cause: the old 4-segment stacked bar (explicit claims, inferred claims, ISS with activity, unclaimed) had all three claim-type subcategories at zero in the current data, rendering only the unclaimed segment. Simplified `create_conversion_rate_figure()` in `generate_visualizations.py` to a 2-segment bar: Claimed experiments (blue, 69) vs Unclaimed ISS (grey, 320). Also made the donut title dynamic (`f"among {claimed_total} experiment claims"`). Updated the HTML file data values from old snapshot (434/127/48/136) to current (389/69/25/44). Re-ran pipeline and copied the regenerated PNG to the evidence bundle.
+
+**Key design decision:** Simplified the bar chart to match the two categories that are reliably populated in the current data, rather than maintaining subcategories that are all zero.
+
+---
+
+### Exchange 47 — Observation-statement figure legends and subtitles
+
+> I'd like to change the figure legend titles so that they consist of the observation statement (result statement) rather than a neutral description of the figure. For example, for figure 1, you could switch the figure legend title to "18% of MATSUlab issues were claimed as experiments and 36% of those claimed at least one formal result node". Also can you make the callout at the top of the page stand out a bit more (it's a > currently; it should read more like a title or subtitle)
+
+**Response:** Updated all three evidence bundle READMEs:
+- Changed top callout from blockquote (`> **bold**`) to `###` heading for visual prominence on GitHub
+- Replaced neutral figure legend titles with observation/result statements:
+  - EVD 1: "18% of issues (69 of 389) were claimed as experiments; 72% of claims were self-claims and 28% were cross-person idea exchanges."
+  - EVD 5: "The issue-to-result pipeline funnels 389 issues down to 69 claimed experiments and 25 with formal results, with the PI serving as the primary hub for cross-person idea exchange."
+  - EVD 7: "Three onboarding pathways produced results in 125, 47, and 36 days — structured assignment via the issue board compressed time-to-result by 3×."
+
+User subsequently refined the EVD 5 and EVD 7 figure legend titles directly.
+
+---
+
+### Exchange 48 — Grounding context with methodological limitations
+
+> Note that I refined the evidence statements in the readme for evd 5 and 7. The grounding context section needs work. This section is meant to provide the reader with sufficient context to appreciate the limitations and methods that led to this particular plot. So, for example, EVD5: "Claiming was assessed based on page metadata ('Claimed by:' attribute), page authorship, or authorship of daily log entries within the Issue page. This approach does not capture the issues that were more informally transferred from one researcher to another" -- that type of context. So: use the methods that created each of the evd bundles to consider the limitations/caveats/grounding context necessary for the reader to appreciate the result and put it in appropriate context, and put that in the "grounding context" section for each evidence bundle
+
+**Response:** Reviewed `calculate_metrics.py` implementation in depth to identify the specific measurement assumptions and limitations. Renamed "Context" → "Grounding context" in all three READMEs. Rewrote each section with a brief methodological lead-in followed by enumerated limitations:
+
+- **EVD 1** (5 caveats): claim detection is metadata-dependent; inferred claims default to self-claims (underestimating exchange); issue count depends on naming conventions; result linking uses three-tier fallback (36% is a lower bound); snapshot-date caveat.
+- **EVD 5** (6 caveats): same claim detection caveats as EVD 1 (cross-referenced); attribution priority chain; "No Result Yet" ambiguity; known-authorship requirement for cross-person classification; flows reflect formal metadata not informal collaboration.
+- **EVD 7** (6 caveats): milestone dates manually extracted (not computed); small sample n=3 with temporal confound; post-hoc pathway classification; elapsed days ≠ effort; RES node ≠ quality; lab average comparison uses different population.
+
+**Key design decision:** The grounding context surfaces the specific methodological choices that could bias the numbers, helping readers calibrate their interpretation rather than taking figures at face value.
+
+---
+
+### Exchange 49 — Source material and attribution links
+
+> Please push your latest changes to the repo and pull the changes I made to the main README file. Note the changes I made to the main readme file in the source material and attribution links. Propagate those links and attribution to each evidence bundle. In other words, each evidence bundle README should include those attribution links, and to the *relevant* source material. ie EVD 5 should have the link for EVD5 and EVD7 should have the link to EVD7
+
+**Response:** Pushed local commits, pulled user's main README updates (which added Source material and Attribution sections with Roam result page links and ORCID-linked names). Propagated to each evidence bundle README with bundle-specific source links:
+- EVD 1: experimental log + raw data request (no bundle-specific result page)
+- EVD 5: experimental log + [Result page: EVD 5](https://roamresearch.com/#/app/discourse-graphs/page/EBoRlwI78) + raw data
+- EVD 7: experimental log + [Result page: EVD 7](https://roamresearch.com/#/app/discourse-graphs/page/0FU6ssOwH) + raw data
+
+All three include the full Attribution block (Matt Akamatsu with ORCID, Claude, Discourse Graphs Project with Joel Chan ORCID, Akamatsu Lab, DG extension).
+
+---
+
+### Exchange 50 — Conversation log update
+
+> Nice. Please update our conversation_log.md based on our conversation thus far
+
+**Response:** This entry. Updated the conversation log through Exchange 50 (Session 8).
+
+---
+
 ## Cumulative Outputs
 
 ### Scripts
@@ -397,7 +459,7 @@ This document records the iterative prompt–response specification process betw
 | `src/parse_jsonld.py` | Parse JSON-LD export; extract experiment pages, ISS/RES nodes, relation instances | 1 |
 | `src/parse_roam_json.py` | Stream-parse Roam JSON; extract block timestamps, experimental logs, claim metadata, earliest block timestamps | 1, 7 |
 | `src/calculate_metrics.py` | Merge data sources; compute all 5 metrics; 3-tier RES matching; inferred claims | 1, 5, 6, 7, 9, 41 |
-| `src/generate_visualizations.py` | Generate figures 1–5 (static PNGs) | 12, 14 |
+| `src/generate_visualizations.py` | Generate figures 1–5 (static PNGs) | 12, 14, 46 |
 | `src/handoff_visualizations.py` | Generate handoff flow diagrams (alluvial, directed, heatmap) | 3, 17, 43 |
 | `src/student_timeline_analysis.py` | Student onboarding timeline extraction and visualization | 19–27, 33 |
 | `src/create_evidence_bundle.py` | Generate RO-Crate evidence bundles (EVD 1, 5, 7) | 24, 31, 43 |
@@ -407,9 +469,9 @@ This document records the iterative prompt–response specification process betw
 ### Evidence Bundles
 | Bundle | Evidence Statement | Key exchanges |
 |--------|-------------------|---------------|
-| `evd1-conversion-rate/` | 18% of MATSUlab issues (n=389) were claimed as experiments and 36% of those claimed at least one formal result node, yielding 44 total RES nodes | 31 |
-| `evd5-issue-funnel/` | Full funnel with alluvial flow diagram showing researcher-level Issue Created → Issue Claimed → Result Created flow | 14, 16, 17, 43 |
-| `evd7-student-onboarding/` | All three undergraduate researchers generated an original result within ~4 months | 24, 27, 28, 33, 34 |
+| `evd1-conversion-rate/` | 18% of MATSUlab issues (n=389) were claimed as experiments and 36% of those claimed at least one formal result node, yielding 44 total RES nodes | 31, 46, 47, 48, 49 |
+| `evd5-issue-funnel/` | Full funnel with alluvial flow diagram showing researcher-level Issue Created → Issue Claimed → Result Created flow | 14, 16, 17, 43, 47, 48, 49 |
+| `evd7-student-onboarding/` | All three undergraduate researchers generated an original result within ~4 months | 24, 27, 28, 33, 34, 47, 48, 49 |
 
 ### Key Design Decisions (traced to user prompts)
 
@@ -427,3 +489,6 @@ This document records the iterative prompt–response specification process betw
 12. **Attribution priority chain** (Exchanges 36–37, 41): Made by > Claimed By > Author > JSON-LD creator.
 13. **De-identification** (Exchange 42): Central `anonymize.py` module; PI identified, all others R1–R11.
 14. **Alluvial as primary EVD 5 figure** (Exchange 43): Researcher-level flow diagram replaces aggregate funnel as the key figure.
+15. **2-segment conversion bar** (Exchange 46): Simplified from 4 claim-type subcategories (all zeros) to claimed vs. unclaimed.
+16. **Observation-statement figure legends** (Exchange 47): Figure legend titles state the result, not a neutral description.
+17. **Grounding context with limitations** (Exchange 48): Each evidence bundle documents the specific methodological caveats readers need to interpret the numbers critically.
