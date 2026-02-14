@@ -22,7 +22,7 @@
   "dge:method": {
     "@type": "dge:Method",
     "dc:title": "Discourse graph conversion rate analysis",
-    "dc:description": "Automated pipeline parsing JSON-LD and Roam JSON exports to identify issue nodes (320 formal ISS + 0 experiment pages), detect claims via a two-tier strategy (explicit via Claimed By:: field, n=0; inferred via experimental log presence, n=0; plus 0 ISS pages with activity), and link result nodes using a 3-tier matching strategy (relation instances, backreference matching, full description matching).",
+    "dc:description": "Automated pipeline parsing JSON-LD and Roam JSON exports to identify issue nodes (320 formal ISS pages + 69 experiment pages = 389 total issues), detect claims via a two-tier strategy (explicit via Claimed By:: field, or inferred via experimental log presence), and link result nodes using a 3-tier matching strategy (relation instances, backreference matching, full description matching).",
     "prov:used": [
       {
         "@id": "src/calculate_metrics.py",
@@ -46,7 +46,7 @@
   "dge:system": {
     "@type": "dge:System",
     "dc:title": "MATSUlab discourse graph",
-    "dc:description": "Akamatsu Lab Roam Research discourse graph, February 2026 snapshot. Contains 389 identifiable issues (320 formal ISS nodes + 0 experiment pages), 69 claimed experiments, and 323 result nodes.",
+    "dc:description": "Akamatsu Lab Roam Research discourse graph, February 2026 snapshot. Contains 389 identifiable issues (320 formal ISS nodes + 69 experiment pages), 69 claimed experiments, and 44 linked RES nodes.",
     "schema:memberOf": "Akamatsu Lab, University of Washington",
     "dcterms:temporal": "2026-02-12"
   },
@@ -55,7 +55,7 @@
       "@type": "schema:ImageObject",
       "schema:contentUrl": "fig1_conversion_rate.png",
       "schema:encodingFormat": "image/png",
-      "dge:figureLegend": "Figure 1. Issue conversion rate and claim authorship in the MATSUlab discourse graph. (Left) Stacked horizontal bar showing the composition of all 389 issues: explicit claims (0, blue), inferred claims (0, green), ISS with activity (0, amber), unclaimed (320, grey). Bracket indicates total claimed: 69 (17.7%). (Right) Donut chart showing claim authorship among 69 experiment-page claims: self-claims (50, 72%) and cross-person claims (19, 28%)."
+      "dge:figureLegend": "Figure 1. 18% of issues (69 of 389) were claimed as experiments; 72% of claims were self-claims and 28% were cross-person idea exchanges. (Left) Stacked horizontal bar showing the composition of all 389 issues: claimed experiments (69, blue) and unclaimed ISS pages (320, grey). (Right) Donut chart showing claim authorship among 69 experiment-page claims: self-claims (50, 72%) and cross-person claims (19, 28%)."
     },
     {
       "@type": "schema:WebPage",
@@ -75,12 +75,7 @@
   "dge:documentation": [
     {
       "@type": "schema:TextDigitalDocument",
-      "schema:contentUrl": "docs/evidence_statement.md",
-      "dc:description": "Evidence statement, evidence description, and figure legend"
-    },
-    {
-      "@type": "schema:TextDigitalDocument",
-      "schema:contentUrl": "docs/methods_excerpt.md",
+      "schema:contentUrl": "methods_excerpt.md",
       "dc:description": "Relevant methods sections for node identification, claim detection, and metric calculation"
     }
   ],
@@ -108,9 +103,6 @@
   "dge:summaryMetrics": {
     "total_issues": 389,
     "claimed_experiments": 69,
-    "explicit_claims": 0,
-    "inferred_claims": 0,
-    "iss_with_activity": 0,
     "unclaimed_iss": 320,
     "conversion_rate_percent": 17.7,
     "experiments_with_results": 25,

@@ -15,7 +15,7 @@
       "@id": "./",
       "@type": "Dataset",
       "name": "EVD 1: Issue Conversion Rate — MATSUlab Discourse Graph",
-      "description": "Evidence bundle for the finding that 29% of MATSUlab issues (n=434) were claimed as experiments and 38% of those claimed at least one formal result node, yielding 136 total RES nodes. Contains the evidence statement, static and interactive figures, underlying data, and methodological documentation.",
+      "description": "Evidence bundle for the finding that 18% of MATSUlab issues (n=389) were claimed as experiments and 36% of those claimed at least one formal result node, yielding 44 total RES nodes. Contains the evidence statement, static and interactive figures, underlying data, and methodological documentation.",
       "datePublished": "2026-02-10",
       "creator": [
         {
@@ -39,10 +39,7 @@
           "@id": "data/conversion_data.json"
         },
         {
-          "@id": "docs/evidence_statement.md"
-        },
-        {
-          "@id": "docs/methods_excerpt.md"
+          "@id": "methods_excerpt.md"
         }
       ]
     },
@@ -73,7 +70,7 @@
         "ImageObject"
       ],
       "name": "Figure 1: Issue Conversion Rate (static)",
-      "description": "Two-panel figure. Left: stacked horizontal bar showing 434 issues broken down by claim type (68 explicit, 54 inferred, 5 ISS with activity, 307 unclaimed). Right: donut chart of claim authorship (103 self-claims, 19 cross-person).",
+      "description": "Two-panel figure. Left: stacked horizontal bar showing 389 issues (69 claimed experiments, 320 unclaimed ISS). Right: donut chart of claim authorship (50 self-claims, 19 cross-person).",
       "encodingFormat": "image/png"
     },
     {
@@ -94,14 +91,7 @@
       "encodingFormat": "application/json"
     },
     {
-      "@id": "docs/evidence_statement.md",
-      "@type": "File",
-      "name": "Evidence Statement and Figure Legend",
-      "description": "EVD 1 evidence statement, evidence description, and figure legend in markdown.",
-      "encodingFormat": "text/markdown"
-    },
-    {
-      "@id": "docs/methods_excerpt.md",
+      "@id": "methods_excerpt.md",
       "@type": "File",
       "name": "Methods Excerpt",
       "description": "Relevant sections from the full methods document covering node identification, claim detection, and metric definitions.",

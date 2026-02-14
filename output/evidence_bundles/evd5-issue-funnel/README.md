@@ -20,6 +20,12 @@
 
 ---
 
+## Evidence description
+
+The issue-to-result funnel was constructed by tracking the attrition of issues through three stages: creation, claim, and result production. All 389 identifiable issues (320 formal ISS nodes plus 69 experiment pages) formed the top of the funnel. Of these, 69 (18%) were claimed — detected via a `Claimed By::` metadata field (explicit claim) or the presence of experimental log entries authored by the page creator (inferred claim). This represents an 18% issue-to-experiment conversion rate.
+
+Of the 69 claimed experiments, 25 (36%) had at least one linked RES (Result) node, representing experiments that produced a formally recorded result. The remaining 44 claimed experiments either have work still in progress or recorded their outputs in formats other than formal `[[RES]]` pages. The 25 result-producing experiments generated a total of 44 RES nodes, averaging 1.8 results per experiment. Overall, 6% of all issues progressed through the full funnel from creation to formal result production.
+
 ## Summary
 
 This evidence bundle traces the full lifecycle of research questions in the MATSUlab discourse graph — from issue creation through experiment claiming to formal result production — and reveals who is involved at each stage.
@@ -72,7 +78,7 @@ Funnel chart: [`src/generate_visualizations.py`](../../../src/generate_visualiza
 Bundle generator: [`src/create_evidence_bundle.py`](../../../src/create_evidence_bundle.py)
 Full pipeline trace: [`notebooks/evd1_evd7_analysis.ipynb`](../../../notebooks/evd1_evd7_analysis.ipynb)
 
-See [`docs/methods_excerpt.md`](docs/methods_excerpt.md) for detailed methodology covering node identification, claim detection, and RES linking.
+See [`methods_excerpt.md`](methods_excerpt.md) for detailed methodology covering node identification, claim detection, and RES linking.
 
 ## Data
 

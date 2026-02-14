@@ -42,7 +42,7 @@
     "@type": "schema:ImageObject",
     "schema:contentUrl": "fig7_student_timelines.png",
     "schema:encodingFormat": "image/png",
-    "dge:figureLegend": "Figure 7. Undergraduate researcher onboarding timeline in the MATSUlab discourse graph. Gantt-style chart showing the progression of three anonymized undergraduate researchers (A, B, C) from lab start to first formal result (RES node). Researcher A: 41 days to experiment, 125 days to RES. Researcher B: 5 days to experiment, 47 days to RES. Researcher C: 7 days to experiment, 36 days to RES."
+    "dge:figureLegend": "Figure 7. Use of the issues board led to three undergraduate researchers producing results in 125, 47, and 36 days from start date. Timeline showing the progression of three anonymized undergraduate researchers (A, B, C) from lab start to first formal result (RES node). Milestones tracked: first day in lab, first experiment, first plot, and first RES node. Researcher A: 42 days to experiment, 125 days to RES. Researcher B: 5 days to experiment, 47 days to RES. Researcher C: 7 days to experiment, 36 days to RES."
   },
   "dge:groundingData": [
     {
@@ -55,8 +55,8 @@
   "dge:documentation": [
     {
       "@type": "schema:TextDigitalDocument",
-      "schema:contentUrl": "docs/evidence_statement.md",
-      "dc:description": "Evidence statement, evidence description, and figure legend"
+      "schema:contentUrl": "methods_excerpt.md",
+      "dc:description": "Methods excerpt describing milestone tracing methodology, pathway classification, and lab average comparison"
     }
   ],
   "prov:wasGeneratedBy": {
@@ -86,7 +86,7 @@
     "mean_days_to_res": 69.3,
     "min_days_to_res": 36,
     "max_days_to_res": 125,
-    "lab_average_days_to_res": 151.7,
+    "lab_average_days_to_res": 88.3,
     "pathways_identified": [
       "Self-directed exploration",
       "Assigned entry project",

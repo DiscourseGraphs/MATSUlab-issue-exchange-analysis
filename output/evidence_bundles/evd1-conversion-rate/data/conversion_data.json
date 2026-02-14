@@ -8,11 +8,6 @@
     "conversion_rate_percent": 17.7,
     "unclaimed_iss": 320
   },
-  "claim_type_breakdown": {
-    "explicit_claims": 0,
-    "inferred_claims": 0,
-    "iss_with_activity": 0
-  },
   "claim_authorship": {
     "self_claims": 50,
     "cross_person_claims": 19,
@@ -28,7 +23,7 @@
   },
   "issue_composition": {
     "formal_iss_nodes": 320,
-    "experiment_pages_with_inferred_claims": 0,
-    "description": "Total issues = 320 formal ISS nodes + 0 experiment pages = 389"
+    "experiment_pages": 69,
+    "description": "Total issues = 320 formal ISS nodes + 69 experiment pages = 389"
   }
 }

@@ -14,6 +14,16 @@
 
 ---
 
+## Evidence description
+
+The issue conversion rate was computed across all identifiable issues in the MATSUlab Roam Research discourse graph. Issues were identified as either formal ISS (Issue) nodes (n=320) or experiment pages (n=69), giving a total of 389 issues. An experiment page is identified by a title starting with `@` followed by a type prefix (e.g., `@analysis/...`, `@experiment/...`).
+
+An issue was considered "claimed" if it had been converted to an experiment page — detected via a `Claimed By::` metadata field (explicit claim) or the presence of experimental log entries authored by the page creator (inferred claim). This yielded 69 claimed experiments out of 389 total issues (17.7%).
+
+Of the 69 claimed experiments, 25 (36%) had at least one linked RES (Result) node, representing experiments that produced a formally recorded result. The 25 result-producing experiments generated a total of 44 RES nodes, averaging 1.8 results per experiment. The remaining 44 claimed experiments either have work still in progress or recorded their outputs in formats other than formal `[[RES]]` pages.
+
+Among the 69 experiment-page claims with known creator–claimer pairs, 72% (50) were self-claims and 28% (19) were cross-person claims where the issue creator and claimer were different people.
+
 ## Summary
 
 The issue conversion rate measures how many research questions (Issues) in the lab's discourse graph progressed to active work (Experiments) and formal outputs (Results).
@@ -47,7 +57,7 @@ Claim detection: [`src/calculate_metrics.py`](../../../src/calculate_metrics.py)
 Visualization: [`src/generate_visualizations.py`](../../../src/generate_visualizations.py)
 Full pipeline trace: [`notebooks/evd1_evd7_analysis.ipynb`](../../../notebooks/evd1_evd7_analysis.ipynb)
 
-See [`docs/methods_excerpt.md`](docs/methods_excerpt.md) for detailed methodology.
+See [`methods_excerpt.md`](methods_excerpt.md) for detailed methodology.
 
 ## Data
 

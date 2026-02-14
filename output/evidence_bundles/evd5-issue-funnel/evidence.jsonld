@@ -11,7 +11,7 @@
   "@id": "evd5-issue-funnel",
   "dc:title": "[[RES]] - 18% of MATSUlab issues (n=389) were claimed as experiments and 36% of those claimed at least one formal result node, yielding 44 total RES nodes - [[@analysis/quantify issue claiming from MATSUlab]]",
   "dc:creator": "Matt Akamatsu",
-  "dc:date": "2026-02-12",
+  "dc:date": "2026-02-13",
   "dcterms:license": "https://creativecommons.org/licenses/by/4.0/",
   "dge:evidenceStatement": "Of 389 total issues in the MATSUlab discourse graph, 69 (18%) were claimed as experiments and 25 (6%) produced at least one formal result node, yielding 44 total RES nodes (avg 1.8 per result-producing experiment).",
   "dge:observable": {
@@ -50,9 +50,9 @@
   "dge:system": {
     "@type": "dge:System",
     "dc:title": "MATSUlab discourse graph",
-    "dc:description": "Akamatsu Lab Roam Research discourse graph, February 2026 snapshot. Contains 389 identifiable issues (320 formal ISS nodes + 0 experiment pages), 69 claimed experiments, and 323 result nodes.",
+    "dc:description": "Akamatsu Lab Roam Research discourse graph, February 2026 snapshot. Contains 389 identifiable issues (320 formal ISS nodes + 69 experiment pages), 69 claimed experiments, and 44 linked RES nodes.",
     "schema:memberOf": "Akamatsu Lab, University of Washington",
-    "dcterms:temporal": "2026-02-12"
+    "dcterms:temporal": "2026-02-13"
   },
   "dge:figure": {
     "@type": "schema:ImageObject",
@@ -84,19 +84,14 @@
   "dge:documentation": [
     {
       "@type": "schema:TextDigitalDocument",
-      "schema:contentUrl": "docs/evidence_statement.md",
-      "dc:description": "Evidence statement, evidence description, and figure legend"
-    },
-    {
-      "@type": "schema:TextDigitalDocument",
-      "schema:contentUrl": "docs/methods_excerpt.md",
+      "schema:contentUrl": "methods_excerpt.md",
       "dc:description": "Relevant methods sections for claim detection, RES linking, and metric calculation"
     }
   ],
   "prov:wasGeneratedBy": {
     "@type": "prov:Activity",
     "prov:startedAtTime": "2026-01-25",
-    "prov:endedAtTime": "2026-02-12",
+    "prov:endedAtTime": "2026-02-13",
     "prov:used": [
       "akamatsulab_discourse-graph-json-LD202602112140.json",
       "akamatsulab-whole-graph-json-2026-02-11-21-45-17.json"
@@ -117,9 +112,7 @@
   "dge:summaryMetrics": {
     "total_issues": 389,
     "claimed_experiments": 69,
-    "explicit_claims": 0,
-    "inferred_claims": 0,
-    "iss_with_activity": 0,
+    "unclaimed_iss": 320,
     "experiments_with_results": 25,
     "total_res_nodes": 44,
     "conversion_rate_percent": 17.7,

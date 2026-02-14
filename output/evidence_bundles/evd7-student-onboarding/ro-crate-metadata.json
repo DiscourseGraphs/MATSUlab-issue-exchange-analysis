@@ -36,7 +36,7 @@
           "@id": "data/student_milestones.json"
         },
         {
-          "@id": "docs/evidence_statement.md"
+          "@id": "methods_excerpt.md"
         }
       ]
     },
@@ -78,10 +78,10 @@
       "encodingFormat": "application/json"
     },
     {
-      "@id": "docs/evidence_statement.md",
+      "@id": "methods_excerpt.md",
       "@type": "File",
-      "name": "Evidence Statement and Figure Legend",
-      "description": "EVD 7 evidence statement, evidence description, and figure legend in markdown.",
+      "name": "Methods Excerpt",
+      "description": "Methodology for milestone tracing, pathway classification, and lab average comparison.",
       "encodingFormat": "text/markdown"
     }
   ]
