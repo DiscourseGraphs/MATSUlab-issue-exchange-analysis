@@ -65,7 +65,7 @@ The `Issue Created By::` field is extracted similarly to identify the person who
 
 When both JSON-LD and Roam JSON provide a `Claimed By` value, the Roam JSON value is preferred because it also provides the block creation timestamp (used for time-to-claiming).
 
-**Count in current data:** 68 explicitly claimed
+**Count in current data:** 69 explicitly claimed
 
 ### 3.2 Inferred Claiming (`claim_type = 'inferred'`)
 
@@ -86,7 +86,7 @@ When these conditions are met:
 — `src/parse_roam_json.py`, `has_experimental_log()` (line 193) — checks for header block matching `Experiment(al)?\s+Log` with child blocks containing date patterns
 — `src/parse_roam_json.py`, `get_experimental_log_entries()` (line 221) — extracts all dated entries
 
-**Count in current data:** 54 inferred claiming
+**Count in current data:** 56 inferred claiming
 
 ### 3.3 ISS Pages with Activity
 
@@ -98,7 +98,7 @@ A small number of ISS pages (pages that were never renamed to experiment format)
 
 ISS pages with no experimental log entries are considered unclaimed.
 
-**Count in current data:** 307 unclaimed ISS pages
+**Count in current data:** 315 unclaimed ISS pages
 
 ---
 
@@ -157,14 +157,14 @@ Conversion Rate = Total Claimed / Total Issues × 100
 **Components:**
 | Component | Definition | Count |
 |-----------|-----------|-------|
-| Explicitly Claimed | Experiment pages with `Claimed By::` field | 68 |
-| Inferred Claiming | Experiment pages with experimental log (no `Claimed By::`) | 54 |
+| Explicitly Claimed | Experiment pages with `Claimed By::` field | 69 |
+| Inferred Claiming | Experiment pages with experimental log (no `Claimed By::`) | 56 |
 | ISS with Activity | ISS pages with experimental log entries | 5 |
-| Unclaimed ISS | ISS pages with no experimental log | 307 |
-| **Total Claimed** | | **127** |
-| **Total Issues** | | **434** |
+| Unclaimed ISS | ISS pages with no experimental log | 315 |
+| **Total Claimed** | | **130** |
+| **Total Issues** | | **445** |
 
-**Result:** 29.3%
+**Result:** 29.2%
 
 **Implementation:** `src/calculate_metrics.py`, `calculate_conversion_rate()` (line 165)
 
@@ -182,7 +182,7 @@ Where:
 - **Claiming Timestamp** = `create-time` of the `Claimed By::` block (explicitly claimed) or earliest experimental log entry (inferred)
 - **Issue Creation Date** = minimum of (JSON-LD `created`, Roam page `create-time`, earliest block `create-time`) — see Section 4.1
 
-**Inclusion criteria:** Only experiments with both a known claiming timestamp and a known issue creation date are included. This yields 122 experiments (out of 127 claimed).
+**Inclusion criteria:** Only experiments with both a known claiming timestamp and a known issue creation date are included. This yields 125 experiments (out of 130 claimed).
 
 **Results:**
 | Statistic | Value |
@@ -212,7 +212,7 @@ Where:
   - For inferred claiming: Issue creation date (page_created), since there is no formal claiming event
 - **Earliest Linked RES** = the RES node with the earliest `created` date among those linked to the experiment (see Section 5 for linking methods)
 
-**Inclusion criteria:** Only claimed experiments that have at least one linked RES node with a parseable creation date. This yields 48 experiments.
+**Inclusion criteria:** Only claimed experiments that have at least one linked RES node with a parseable creation date. This yields 50 experiments.
 
 **Results:**
 | Statistic | Value |
@@ -261,8 +261,8 @@ Only experiments where both `Issue Created By` and `Claimed By` are known are in
 | Metric | Value |
 |--------|-------|
 | Cross-Person Claiming | 19 |
-| Self-Claiming | 103 |
-| Idea Exchange Rate | 15.6% |
+| Self-Claiming | 106 |
+| Idea Exchange Rate | 15.2% |
 
 **Implementation:** `src/calculate_metrics.py`, `calculate_cross_person_claims()` (line 524)
 

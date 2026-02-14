@@ -474,12 +474,12 @@ def _write_ro_crate_metadata(path: Path):
                 ),
                 "description": (
                     "Evidence bundle for the finding that 29% of MATSUlab issues "
-                    "(n=434) were claimed as experiments and 11% produced at least "
-                    "one formal result node, yielding 136 total RES nodes. "
+                    "(n=445) were claimed as experiments and 11% produced at least "
+                    "one formal result node, yielding 139 total RES nodes. "
                     "Contains the evidence statement, figure, underlying data, "
                     "and methodological documentation."
                 ),
-                "datePublished": "2026-01-27",
+                "datePublished": "2026-02-14",
                 "creator": [
                     {"@id": "#matt-akamatsu"},
                 ],
@@ -1264,12 +1264,12 @@ def _write_evd1_ro_crate_metadata(path: Path):
                 ),
                 "description": (
                     "Evidence bundle for the finding that 29% of MATSUlab issues "
-                    "(n=434) were claimed as experiments and 38% of those claimed "
-                    "at least one formal result node, yielding 136 total RES nodes. "
+                    "(n=445) were claimed as experiments and 38% of those produced "
+                    "at least one formal result node, yielding 139 total RES nodes. "
                     "Contains the evidence statement, static and interactive figures, "
                     "underlying data, and methodological documentation."
                 ),
-                "datePublished": "2026-02-10",
+                "datePublished": "2026-02-14",
                 "creator": [
                     {"@id": "#matt-akamatsu"},
                 ],
@@ -1309,10 +1309,10 @@ def _write_evd1_ro_crate_metadata(path: Path):
                 "@type": ["File", "ImageObject"],
                 "name": "Figure 1: Issue Conversion Rate (static)",
                 "description": (
-                    "Two-panel figure. Left: stacked horizontal bar showing 434 issues "
-                    "broken down by claiming type (68 explicitly, 54 inferred, 5 ISS with "
-                    "activity, 307 unclaimed). Right: donut chart of claiming authorship "
-                    "(103 self-claimed, 19 cross-person)."
+                    "Two-panel figure. Left: stacked horizontal bar showing 445 issues "
+                    "broken down by claiming type (69 explicitly, 56 inferred, 5 ISS with "
+                    "activity, 315 unclaimed). Right: donut chart of claiming authorship "
+                    "(106 self-claimed, 19 cross-person)."
                 ),
                 "encodingFormat": "image/png",
             },
