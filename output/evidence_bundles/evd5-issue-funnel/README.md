@@ -8,7 +8,7 @@
 
 ![Figure 5. Issue-to-experiment-to-result flow](fig5_alluvial_flow.png)
 
-**Figure 5. The issue-to-result pipeline funnels 389 issues down to 69 claimed experiments and 25 with formal results, with the PI serving as the primary hub for cross-person idea exchange.** Alluvial (Sankey) diagram showing all 69 claimed experiments flowing through three stages: Issue Created (left), Issue Claimed (center), and Result Created (right). Band width is proportional to the number of experiments. Green bands indicate self-claims; purple bands indicate cross-person claims (idea exchange). Researcher names are anonymized (R1–R11); the PI (Matt Akamatsu) is identified.
+**Figure 5. Of 389 issues, 69 were claimed as experiments with 25 subsequent results.** Alluvial (Sankey) diagram showing all 69 claimed experiments flowing through three stages: Issue Created (left), Issue Claimed (center), and Result Created (right). Band width is proportional to the number of experiments. Green bands indicate self-claims; purple bands indicate cross-person claims (idea exchange). Researcher names are anonymized (R1–R11); the PI (Matt Akamatsu) is identified.
 
 > An [interactive HTML version](fig5_alluvial_flow.html) allows hovering to inspect individual flows (download and open locally).
 
@@ -58,6 +58,8 @@ In the discourse graph system, the path from question to answer follows a struct
 3. **Result (RES)** — Formal result node linked back to the experiment
 
 The alluvial diagram visualizes this three-stage flow at the researcher level, making it possible to see both aggregate conversion rates and individual collaboration patterns.
+
+
 
 ## Methods
 

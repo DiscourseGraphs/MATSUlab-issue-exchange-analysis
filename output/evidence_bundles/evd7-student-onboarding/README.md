@@ -8,7 +8,7 @@
 
 ![Figure 7. Undergraduate researcher onboarding timeline](fig7_student_timelines.png)
 
-**Figure 7. Three onboarding pathways produced results in 125, 47, and 36 days — structured assignment via the issue board compressed time-to-result by 3×.** Timeline showing the progression of three anonymized undergraduate researchers (A, B, C) from lab start to first formal result (RES node). Milestones tracked: first day in lab, first experiment, first plot, and first RES node. Numbers indicate days from lab start. Researcher A followed a self-directed exploration pathway (125 days to RES). Researcher B was assigned an entry project (47 days). Researcher C was directly assigned to an existing experiment (36 days).
+**Figure 7. Use of the issues board led to three undergraduate researchers producing results in 125, 47, and 36 days from start date.** Timeline showing the progression of three anonymized undergraduate researchers (A, B, C) from lab start to first formal result (RES node). Milestones tracked: first day in lab, first experiment, first plot, and first RES node. Numbers indicate days from lab start. Researcher A followed a self-directed exploration pathway (125 days to RES). Researcher B was assigned an entry project (47 days). Researcher C was directly assigned to an existing experiment (36 days).
 
 > An [interactive HTML version](fig7_student_timelines.html) is also included (download and open locally).
 
