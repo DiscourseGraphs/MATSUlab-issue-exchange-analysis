@@ -29,14 +29,17 @@ Among the 69 claimed experiments:
 - **50 (72%)** were self-claims — the same person who created the issue also worked on it
 - **19 (28%)** were cross-person claims — a different researcher picked up the issue, representing **idea exchange** between lab members
 
-## Context
+## Grounding context
 
 The MATSUlab discourse graph uses the [Discourse Graph](https://discoursegraph.com) framework in Roam Research. Researchers create **ISS** (Issue) nodes to articulate research questions, then claim them as **experiments** (`@analysis/...` or `@experiment/...` pages) by adding a `Claimed By::` field or by starting an experimental log. Results are recorded as **RES** nodes that reference the parent experiment.
 
-An issue was counted as "claimed" if it met any of these criteria:
-1. A `Claimed By::` field populated with a researcher name (explicit claim)
-2. Experimental log entries by the page creator with no `Claimed By::` field (inferred claim)
-3. An ISS page with experimental log content indicating active work
+Readers should be aware of the following when interpreting the numbers above:
+
+- **Claim detection is metadata-dependent.** Claiming was assessed via the `Claimed By::` page attribute, page authorship, or authorship of dated log entries within experiment pages. Issues that were informally transferred between researchers — without updating the metadata — are not captured.
+- **Inferred claims default to self-claims.** When no `Claimed By::` field is present, the claim is attributed to the page creator. Cross-person transfers that happened without updating the metadata are therefore counted as self-claims, likely **underestimating** the true idea exchange rate.
+- **Issue count depends on naming conventions.** The 389 total issues comprise formal `[[ISS]]` pages plus experiment pages identified by the `@analysis/` or `@experiment/` prefix. Research questions articulated in other formats (e.g. daily notes, meeting notes) are not counted.
+- **Result linking uses a three-tier fallback.** RES nodes are matched to experiments via (1) explicit JSON-LD relation instances, (2) backreferences in RES titles, or (3) substring matching on experiment descriptions (≥20 characters). Results stored informally — in daily notes, figures without RES pages, or external tools — are not captured. The 36% result rate is therefore a lower bound.
+- **Snapshot date.** All counts reflect a single February 2026 export. Work in progress at the time of export is counted as "no result yet."
 
 ## Methods
 

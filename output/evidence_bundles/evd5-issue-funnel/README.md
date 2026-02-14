@@ -49,15 +49,18 @@ The 19 cross-person claims represent **idea exchange** — cases where a researc
 - **44 of 69 claimed experiments** have not yet produced a formal RES node (shown as "No Result Yet" on the right), indicating work-in-progress or informal output recording
 - Cross-person flows (purple bands) connect diverse researcher pairs, with Matt Akamatsu as the primary issue source for cross-person claims
 
-## Context
+## Grounding context
 
-In the discourse graph system, the path from question to answer follows a structured workflow:
+In the discourse graph system, the path from question to answer follows a structured workflow: **Issue (ISS)** → **Experiment** (someone claims the issue and begins work) → **Result (RES)** (formal result node linked back to the experiment). The alluvial diagram visualizes this three-stage flow at the researcher level.
 
-1. **Issue (ISS)** — A researcher articulates a research question
-2. **Experiment** — Someone claims the issue and begins work (explicit `Claimed By::` or inferred from experimental log activity)
-3. **Result (RES)** — Formal result node linked back to the experiment
+This bundle shares the same underlying metrics pipeline as EVD 1. Readers should be aware of the following when interpreting the flow diagram:
 
-The alluvial diagram visualizes this three-stage flow at the researcher level, making it possible to see both aggregate conversion rates and individual collaboration patterns.
+- **Claim detection is metadata-dependent.** Claiming was assessed via the `Claimed By::` page attribute, page authorship, or authorship of dated log entries within experiment pages. Issues informally transferred between researchers — without updating the metadata — are not captured.
+- **Inferred claims default to self-claims.** When no `Claimed By::` field is present, the claim is attributed to the page creator, likely **underestimating** cross-person idea exchange.
+- **Attribution priority chain.** When multiple metadata fields exist (`Made By::`, `Claimed By::`, `Author::`, JSON-LD creator), the pipeline uses the first available in that order. If fields disagree about who created or claimed the issue, only the highest-priority field is used.
+- **"No Result Yet" is ambiguous.** 44 of 69 claimed experiments show no linked RES node. This could mean work is in progress, results were recorded informally, or the experiment was abandoned. The diagram does not distinguish between these cases.
+- **Cross-person flows require known authorship on both sides.** If either the issue creator or the claimer is unknown, that experiment is excluded from the self-claim / cross-person classification (but still counted in the total). This may further underestimate cross-person exchange.
+- **Flows reflect formal metadata, not informal collaboration.** A researcher who contributed ideas, code review, or analysis support but is not listed in the `Claimed By::` or `Made By::` fields will not appear in the diagram.
 
 
 

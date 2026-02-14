@@ -45,15 +45,18 @@ Was assigned a specific experiment designed to introduce the lab's simulation an
 **Researcher C — Direct assignment (36 days)**
 Was added as a contributor to an existing experiment via the `Possible Contributors::` field. Fastest time to result (36 days), benefiting from existing infrastructure and clear deliverables.
 
-## Context
+## Grounding context
 
-The MATSUlab discourse graph uses an **Issues board** — a shared collection of research questions (ISS nodes) that any lab member can browse and claim. This evidence bundle asks: how effectively does this system support new researcher onboarding?
+The MATSUlab discourse graph uses an **Issues board** — a shared collection of research questions (ISS nodes) that any lab member can browse and claim. This evidence bundle asks: how effectively does this system support new researcher onboarding? Four milestones were tracked for each researcher: first day in lab, first experiment, first plot, and first formal RES node.
 
-Four milestones were tracked for each researcher:
-1. **First day in lab** — extracted from daily notes
-2. **First experiment** — first `[[@analysis/...]]` reference in daily notes or experiment page creation
-3. **First plot** — first embedded image/visualization in daily notes
-4. **First RES node** — formal result page creation in the discourse graph
+Unlike EVD 1 and EVD 5, this analysis is a manually curated case study rather than an automated pipeline output. Readers should keep the following in mind:
+
+- **Milestone dates were manually extracted** by reviewing daily notes and experiment page metadata in Roam Research. They are not computationally derived from the graph export. Dates reflect the analyst's judgment about when each milestone was first reached.
+- **Small sample (n = 3).** The three researchers joined the lab at different times (Feb 2024, Oct 2024, Jun 2025) under potentially different lab conditions, mentorship availability, and issue board maturity. The sample size does not support statistical generalization.
+- **Pathway classification is post-hoc.** The labels "self-directed exploration," "assigned entry project," and "direct assignment" were assigned by the PI based on recollection of how each student was onboarded. They are not properties inferred from the discourse graph structure.
+- **Timeline measures elapsed days, not effort.** Researchers had varying course loads, lab hours, and prior experience. A shorter time-to-result does not necessarily indicate a more effective pathway — it may reflect more available time or more relevant prior skills.
+- **"First RES node" measures formal output, not quality.** The milestone tracks when a formal result page was created in the discourse graph, not whether the result was complete, correct, or publishable.
+- **Lab average comparison (88 days) is drawn from a different population.** The lab-wide average includes all researchers (faculty, graduate students, undergraduates) across the full history of the graph. The undergraduate mean (69 days) is not directly comparable because the populations and time periods differ.
 
 ## Methods
 
