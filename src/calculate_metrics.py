@@ -511,6 +511,14 @@ def calculate_time_to_first_result(
             'first_res_primary_contributor': earliest_res.get('primary_contributor') or earliest_res.get('creator'),
             'days_to_first_result': days_to_result,
             'total_linked_res': len(linked_res),
+            'all_linked_res': [
+                {
+                    'title': r['title'],
+                    'created': r['created'],
+                    'creator': r.get('creator', ''),
+                }
+                for r in sorted(linked_res, key=lambda x: x['created'])
+            ],
         })
 
     if not results:
@@ -733,6 +741,18 @@ def calculate_all_metrics(
     # Metric 5: Cross-Person Claiming
     cross_person = calculate_cross_person_claims(experiments)
 
+    # Build graph growth data: creation dates + creator per discourse node type
+    graph_growth = {
+        'total_content_nodes': jsonld_data.get('total_content_nodes', 0),
+        'nodes_by_type': {
+            node_type: [
+                {'created': n.get('created'), 'creator': n.get('creator')}
+                for n in nodes
+            ]
+            for node_type, nodes in jsonld_data.get('all_nodes_by_type', {}).items()
+        },
+    }
+
     return {
         'generated': datetime.now().isoformat(),
         'data_sources': {
@@ -744,6 +764,8 @@ def calculate_all_metrics(
             'total_iss_nodes': len(iss_nodes),
             'total_res_nodes': len(res_nodes),
         },
+        'iss_node_list': iss_nodes,
+        'graph_growth': graph_growth,
         'metrics': {
             'conversion_rate': conversion,
             'time_to_claim': time_to_claim,

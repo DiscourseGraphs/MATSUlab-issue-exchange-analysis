@@ -1,0 +1,113 @@
+{
+  "@context": {
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "prov": "http://www.w3.org/ns/prov#",
+    "schema": "https://schema.org/",
+    "dgb": "https://discoursegraphs.com/schema/dg_base/",
+    "dge": "https://discoursegraphs.com/schema/dg_evidence/"
+  },
+  "@type": "dge:EvidenceBundle",
+  "@id": "evd6-time-to-result",
+  "dc:title": "[[RES]] - Among 50 experiments in the MATSUlab that produced formal results, the median time from issue claiming to first result was 12 days, with wide variance (n=50, IQR 0\u201350 days) - [[@analysis/quantify issue claiming from MATSUlab]]",
+  "dc:creator": "Matt Akamatsu",
+  "dc:date": "2026-02-15",
+  "dcterms:license": "https://creativecommons.org/licenses/by/4.0/",
+  "dge:evidenceStatement": "Among 50 experiments in the MATSUlab that produced formal results, the median time from issue claiming to first result was 12 days, with wide variance (n=50, IQR 0\u201350 days).",
+  "dge:observable": {
+    "@type": "dge:Observable",
+    "dc:title": "Time from issue creation and claiming to first result production",
+    "dc:description": "The elapsed time between issue creation, experiment claiming, and production of the first formal result node (RES). Measured across 50 result-producing experiments and 125 claimed experiments in the MATSUlab discourse graph."
+  },
+  "dge:method": {
+    "@type": "dge:Method",
+    "dc:title": "Time-to-result interval analysis with bootstrap confidence intervals",
+    "dc:description": "Automated pipeline computing three timing intervals from actual timestamps in the MATSUlab discourse graph: (1) issue creation to claim (page_created to claimed_timestamp), (2) issue creation to first result (page_created to earliest RES node created date), (3) claim to first result (claimed_timestamp to earliest RES node). All intervals use a unified page-creation origin for the swimmer plot visualization. Bootstrap 95% CIs computed from 10,000 resamples.",
+    "prov:used": [
+      {
+        "@id": "src/calculate_metrics.py",
+        "dc:description": "Time-to-claim and time-to-first-result metric calculation"
+      },
+      {
+        "@id": "src/experiment_lifecycle_visualizations.py",
+        "dc:description": "Swimmer plot visualization (unified page-creation x-axis)"
+      },
+      {
+        "@id": "src/parse_jsonld.py",
+        "dc:description": "JSON-LD export parser"
+      },
+      {
+        "@id": "src/parse_roam_json.py",
+        "dc:description": "Roam JSON streaming parser for claim timestamps"
+      }
+    ],
+    "schema:codeRepository": "node-metrics"
+  },
+  "dge:system": {
+    "@type": "dge:System",
+    "dc:title": "MATSUlab discourse graph",
+    "dc:description": "Akamatsu Lab Roam Research discourse graph, February 2026 snapshot. Contains 445 identifiable issues, 130 claimed experiments (125 with known claim timestamps), and 50 experiments with at least one linked RES node.",
+    "schema:memberOf": "Akamatsu Lab, University of Washington",
+    "dcterms:temporal": "2026-02-15"
+  },
+  "dge:figure": [
+    {
+      "@type": "schema:ImageObject",
+      "schema:contentUrl": "fig6c_swimmer_plot.png",
+      "schema:encodingFormat": "image/png",
+      "dge:figureLegend": "Figure 6c. Among 50 experiments in the MATSUlab that produced formal results, the median time from issue claiming to first result was 12 days, with wide variance (n=50, IQR 0\u201350 days). Each horizontal lane represents one experiment (n=50), sorted by time from issue creation to first result. Grey circle: issue creation (day 0). Blue diamond: date the experiment was claimed. Red star: first formal result (RES node). Light red circles: subsequent results. Orange background: self-claimed. Purple background: cross-person claiming."
+    },
+    {
+      "@type": "schema:ImageObject",
+      "schema:contentUrl": "fig6c_swimmer_plot_log.png",
+      "schema:encodingFormat": "image/png",
+      "dc:description": "Log-scale version of Figure 6c for resolving detail among experiments with short timelines."
+    },
+    {
+      "@type": "schema:WebPage",
+      "schema:contentUrl": "fig6c_swimmer_plot.html",
+      "schema:encodingFormat": "text/html",
+      "dc:description": "Interactive Plotly version of Figure 6c with hover tooltips showing experiment number and day values."
+    }
+  ],
+  "dge:groundingData": [
+    {
+      "@type": "schema:DataDownload",
+      "schema:contentUrl": "data/time_to_result_data.json",
+      "schema:encodingFormat": "application/json",
+      "dc:description": "Summary statistics (mean, median, 95% bootstrap CIs, IQR) for all three timing intervals, plus per-experiment anonymized timing data"
+    }
+  ],
+  "prov:wasGeneratedBy": {
+    "@type": "prov:Activity",
+    "prov:startedAtTime": "2026-02-14",
+    "prov:endedAtTime": "2026-02-15",
+    "prov:used": [
+      "akamatsulab_discourse-graph-json-LD202602112140.json",
+      "akamatsulab-whole-graph-2026-02-13-22-24-27.json"
+    ],
+    "prov:wasAssociatedWith": [
+      {
+        "@type": "prov:Agent",
+        "dc:title": "Matt Akamatsu",
+        "schema:affiliation": "University of Washington"
+      },
+      {
+        "@type": "prov:SoftwareAgent",
+        "dc:title": "Claude",
+        "schema:provider": "Anthropic"
+      }
+    ]
+  },
+  "dge:summaryMetrics": {
+    "experiments_with_results": 50,
+    "claimed_experiments_with_timestamps": 125,
+    "issue_to_claim_median_days": 0,
+    "issue_to_claim_mean_days": 52.8,
+    "issue_to_result_median_days": 38,
+    "issue_to_result_mean_days": 127.5,
+    "claim_to_result_median_days": 12,
+    "claim_to_result_mean_days": 47.6,
+    "ci_method": "10000 bootstrap resamples, percentile method"
+  }
+}

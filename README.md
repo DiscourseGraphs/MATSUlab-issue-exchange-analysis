@@ -8,7 +8,7 @@ This repository accompanies a study exploring how a shared issue board promotes 
 
 ### Evidence Bundles
 
-The primary outputs are three **evidence bundles** in `output/evidence_bundles/`. An evidence bundle is a self-contained package that pairs a research finding with the data, figure, methods, and metadata needed to evaluate it. Each bundle follows the [RO-Crate](https://www.researchobject.org/ro-crate/) packaging standard and uses [JSON-LD](https://json-ld.org/) metadata with a discourse graph evidence vocabulary (`dge:`).
+The primary outputs are four **evidence bundles** in `output/evidence_bundles/`. An evidence bundle is a self-contained package that pairs a research finding with the data, figure, methods, and metadata needed to evaluate it. Each bundle follows the [RO-Crate](https://www.researchobject.org/ro-crate/) packaging standard and uses [JSON-LD](https://json-ld.org/) metadata with a discourse graph evidence vocabulary (`dge:`).
 
 Each bundle contains:
 
@@ -36,6 +36,13 @@ Each bundle contains:
 - **Primary figure:** Alluvial (Sankey) diagram showing researcher-level flow from Issue Created → Claimed By → Result Created
 - **Supplemental figure:** Aggregate conversion funnel bar chart
 - **Data:** `funnel_summary.json`, `experiment_details.csv` (anonymized)
+
+#### EVD 6 — Time to Result (`evd6-time-to-result/`)
+
+> Among 50 experiments in the MATSUlab that produced formal results, the median time from issue claiming to first result was 12 days, with wide variance (n=50, IQR 0–50 days).
+
+- **Figure:** Swimmer plot showing experiment lifecycles from issue creation through claiming to result production (linear, log-scale, and interactive versions)
+- **Data:** `data/time_to_result_data.json` (summary statistics with bootstrap CIs and per-experiment timing intervals)
 
 #### EVD 7 — Undergraduate Researcher Onboarding (`evd7-student-onboarding/`)
 
@@ -65,6 +72,7 @@ Each bundle contains:
 | `src/calculate_metrics.py` | Merge data sources and compute all metrics |
 | `src/generate_visualizations.py` | Generate static figures (conversion rate, time distributions, contributor breadth, idea exchange, funnel) |
 | `src/handoff_visualizations.py` | Generate alluvial/Sankey flow diagrams |
+| `src/experiment_lifecycle_visualizations.py` | Experiment lifecycle swimmer plots and result cascade visualizations |
 | `src/student_timeline_analysis.py` | Student onboarding timeline extraction and visualization |
 | `src/create_evidence_bundle.py` | Generate RO-Crate evidence bundles |
 | `src/anonymize.py` | Central de-identification module (researcher name → pseudonym mapping) |
@@ -95,12 +103,13 @@ Raw data (not in repo)
            └───────────┼───────────────┘
                        ▼
            src/create_evidence_bundle.py
+           src/experiment_lifecycle_visualizations.py
                        │
-        ┌──────────────┼──────────────┐
-        ▼              ▼              ▼
-    evd1-          evd5-          evd7-
-    conversion-    issue-         student-
-    rate/          funnel/        onboarding/
+        ┌──────────┬───┴────┬──────────┐
+        ▼          ▼        ▼          ▼
+    evd1-      evd5-    evd6-      evd7-
+    conversion issue-   time-to-   student-
+    -rate/     funnel/  result/    onboarding/
 ```
 
 The Jupyter notebook (`notebooks/evd1_evd7_analysis.ipynb`) executes this same pipeline interactively, showing intermediate results at each step.

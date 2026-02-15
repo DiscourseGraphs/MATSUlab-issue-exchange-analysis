@@ -545,3 +545,84 @@ Updated 13+ files spanning source code, visualizations, evidence bundles, method
 17. **Grounding context with limitations** (Exchange 48): Each evidence bundle documents the specific methodological caveats readers need to interpret the numbers critically.
 18. **"Claiming" not "claim" terminology** (Exchange 53): Replaced "claim" nouns with "claiming" gerund forms to avoid confusion with CLM (Claim) discourse graph node type. "Claimed" as verb/adjective kept.
 19. **EVD1 bundle in pipeline** (Exchange 54): Added `create_evd1_bundle()` to `main.py` so EVD1 bundle is regenerated alongside EVD5 during pipeline runs.
+
+---
+
+## Session 10 — 2026-02-14 through 2026-02-15 (EVD1 observation fix, experiment lifecycle visualizations)
+
+### Exchange 56 — EVD1 observation statement consistency
+
+> There are a couple of consistency issues with the outputs of this repo. The readme for evd1: the observation statement currently includes a statement about results, though the plot doesn't describe the conversion to results. it does include the % that were claimed between lab members, so that can be part of the observation statement. And then this observation statement should be the first sentence of the figure legend (our best practices for including the observation statement in the figure legend)
+
+**Response:** Updated the EVD1 observation statement from "29% of MATSUlab issues were claimed as experiments, and 38% of those produced at least one formal result node" to "29% of MATSUlab issues (n=445) were claimed as experiments, and 15% of those were claimed by a different lab member than the issue creator." Updated 5 files: README.md, docs/evidence_statement.md, evidence.jsonld, ro-crate-metadata.json, and fig1_conversion_rate.html. Made the observation statement the first sentence of the figure legend in all locations.
+
+**Files modified:** `output/evidence_bundles/evd1-conversion-rate/README.md`, `docs/evidence_statement.md`, `evidence.jsonld`, `ro-crate-metadata.json`, `fig1_conversion_rate.html`
+
+---
+
+### Exchange 57 — Fig 6 experiment lifecycle visualization series
+
+> [Implicit from prior session context] Created a new series of experiment lifecycle visualizations (Fig 6a–6g) including time-to-result histogram, CDF, swimmer plot, raincloud plot, result yield bubble chart, Kaplan-Meier survival curve, and result cascade.
+
+**Response:** Created `src/experiment_lifecycle_visualizations.py` with 7 visualization functions generating both static PNG and interactive Plotly HTML outputs. Added to the pipeline via `main.py`.
+
+**Files created:** `src/experiment_lifecycle_visualizations.py`
+
+---
+
+### Exchange 58 — Swimmer plot mixed x-axis origin bug
+
+> for the output/visualization/fig6c_swimmer_plot.html, several of the experiments are reported as being claimed long after the result was created. So can you make me a diagnostic HTML file, where for the mouse overlay, I get lots more diagnostic information, like the claim date stamp, the method if applicable or where that info came from. this will let me troubleshoot why those numbers are so far outside what I'm expecting
+
+**Response:** Created `src/diagnostic_swimmer_plot.py` → `output/visualizations/fig6c_swimmer_plot_diagnostic.html` with rich hover tooltips showing all timestamps, claim types, and both reference-based and page-based day calculations. Identified the root cause: a **mixed x-axis origin bug** where `days_to_claim` was relative to `page_created` but `days_to_first_result` was relative to `ref_timestamp`, which for explicit claims was `claimed_timestamp` (not `page_created`). This caused ~10 experiments to display claim diamonds after result stars.
+
+**Files created:** `src/diagnostic_swimmer_plot.py`
+
+---
+
+### Exchange 59 — Confirm unified x-axis fix
+
+> Okay, so this looks like the results are not being plotted on the right axis. They should be plotted as days from original issue created, right? This should be easily done, since the exact date is given. So, for example, @analysis/develop metrics to quantify... the result was created 2024-11-26, the page was created 2023-07-06, and the claiming happened on 2024-10-31. So we need to redo the result time calculation so that it shows up 26 days after the claim time (in this case), meaning it should be shown as the difference from the creation date of the issue. Right?
+
+**Response:** Updated the diagnostic swimmer plot to use a unified x-axis with `page_created` as day 0 for all markers. Confirmed with the user's example: claim at day 483, result at day 509 (= 483 + 26), both from 2023-07-06 page creation.
+
+**Files modified:** `src/diagnostic_swimmer_plot.py`
+
+---
+
+### Exchange 60 — Apply unified x-axis to production swimmer plot
+
+> Phew! Log this in the conversation-log.md and update the plotting function and swim diagram based on this unified X axis. Replot on linear and log scale (two plots)
+
+**Response:** Updated `create_swimmer_plot()`, `_create_swimmer_plot_static()`, and `_compute_res_days()` in `src/experiment_lifecycle_visualizations.py` to compute all marker positions as days from `page_created` (issue creation date) using actual timestamps. Replaced `_compute_res_days()` with `_compute_res_days_from_page()`. Updated sorting to use corrected page-origin days. Regenerated all three swimmer plot outputs: interactive HTML, static linear PNG, and static log-scale PNG.
+
+**Key design decision (20):** **Unified swimmer plot x-axis** (Exchange 59–60): All swimmer plot markers (claim diamonds, result stars) use `page_created` as day 0, computed from actual timestamps. The pre-computed `days_to_first_result` metric (which uses `claimed_timestamp` as origin for explicit claims) is not used for plotting — only for the metric calculation itself.
+
+**Files modified:** `src/experiment_lifecycle_visualizations.py`
+
+---
+
+### Exchange 61 — Distribution analysis and EVD 6 evidence bundle
+
+> Love it! Let's also report some statistics in a table. The mean/median and 95% confidence intervals for the length of time from issue creation to claim, and from issue claim to first result creation. Do you think the time from issue creation to first result is exponentially distributed? Or that the time from issue claim to result creation is exponentially distributed?
+
+**Response:** Computed summary statistics with 10,000 bootstrap CIs for three intervals: issue→claim (n=125, median 0d, mean 52.8d), issue→result (n=50, median 38d, mean 127.5d), claim→result (n=50, median 12d, mean 47.6d). Tested exponential vs. log-normal fit: none of the distributions are exponential (KS tests reject for issue→claim p=0.02 and issue→result p=0.007; claim→result marginal p=0.07). The log-transformed positive values pass normality tests (KS p=0.66–0.72), indicating log-normal is a better model — consistent with research tasks involving multiplicative accumulation of variable-duration steps.
+
+> Love it. Once you plot it, it looks like the data are a little sparse for us to make too many claims about the distributions. Let's save the table, and fig6c, in a new evidence bundle called time-to-result. We should workshop the observation statement, but it's something like: there was a median of 12 days between issue claim to result generation, with wide variance (IQR 0-51 days)
+
+**Response:** Created `output/evidence_bundles/evd6-time-to-result/` with swimmer plot (linear, log, interactive HTML), summary statistics table with bootstrap CIs, evidence.jsonld, ro-crate-metadata.json, and evidence statement. Proposed observation statement: "Among 50 experiments that produced formal results, the median time from claiming to first result was 12 days (IQR 0–50 days), and the median time from issue creation to first result was 38 days (IQR 7–184 days)."
+
+**Files created:** `output/evidence_bundles/evd6-time-to-result/` (README.md, evidence.jsonld, ro-crate-metadata.json, data/time_to_result_data.json, fig6c_swimmer_plot.{png,html}, fig6c_swimmer_plot_log.png)
+
+---
+
+### Exchange 62 — Refine EVD 6 observation statement and remove redundant docs
+
+> It looks great! The README and the log/evidence-statement are now redundant, so we should just remove the log folder and the evidence statement.md. my result statement reads: The median time from issue claiming to first result in the MATSU lab was 12 days, with wide variance (n=50, IQR 0–50), so we could combine both: Among 50 experiments in the MATSU lab that produced formal results, the median time from issue claiming to first result in the MATSU lab was 12 days, with wide variance (n=50, IQR 0–50). This is because I think the wide variance is the main observation, and we're adding a little extra context about the model system being the MATSU lab
+
+**Response:** Removed redundant `docs/` folder and `evidence_statement.md` from the EVD 6 bundle (the README serves as the single source of truth). Updated the observation statement across README.md, evidence.jsonld, and ro-crate-metadata.json to: "Among 50 experiments in the MATSUlab that produced formal results, the median time from issue claiming to first result was 12 days, with wide variance (n=50, IQR 0–50 days)." Updated figure legend to match. Removed stale docs references from metadata files.
+
+**Key design decision (21):** **Wide variance as the headline observation** (Exchange 62): The observation statement leads with the median (12 days) but emphasizes the wide variance (IQR 0–50) as the main finding, rather than listing multiple interval statistics. The MATSUlab is named as the system for context.
+
+**Files modified:** `output/evidence_bundles/evd6-time-to-result/README.md`, `evidence.jsonld`, `ro-crate-metadata.json`
+**Files removed:** `output/evidence_bundles/evd6-time-to-result/docs/` (redundant with README)

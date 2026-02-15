@@ -1,0 +1,414 @@
+{
+  "summary": {
+    "issue_to_claim": {
+      "n": 125,
+      "mean": 52.8,
+      "mean_95ci": [
+        33.1598,
+        74.592
+      ],
+      "median": 0.0,
+      "median_95ci": [
+        0.0,
+        0.0
+      ],
+      "iqr": [
+        0.0,
+        28.0
+      ],
+      "min": 0,
+      "max": 483
+    },
+    "issue_to_first_result": {
+      "n": 50,
+      "mean": 127.5,
+      "mean_95ci": [
+        81.5,
+        179.582
+      ],
+      "median": 38.0,
+      "median_95ci": [
+        23.0,
+        63.0
+      ],
+      "iqr": [
+        7.25,
+        183.75
+      ],
+      "min": 0,
+      "max": 754
+    },
+    "claim_to_first_result": {
+      "n": 50,
+      "mean": 47.6,
+      "mean_95ci": [
+        11.0195,
+        86.00099999999999
+      ],
+      "median": 12.0,
+      "median_95ci": [
+        2.5,
+        31.5
+      ],
+      "iqr": [
+        0.0,
+        50.5
+      ],
+      "min": -449,
+      "max": 433
+    }
+  },
+  "ci_method": "10,000 bootstrap resamples, percentile method, seed=42",
+  "per_experiment": [
+    {
+      "experiment_id": "Exp_1",
+      "days_issue_to_claim": 391,
+      "days_issue_to_first_result": 319,
+      "days_claim_to_first_result": -72,
+      "total_linked_res": 2
+    },
+    {
+      "experiment_id": "Exp_2",
+      "days_issue_to_claim": 248,
+      "days_issue_to_first_result": 248,
+      "days_claim_to_first_result": -1,
+      "total_linked_res": 2
+    },
+    {
+      "experiment_id": "Exp_3",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 0,
+      "days_claim_to_first_result": 0,
+      "total_linked_res": 3
+    },
+    {
+      "experiment_id": "Exp_4",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 0,
+      "days_claim_to_first_result": 0,
+      "total_linked_res": 2
+    },
+    {
+      "experiment_id": "Exp_5",
+      "days_issue_to_claim": 5,
+      "days_issue_to_first_result": 5,
+      "days_claim_to_first_result": 0,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_6",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 0,
+      "days_claim_to_first_result": 0,
+      "total_linked_res": 4
+    },
+    {
+      "experiment_id": "Exp_7",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 0,
+      "days_claim_to_first_result": 0,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_8",
+      "days_issue_to_claim": 10,
+      "days_issue_to_first_result": 11,
+      "days_claim_to_first_result": 0,
+      "total_linked_res": 3
+    },
+    {
+      "experiment_id": "Exp_9",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 0,
+      "days_claim_to_first_result": 0,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_10",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 0,
+      "days_claim_to_first_result": 0,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_11",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 2,
+      "days_claim_to_first_result": 2,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_12",
+      "days_issue_to_claim": 1,
+      "days_issue_to_first_result": 2,
+      "days_claim_to_first_result": 0,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_13",
+      "days_issue_to_claim": 449,
+      "days_issue_to_first_result": 452,
+      "days_claim_to_first_result": 3,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_14",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 3,
+      "days_claim_to_first_result": 3,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_15",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 3,
+      "days_claim_to_first_result": 3,
+      "total_linked_res": 2
+    },
+    {
+      "experiment_id": "Exp_16",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 3,
+      "days_claim_to_first_result": 3,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_17",
+      "days_issue_to_claim": 3,
+      "days_issue_to_first_result": 7,
+      "days_claim_to_first_result": 4,
+      "total_linked_res": 2
+    },
+    {
+      "experiment_id": "Exp_18",
+      "days_issue_to_claim": 457,
+      "days_issue_to_first_result": 8,
+      "days_claim_to_first_result": -449,
+      "total_linked_res": 12
+    },
+    {
+      "experiment_id": "Exp_19",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 12,
+      "days_claim_to_first_result": 12,
+      "total_linked_res": 2
+    },
+    {
+      "experiment_id": "Exp_20",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 13,
+      "days_claim_to_first_result": 12,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_21",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 18,
+      "days_claim_to_first_result": 18,
+      "total_linked_res": 2
+    },
+    {
+      "experiment_id": "Exp_22",
+      "days_issue_to_claim": 483,
+      "days_issue_to_first_result": 509,
+      "days_claim_to_first_result": 26,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_23",
+      "days_issue_to_claim": 20,
+      "days_issue_to_first_result": 27,
+      "days_claim_to_first_result": 6,
+      "total_linked_res": 2
+    },
+    {
+      "experiment_id": "Exp_24",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 28,
+      "days_claim_to_first_result": 28,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_25",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 28,
+      "days_claim_to_first_result": 28,
+      "total_linked_res": 3
+    },
+    {
+      "experiment_id": "Exp_26",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 28,
+      "days_claim_to_first_result": 28,
+      "total_linked_res": 5
+    },
+    {
+      "experiment_id": "Exp_27",
+      "days_issue_to_claim": 6,
+      "days_issue_to_first_result": 35,
+      "days_claim_to_first_result": 29,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_28",
+      "days_issue_to_claim": 32,
+      "days_issue_to_first_result": 32,
+      "days_claim_to_first_result": 0,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_29",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 35,
+      "days_claim_to_first_result": 34,
+      "total_linked_res": 3
+    },
+    {
+      "experiment_id": "Exp_30",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 41,
+      "days_claim_to_first_result": 40,
+      "total_linked_res": 46
+    },
+    {
+      "experiment_id": "Exp_31",
+      "days_issue_to_claim": 65,
+      "days_issue_to_first_result": 43,
+      "days_claim_to_first_result": -23,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_32",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 45,
+      "days_claim_to_first_result": 45,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_33",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 49,
+      "days_claim_to_first_result": 49,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_34",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 51,
+      "days_claim_to_first_result": 51,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_35",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 56,
+      "days_claim_to_first_result": 56,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_36",
+      "days_issue_to_claim": 8,
+      "days_issue_to_first_result": 70,
+      "days_claim_to_first_result": 61,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_37",
+      "days_issue_to_claim": 26,
+      "days_issue_to_first_result": 61,
+      "days_claim_to_first_result": 35,
+      "total_linked_res": 4
+    },
+    {
+      "experiment_id": "Exp_38",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 74,
+      "days_claim_to_first_result": 74,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_39",
+      "days_issue_to_claim": 440,
+      "days_issue_to_first_result": 524,
+      "days_claim_to_first_result": 83,
+      "total_linked_res": 3
+    },
+    {
+      "experiment_id": "Exp_40",
+      "days_issue_to_claim": 146,
+      "days_issue_to_first_result": 136,
+      "days_claim_to_first_result": -11,
+      "total_linked_res": 2
+    },
+    {
+      "experiment_id": "Exp_41",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 164,
+      "days_claim_to_first_result": 164,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_42",
+      "days_issue_to_claim": 8,
+      "days_issue_to_first_result": 180,
+      "days_claim_to_first_result": 172,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_43",
+      "days_issue_to_claim": 339,
+      "days_issue_to_first_result": 185,
+      "days_claim_to_first_result": -154,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_44",
+      "days_issue_to_claim": 243,
+      "days_issue_to_first_result": 209,
+      "days_claim_to_first_result": -34,
+      "total_linked_res": 3
+    },
+    {
+      "experiment_id": "Exp_45",
+      "days_issue_to_claim": 15,
+      "days_issue_to_first_result": 253,
+      "days_claim_to_first_result": 237,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_46",
+      "days_issue_to_claim": 33,
+      "days_issue_to_first_result": 378,
+      "days_claim_to_first_result": 344,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_47",
+      "days_issue_to_claim": 86,
+      "days_issue_to_first_result": 450,
+      "days_claim_to_first_result": 363,
+      "total_linked_res": 2
+    },
+    {
+      "experiment_id": "Exp_48",
+      "days_issue_to_claim": 36,
+      "days_issue_to_first_result": 392,
+      "days_claim_to_first_result": 355,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_49",
+      "days_issue_to_claim": 0,
+      "days_issue_to_first_result": 433,
+      "days_claim_to_first_result": 433,
+      "total_linked_res": 1
+    },
+    {
+      "experiment_id": "Exp_50",
+      "days_issue_to_claim": 431,
+      "days_issue_to_first_result": 754,
+      "days_claim_to_first_result": 323,
+      "total_linked_res": 2
+    }
+  ]
+}

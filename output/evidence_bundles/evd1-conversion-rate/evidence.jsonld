@@ -9,11 +9,11 @@
   },
   "@type": "dge:EvidenceBundle",
   "@id": "evd1-conversion-rate",
-  "dc:title": "[[RES]] - 29% of MATSUlab issues (n=445) were claimed as experiments and 38% of those claimed at least one formal result node, yielding 139 total RES nodes - [[@analysis/quantify issue claiming from MATSUlab]]",
+  "dc:title": "[[RES]] - 29% of MATSUlab issues (n=445) were claimed as experiments, and 15% of those were claimed by a different lab member than the issue creator - [[@analysis/quantify issue claiming from MATSUlab]]",
   "dc:creator": "Matt Akamatsu",
   "dc:date": "2026-02-14",
   "dcterms:license": "https://creativecommons.org/licenses/by/4.0/",
-  "dge:evidenceStatement": "29% of MATSUlab issues (n=445) were claimed as experiments and 38% of those claimed at least one formal result node, yielding 139 total RES nodes.",
+  "dge:evidenceStatement": "29% of MATSUlab issues (n=445) were claimed as experiments, and 15% of those were claimed by a different lab member than the issue creator.",
   "dge:observable": {
     "@type": "dge:Observable",
     "dc:title": "Issue-to-experiment conversion rate and result production",
@@ -55,7 +55,7 @@
       "@type": "schema:ImageObject",
       "schema:contentUrl": "fig1_conversion_rate.png",
       "schema:encodingFormat": "image/png",
-      "dge:figureLegend": "Figure 1. Issue conversion rate and claiming authorship in the MATSUlab discourse graph. (Left) Stacked horizontal bar showing the composition of all 445 issues: explicitly claimed (69, blue), inferred claiming (56, green), ISS with activity (5, amber), unclaimed (315, grey). Bracket indicates total claimed: 130 (29.2%). (Right) Donut chart showing claiming authorship among 125 claimed experiments: self-claimed (106, 85%) and cross-person claiming (19, 15%)."
+      "dge:figureLegend": "Figure 1. 29% of MATSUlab issues (n=445) were claimed as experiments, and 15% of those were claimed by a different lab member than the issue creator. (Left) Stacked horizontal bar showing the composition of all 445 issues: explicitly claimed (69, blue), inferred claiming (56, green), ISS with activity (5, amber), unclaimed (315, grey). Bracket indicates total claimed: 130 (29.2%). (Right) Donut chart showing claiming authorship among 125 claimed experiments: self-claimed (106, 85%) and cross-person claiming (19, 15%)."
     },
     {
       "@type": "schema:WebPage",

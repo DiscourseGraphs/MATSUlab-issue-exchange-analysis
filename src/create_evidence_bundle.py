@@ -904,14 +904,25 @@ def create_evd1_bundle(metrics: dict, output_dir: Path, viz_dir: Path) -> Path:
     (bundle_dir / 'docs').mkdir(exist_ok=True)
 
     # Copy figures
-    for fname in ['fig1_conversion_rate.png', 'fig1_conversion_rate.html']:
+    fig_files = [
+        'fig1_conversion_rate.png',
+        'fig1_conversion_rate.html',
+        'fig0_issue_timeline.png',
+        'fig0_issue_timeline.html',
+        'fig0b_creator_heatmap.png',
+        'fig0b_creator_heatmap.html',
+        'fig0c_discourse_growth.png',
+        'fig0_issue_timeline_animated.gif',
+    ]
+    for fname in fig_files:
         src = viz_dir / fname
         dst = bundle_dir / fname
         if src.exists():
             shutil.copy2(src, dst)
 
-    # Generate data file
+    # Generate data files
     _write_evd1_conversion_data(metrics, bundle_dir / 'data' / 'conversion_data.json')
+    _write_evd1_timeline_data(metrics, bundle_dir / 'data' / 'issue_timeline_data.json')
 
     # Generate doc files
     _write_evd1_evidence_statement(metrics, bundle_dir / 'docs' / 'evidence_statement.md')
@@ -973,6 +984,91 @@ def _write_evd1_conversion_data(metrics: dict, path: Path):
 
     with open(path, 'w') as f:
         json.dump(summary, f, indent=2)
+
+
+def _write_evd1_timeline_data(metrics: dict, path: Path):
+    """Write issue creation timeline data as JSON for the introductory panel."""
+    from collections import OrderedDict
+
+    conv = metrics['metrics']['conversion_rate']
+
+    # Collect all issue creation dates
+    issues = []
+
+    # Claimed experiments
+    for exp in conv.get('claimed_experiment_list', []):
+        pc = exp.get('page_created')
+        if pc is None:
+            continue
+        if isinstance(pc, datetime):
+            pc = pc.isoformat()
+        issues.append({
+            'date': pc[:10] if isinstance(pc, str) else pc,
+            'type': 'experiment',
+            'claimed': True,
+            'claim_type': exp.get('claim_type', 'unknown'),
+        })
+
+    # ISS nodes
+    for iss in metrics.get('iss_node_list', []):
+        pc = iss.get('page_created')
+        if pc is None:
+            continue
+        if isinstance(pc, datetime):
+            pc = pc.isoformat()
+        issues.append({
+            'date': pc[:10] if isinstance(pc, str) else pc,
+            'type': 'ISS',
+            'claimed': iss.get('is_claimed', False),
+            'claim_type': 'iss_activity' if iss.get('is_claimed', False) else 'unclaimed',
+        })
+
+    issues.sort(key=lambda x: x['date'])
+
+    # Monthly summary
+    monthly = OrderedDict()
+    cum_total = 0
+    cum_claimed = 0
+    for iss in issues:
+        month = iss['date'][:7]
+        if month not in monthly:
+            monthly[month] = {'month': month, 'new_issues': 0, 'new_claimed': 0}
+        monthly[month]['new_issues'] += 1
+        if iss['claimed']:
+            monthly[month]['new_claimed'] += 1
+
+    monthly_list = []
+    for m in monthly.values():
+        cum_total += m['new_issues']
+        cum_claimed += m['new_claimed']
+        monthly_list.append({
+            'month': m['month'],
+            'new_issues': m['new_issues'],
+            'new_claimed': m['new_claimed'],
+            'cumulative_issues': cum_total,
+            'cumulative_claimed': cum_claimed,
+        })
+
+    # Discourse node type growth
+    graph_growth = metrics.get('graph_growth', {})
+    node_type_dates = {}
+    for node_type, nodes in graph_growth.get('nodes_by_type', {}).items():
+        dates = sorted([n['created'][:10] for n in nodes if n.get('created')])
+        node_type_dates[node_type] = dates
+
+    timeline_data = {
+        'description': 'Issue creation timeline data for EVD 1 introductory panel',
+        'snapshot_date': datetime.now().strftime('%Y-%m-%d'),
+        'total_issues': len(issues),
+        'total_claimed': sum(1 for i in issues if i['claimed']),
+        'issues': issues,
+        'monthly_summary': monthly_list,
+        'discourse_node_growth': node_type_dates,
+        'total_content_nodes': graph_growth.get('total_content_nodes', 0),
+    }
+
+    with open(path, 'w') as f:
+        json.dump(timeline_data, f, indent=2)
 
 
 def _write_evd1_evidence_statement(metrics: dict, path: Path):
@@ -1276,9 +1372,16 @@ def _write_evd1_ro_crate_metadata(path: Path):
                 "license": {"@id": "https://creativecommons.org/licenses/by/4.0/"},
                 "hasPart": [
                     {"@id": "evidence.jsonld"},
+                    {"@id": "fig0_issue_timeline.png"},
+                    {"@id": "fig0_issue_timeline.html"},
+                    {"@id": "fig0b_creator_heatmap.png"},
+                    {"@id": "fig0b_creator_heatmap.html"},
+                    {"@id": "fig0c_discourse_growth.png"},
+                    {"@id": "fig0_issue_timeline_animated.gif"},
                     {"@id": "fig1_conversion_rate.png"},
                     {"@id": "fig1_conversion_rate.html"},
                     {"@id": "data/conversion_data.json"},
+                    {"@id": "data/issue_timeline_data.json"},
                     {"@id": "docs/evidence_statement.md"},
                     {"@id": "docs/methods_excerpt.md"},
                 ],
@@ -1303,6 +1406,72 @@ def _write_evd1_ro_crate_metadata(path: Path):
                     "(Discourse Graph Evidence) vocabulary."
                 ),
                 "encodingFormat": "application/ld+json",
+            },
+            {
+                "@id": "fig0_issue_timeline.png",
+                "@type": ["File", "ImageObject"],
+                "name": "Figure 0: Issue Creation Timeline (static)",
+                "description": (
+                    "Cumulative issue creation over time with dual y-axis. "
+                    "Left axis: cumulative issue count (claimed vs unclaimed). "
+                    "Right axis: issues as percentage of total discourse nodes. "
+                    "Introductory panel contextualizing when and how the 445 issues accumulated."
+                ),
+                "encodingFormat": "image/png",
+            },
+            {
+                "@id": "fig0_issue_timeline.html",
+                "@type": ["File", "WebPage"],
+                "name": "Figure 0: Issue Creation Timeline (interactive)",
+                "description": (
+                    "Interactive Plotly version of the issue creation timeline. "
+                    "Hover for date and count details. Toggle between discourse node "
+                    "and all-content-page denominators for percentage calculation."
+                ),
+                "encodingFormat": "text/html",
+            },
+            {
+                "@id": "fig0b_creator_heatmap.png",
+                "@type": ["File", "ImageObject"],
+                "name": "Figure 0b: Issue Creator Attribution Heatmap (static)",
+                "description": (
+                    "Heatmap showing issue creation by researcher and month. "
+                    "Rows are anonymized researchers, columns are months, cell "
+                    "intensity indicates number of issues created."
+                ),
+                "encodingFormat": "image/png",
+            },
+            {
+                "@id": "fig0b_creator_heatmap.html",
+                "@type": ["File", "WebPage"],
+                "name": "Figure 0b: Creator Attribution Heatmap (interactive)",
+                "description": (
+                    "Interactive heatmap with toggles for different discourse node types "
+                    "(ISS, RES, CLM, HYP, CON, EVD, QUE). Default shows issues; "
+                    "selecting other types reveals per-researcher creation patterns."
+                ),
+                "encodingFormat": "text/html",
+            },
+            {
+                "@id": "fig0c_discourse_growth.png",
+                "@type": ["File", "ImageObject"],
+                "name": "Figure 0c: Discourse Graph Growth by Node Type",
+                "description": (
+                    "Stacked area chart showing cumulative growth of all discourse "
+                    "node types (ISS, RES, CLM, HYP, CON, EVD, QUE, Experiments) "
+                    "over time. Issues' share of the graph visible as band thickness."
+                ),
+                "encodingFormat": "image/png",
+            },
+            {
+                "@id": "fig0_issue_timeline_animated.gif",
+                "@type": ["File", "ImageObject"],
+                "name": "Figure 0 (animated): Issue Creation Timeline",
+                "description": (
+                    "Animated GIF showing cumulative issue creation month by month, "
+                    "with running counter. Suitable for presentations."
+                ),
+                "encodingFormat": "image/gif",
             },
             {
                 "@id": "fig1_conversion_rate.png",
@@ -1334,6 +1503,16 @@ def _write_evd1_ro_crate_metadata(path: Path):
                 "description": (
                     "Aggregated conversion rate data with claiming type breakdown, "
                     "authorship statistics, and result production metrics."
+                ),
+                "encodingFormat": "application/json",
+            },
+            {
+                "@id": "data/issue_timeline_data.json",
+                "@type": "File",
+                "name": "Issue Timeline Data",
+                "description": (
+                    "Per-issue creation dates, monthly summary with cumulative counts, "
+                    "and discourse node growth data by type. Supports Figure 0 visualizations."
                 ),
                 "encodingFormat": "application/json",
             },

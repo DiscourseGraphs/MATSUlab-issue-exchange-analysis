@@ -622,6 +622,861 @@ def create_funnel_figure(metrics: dict, output_dir: Path):
 
 
 # ────────────────────────────────────────────────
+# Helper: collect all issue creation dates
+# ────────────────────────────────────────────────
+def _collect_issue_dates(metrics: dict):
+    """
+    Collect creation dates for all 445 issues (claimed experiments + ISS nodes).
+
+    Returns list of dicts with keys: date, claimed (bool), claim_type, creator.
+    """
+    from datetime import datetime as dt
+
+    issues = []
+
+    # 1. Claimed experiments (from claimed_experiment_list)
+    for exp in metrics['metrics']['conversion_rate'].get('claimed_experiment_list', []):
+        page_created = exp.get('page_created')
+        if page_created is None:
+            continue
+        if isinstance(page_created, str):
+            try:
+                page_created = dt.fromisoformat(page_created)
+            except (ValueError, TypeError):
+                continue
+        issues.append({
+            'date': page_created,
+            'claimed': True,
+            'claim_type': exp.get('claim_type', 'unknown'),
+            'creator': exp.get('creator') or exp.get('issue_created_by'),
+        })
+
+    # 2. ISS nodes (from iss_node_list — includes unclaimed + ISS with activity)
+    for iss in metrics.get('iss_node_list', []):
+        page_created = iss.get('page_created')
+        if page_created is None:
+            continue
+        if isinstance(page_created, str):
+            try:
+                page_created = dt.fromisoformat(page_created)
+            except (ValueError, TypeError):
+                continue
+        is_claimed = iss.get('is_claimed', False)
+        issues.append({
+            'date': page_created,
+            'claimed': is_claimed,
+            'claim_type': 'iss_activity' if is_claimed else 'unclaimed',
+            'creator': iss.get('creator') or iss.get('primary_contributor'),
+        })
+
+    issues.sort(key=lambda x: x['date'])
+    return issues
+
+
+def _collect_discourse_node_dates(metrics: dict):
+    """
+    Collect creation dates for all discourse nodes by type.
+
+    Returns dict: {node_type: [{'date': datetime, 'creator': str}, ...]}
+    """
+    from datetime import datetime as dt
+    from parse_jsonld import parse_date
+
+    result = {}
+    graph_growth = metrics.get('graph_growth', {})
+
+    for node_type, nodes in graph_growth.get('nodes_by_type', {}).items():
+        dated = []
+        for n in nodes:
+            created = n.get('created')
+            if created is None:
+                continue
+            if isinstance(created, str):
+                try:
+                    d = dt.fromisoformat(created.replace('Z', '+00:00'))
+                    d = d.replace(tzinfo=None)  # make naive for comparison
+                except (ValueError, TypeError):
+                    continue
+            else:
+                d = created
+            dated.append({'date': d, 'creator': n.get('creator')})
+        dated.sort(key=lambda x: x['date'])
+        result[node_type] = dated
+
+    return result
+
+
+# ────────────────────────────────────────────────
+# Figure 0 – Issue Creation Timeline
+# ────────────────────────────────────────────────
+def _compute_issue_timeline_data(metrics: dict):
+    """
+    Shared computation for issue timeline figures.
+    Returns dict with all_issue_dates, cum_total, cum_claimed,
+    pct_of_discourse, pct_of_all_pages, and helper counts.
+    """
+    from datetime import datetime as dt
+
+    issues = _collect_issue_dates(metrics)
+    if not issues:
+        return None
+
+    discourse_nodes = _collect_discourse_node_dates(metrics)
+
+    dates_claimed = [i['date'] for i in issues if i['claimed']]
+    dates_unclaimed = [i['date'] for i in issues if not i['claimed']]
+    all_issue_dates = sorted([i['date'] for i in issues])
+
+    # All discourse node dates (typed nodes only)
+    all_discourse_dates = sorted(
+        d['date']
+        for nodes in discourse_nodes.values()
+        for d in nodes
+    )
+
+    # All content page dates = discourse nodes + experiment pages
+    all_content_dates = list(all_discourse_dates)
+    for exp in metrics['metrics']['conversion_rate'].get('claimed_experiment_list', []):
+        pc = exp.get('page_created')
+        if pc:
+            if isinstance(pc, str):
+                try:
+                    pc = dt.fromisoformat(pc)
+                except (ValueError, TypeError):
+                    continue
+            all_content_dates.append(pc)
+    all_content_dates.sort()
+
+    # Also add experiment pages to discourse dates for the "discourse" denominator
+    # (since experiments are part of the graph, even if not typed as ISS/RES/etc.)
+    all_discourse_plus_exp = list(all_discourse_dates)
+    for exp in metrics['metrics']['conversion_rate'].get('claimed_experiment_list', []):
+        pc = exp.get('page_created')
+        if pc:
+            if isinstance(pc, str):
+                try:
+                    pc = dt.fromisoformat(pc)
+                except (ValueError, TypeError):
+                    continue
+            all_discourse_plus_exp.append(pc)
+    all_discourse_plus_exp.sort()
+
+    # Cumulative counts
+    cum_total = []
+    cum_claimed = []
+    claimed_set = sorted(dates_claimed)
+    ci = 0
+    for i, d in enumerate(all_issue_dates):
+        while ci < len(claimed_set) and claimed_set[ci] <= d:
+            ci += 1
+        cum_total.append(i + 1)
+        cum_claimed.append(ci)
+
+    # % of discourse nodes (typed nodes + experiments)
+    pct_of_discourse = []
+    disc_idx = 0
+    for idx, d in enumerate(all_issue_dates):
+        while disc_idx < len(all_discourse_plus_exp) and all_discourse_plus_exp[disc_idx] <= d:
+            disc_idx += 1
+        total_disc = max(disc_idx, 1)
+        pct_of_discourse.append(cum_total[idx] / total_disc * 100)
+
+    # % of all content pages (total_content_nodes is final count; approximate growth
+    # using all_content_dates which tracks typed+experiment pages we know about)
+    pct_of_all_pages = []
+    total_content_final = metrics.get('graph_growth', {}).get('total_content_nodes', 0)
+    content_idx = 0
+    for idx, d in enumerate(all_issue_dates):
+        while content_idx < len(all_content_dates) and all_content_dates[content_idx] <= d:
+            content_idx += 1
+        # Use tracked content pages as lower bound, scale by ratio to known total
+        tracked_total = max(content_idx, 1)
+        pct_of_all_pages.append(cum_total[idx] / total_content_final * 100
+                                if total_content_final > 0
+                                else 0)
+
+    return {
+        'all_issue_dates': all_issue_dates,
+        'cum_total': cum_total,
+        'cum_claimed': cum_claimed,
+        'dates_claimed': dates_claimed,
+        'dates_unclaimed': dates_unclaimed,
+        'pct_of_discourse': pct_of_discourse,
+        'pct_of_all_pages': pct_of_all_pages,
+        'total_content_final': total_content_final,
+    }
+
+
+def create_issue_timeline_figure(metrics: dict, output_dir: Path):
+    """
+    Standalone figure: cumulative issue count (claimed vs unclaimed)
+    with right axis showing % of discourse nodes (max 100%).
+    """
+    import matplotlib.dates as mdates
+
+    data = _compute_issue_timeline_data(metrics)
+    if data is None:
+        print("  Skipping fig0: no issue dates available")
+        return
+
+    all_issue_dates = data['all_issue_dates']
+    cum_total = data['cum_total']
+    cum_claimed = data['cum_claimed']
+    dates_claimed = data['dates_claimed']
+    dates_unclaimed = data['dates_unclaimed']
+    pct_of_discourse = data['pct_of_discourse']
+
+    fig, ax1 = plt.subplots(figsize=(12, 6))
+
+    # Fill between for claimed/unclaimed
+    ax1.fill_between(all_issue_dates, 0, cum_claimed, step='post',
+                     alpha=0.4, color=C_EXPLICIT,
+                     label=f'Claimed issues ({len(dates_claimed)})')
+    ax1.fill_between(all_issue_dates, cum_claimed, cum_total, step='post',
+                     alpha=0.3, color=C_UNCLAIMED,
+                     label=f'Unclaimed issues ({len(dates_unclaimed)})')
+    ax1.step(all_issue_dates, cum_total, where='post', color='#2c3e50',
+             linewidth=1.5, label=f'Total issues ({len(all_issue_dates)})')
+
+    ax1.set_xlabel('Date')
+    ax1.set_ylabel('Cumulative Issue Count')
+    ax1.set_ylim(0, len(all_issue_dates) * 1.1)
+
+    # Right axis: % of discourse nodes, max 100%
+    ax2 = ax1.twinx()
+    ax2.plot(all_issue_dates, pct_of_discourse, '--', color=C_ACCENT,
+             linewidth=1.2, alpha=0.8, label='% of discourse nodes')
+    ax2.set_ylabel('Issues as % of Discourse Nodes', color=C_ACCENT)
+    ax2.set_ylim(0, 100)
+    ax2.tick_params(axis='y', labelcolor=C_ACCENT)
+
+    # Remove gridlines
+    ax1.grid(False)
+    ax2.grid(False)
+
+    # Combined legend
+    lines1, labels1 = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    ax1.legend(lines1 + lines2, labels1 + labels2, loc='upper left',
+               fontsize=9, framealpha=0.9)
+
+    ax1.set_title('Figure 0. Issue Creation Timeline — MATSUlab Discourse Graph',
+                  fontsize=13, fontweight='bold', pad=12)
+
+    # Format x-axis
+    ax1.xaxis.set_major_formatter(mdates.DateFormatter('%b %Y'))
+    ax1.xaxis.set_major_locator(mdates.MonthLocator(interval=3))
+    plt.setp(ax1.xaxis.get_majorticklabels(), rotation=45, ha='right')
+
+    plt.tight_layout()
+    path = output_dir / 'fig0_issue_timeline.png'
+    plt.savefig(path, bbox_inches='tight')
+    plt.close()
+    print(f"  Saved: {path}")
+
+
+def create_issue_pct_figure(metrics: dict, output_dir: Path):
+    """
+    Separate figure: issues as % of discourse nodes vs % of all content pages.
+    """
+    import matplotlib.dates as mdates
+
+    data = _compute_issue_timeline_data(metrics)
+    if data is None:
+        print("  Skipping fig0_pct: no issue dates available")
+        return
+
+    all_issue_dates = data['all_issue_dates']
+    pct_of_discourse = data['pct_of_discourse']
+    pct_of_all_pages = data['pct_of_all_pages']
+
+    fig, ax = plt.subplots(figsize=(12, 4.5))
+
+    ax.plot(all_issue_dates, pct_of_discourse, '-', color=C_ACCENT,
+            linewidth=1.5, label='% of discourse nodes')
+    ax.plot(all_issue_dates, pct_of_all_pages, '-', color='#8e44ad',
+            linewidth=1.5, label=f'% of all content pages (n={data["total_content_final"]})')
+
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Issues as % of Total')
+    ax.legend(loc='upper left', fontsize=9, framealpha=0.9)
+    ax.grid(False)
+
+    ax.set_title('Figure 0d. Issues as Fraction of Discourse Graph — MATSUlab',
+                 fontsize=12, fontweight='bold', pad=12)
+
+    # Format x-axis
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %Y'))
+    ax.xaxis.set_major_locator(mdates.MonthLocator(interval=3))
+    plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right')
+
+    plt.tight_layout()
+    path = output_dir / 'fig0d_issue_pct.png'
+    plt.savefig(path, bbox_inches='tight')
+    plt.close()
+    print(f"  Saved: {path}")
+
+
+# ────────────────────────────────────────────────
+# Figure 0 – Interactive (Plotly)
+# ────────────────────────────────────────────────
+def create_issue_timeline_interactive(metrics: dict, output_dir: Path):
+    """Plotly interactive version of the issue creation timeline."""
+    import plotly.graph_objects as go
+    from plotly.subplots import make_subplots
+
+    issues = _collect_issue_dates(metrics)
+    if not issues:
+        print("  Skipping fig0 interactive: no issue dates available")
+        return
+
+    discourse_nodes = _collect_discourse_node_dates(metrics)
+
+    all_issue_dates = sorted([i['date'] for i in issues])
+    claimed_dates = sorted([i['date'] for i in issues if i['claimed']])
+    unclaimed_dates = sorted([i['date'] for i in issues if not i['claimed']])
+
+    # Cumulative totals
+    cum_total = list(range(1, len(all_issue_dates) + 1))
+
+    # Cumulative claimed count at each point
+    cum_claimed = []
+    ci = 0
+    for d in all_issue_dates:
+        while ci < len(claimed_dates) and claimed_dates[ci] <= d:
+            ci += 1
+        cum_claimed.append(ci)
+
+    # Discourse node cumulative (for percentage)
+    all_disc_dates = sorted(
+        d['date']
+        for nodes in discourse_nodes.values()
+        for d in nodes
+    )
+    # Include experiment pages
+    from datetime import datetime as dt
+    for exp in metrics['metrics']['conversion_rate'].get('claimed_experiment_list', []):
+        pc = exp.get('page_created')
+        if pc:
+            if isinstance(pc, str):
+                try:
+                    pc = dt.fromisoformat(pc)
+                except (ValueError, TypeError):
+                    continue
+            all_disc_dates.append(pc)
+    all_disc_dates.sort()
+
+    pct_discourse = []
+    pct_all_content = []
+    total_content = metrics.get('graph_growth', {}).get('total_content_nodes', 0)
+    di = 0
+    for idx, d in enumerate(all_issue_dates):
+        while di < len(all_disc_dates) and all_disc_dates[di] <= d:
+            di += 1
+        disc_count = max(di, 1)
+        pct_discourse.append(cum_total[idx] / disc_count * 100)
+        if total_content > 0:
+            pct_all_content.append(cum_total[idx] / total_content * 100)
+        else:
+            pct_all_content.append(0)
+
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+    # Claimed area
+    fig.add_trace(go.Scatter(
+        x=all_issue_dates, y=cum_claimed,
+        fill='tozeroy', name=f'Claimed ({len(claimed_dates)})',
+        line=dict(color=C_EXPLICIT, width=0), fillcolor='rgba(41, 128, 185, 0.4)',
+        hovertemplate='%{x|%b %d, %Y}<br>Claimed: %{y}<extra></extra>'
+    ), secondary_y=False)
+
+    # Total area (fill between claimed and total = unclaimed)
+    fig.add_trace(go.Scatter(
+        x=all_issue_dates, y=cum_total,
+        fill='tonexty', name=f'Unclaimed ({len(unclaimed_dates)})',
+        line=dict(color='#2c3e50', width=1.5), fillcolor='rgba(189, 195, 199, 0.3)',
+        hovertemplate='%{x|%b %d, %Y}<br>Total: %{y}<extra></extra>'
+    ), secondary_y=False)
+
+    # % of discourse nodes
+    fig.add_trace(go.Scatter(
+        x=all_issue_dates, y=pct_discourse,
+        name='% of discourse nodes',
+        line=dict(color=C_ACCENT, width=1.5, dash='dash'),
+        hovertemplate='%{x|%b %d, %Y}<br>%{y:.1f}% of discourse nodes<extra></extra>'
+    ), secondary_y=True)
+
+    # % of all content pages (hidden by default, toggle)
+    fig.add_trace(go.Scatter(
+        x=all_issue_dates, y=pct_all_content,
+        name='% of all content pages',
+        line=dict(color='#9b59b6', width=1.5, dash='dot'),
+        visible='legendonly',
+        hovertemplate='%{x|%b %d, %Y}<br>%{y:.1f}% of all pages<extra></extra>'
+    ), secondary_y=True)
+
+    fig.update_layout(
+        title='Figure 0. Issue Creation Timeline — MATSUlab Discourse Graph',
+        xaxis_title='Date',
+        yaxis_title='Cumulative Issue Count',
+        yaxis2_title='Issues as % of Nodes',
+        hovermode='x unified',
+        template='plotly_white',
+        legend=dict(x=0.02, y=0.98),
+        width=1000, height=550,
+    )
+
+    path = output_dir / 'fig0_issue_timeline.html'
+    fig.write_html(str(path), include_plotlyjs='cdn')
+    print(f"  Saved: {path}")
+
+
+# ────────────────────────────────────────────────
+# Figure 0b – Creator Attribution Heatmap
+# ────────────────────────────────────────────────
+def create_issue_creator_heatmap(metrics: dict, output_dir: Path):
+    """
+    Static heatmap: months × anonymized researchers, cell intensity = issue count.
+    """
+    import pandas as pd
+
+    issues = _collect_issue_dates(metrics)
+    if not issues:
+        print("  Skipping fig0b: no issue dates available")
+        return
+
+    # Build (month, researcher) pairs
+    records = []
+    for iss in issues:
+        creator = iss.get('creator')
+        anon = _normalize_name(creator) if creator else 'Unknown'
+        if not anon:
+            anon = 'Unknown'
+        month_str = iss['date'].strftime('%Y-%m')
+        records.append({'month': month_str, 'researcher': anon})
+
+    df = pd.DataFrame(records)
+    pivot = df.groupby(['researcher', 'month']).size().unstack(fill_value=0)
+
+    # Sort researchers by total issues (descending)
+    pivot = pivot.loc[pivot.sum(axis=1).sort_values(ascending=False).index]
+
+    # Sort months chronologically
+    pivot = pivot[sorted(pivot.columns)]
+
+    fig, ax = plt.subplots(figsize=(max(14, len(pivot.columns) * 0.5), max(5, len(pivot) * 0.5)))
+    cmap = sns.color_palette("YlOrRd", as_cmap=True)
+
+    sns.heatmap(pivot, ax=ax, cmap=cmap, linewidths=0.5, linecolor='white',
+                annot=True, fmt='d', annot_kws={'size': 7},
+                cbar_kws={'label': 'Issues Created', 'shrink': 0.7})
+
+    ax.set_xlabel('Month')
+    ax.set_ylabel('Researcher')
+    ax.set_title('Figure 0b. Issue Creator Attribution — MATSUlab Discourse Graph',
+                 fontsize=12, fontweight='bold', pad=12)
+
+    # Rotate x labels
+    plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right', fontsize=8)
+    plt.setp(ax.yaxis.get_majorticklabels(), fontsize=9)
+
+    plt.tight_layout()
+    path = output_dir / 'fig0b_creator_heatmap.png'
+    plt.savefig(path, bbox_inches='tight')
+    plt.close()
+    print(f"  Saved: {path}")
+
+
+def create_issue_creator_heatmap_interactive(metrics: dict, output_dir: Path):
+    """
+    Interactive heatmap with node-type toggles.
+    Checkbox toggles for ISS, RES, CLM, HYP, CON, EVD, QUE, plus "All".
+    Default = issues only.
+    """
+    import plotly.graph_objects as go
+    import pandas as pd
+    from datetime import datetime as dt
+
+    issues = _collect_issue_dates(metrics)
+    discourse_nodes = _collect_discourse_node_dates(metrics)
+
+    if not issues and not discourse_nodes:
+        print("  Skipping fig0b interactive: no data available")
+        return
+
+    # Collect all data by node type
+    # "Issues" = claimed experiments + ISS nodes
+    all_data = {}
+
+    # Issues (special: combined from experiment list + ISS list)
+    issue_records = []
+    for iss in issues:
+        creator = iss.get('creator')
+        anon = _normalize_name(creator) if creator else 'Unknown'
+        if not anon:
+            anon = 'Unknown'
+        month_str = iss['date'].strftime('%Y-%m')
+        issue_records.append({'month': month_str, 'researcher': anon})
+    all_data['Issues'] = issue_records
+
+    # Discourse node types
+    for node_type, nodes in discourse_nodes.items():
+        records = []
+        for n in nodes:
+            creator = n.get('creator')
+            anon = _normalize_name(creator) if creator else 'Unknown'
+            if not anon:
+                anon = 'Unknown'
+            month_str = n['date'].strftime('%Y-%m')
+            records.append({'month': month_str, 'researcher': anon})
+        all_data[node_type] = records
+
+    # Get all researchers and months across all types
+    all_researchers = set()
+    all_months = set()
+    for records in all_data.values():
+        for r in records:
+            all_researchers.add(r['researcher'])
+            all_months.add(r['month'])
+
+    researchers_sorted = sorted(all_researchers)
+    months_sorted = sorted(all_months)
+
+    # Build pivot tables for each type
+    pivots = {}
+    for type_name, records in all_data.items():
+        if not records:
+            pivots[type_name] = pd.DataFrame(0, index=researchers_sorted, columns=months_sorted)
+            continue
+        df = pd.DataFrame(records)
+        pivot = df.groupby(['researcher', 'month']).size().unstack(fill_value=0)
+        pivot = pivot.reindex(index=researchers_sorted, columns=months_sorted, fill_value=0)
+        pivots[type_name] = pivot
+
+    # Sort researchers by total issues (descending)
+    issue_totals = pivots['Issues'].sum(axis=1).sort_values(ascending=False)
+    researchers_sorted = list(issue_totals.index)
+    for k in pivots:
+        pivots[k] = pivots[k].loc[researchers_sorted]
+
+    # Build Plotly figure with one trace per type
+    fig = go.Figure()
+
+    type_names = list(pivots.keys())
+    for i, type_name in enumerate(type_names):
+        pivot = pivots[type_name]
+        visible = True if type_name == 'Issues' else False
+        fig.add_trace(go.Heatmap(
+            z=pivot.values,
+            x=pivot.columns.tolist(),
+            y=pivot.index.tolist(),
+            colorscale='YlOrRd',
+            name=type_name,
+            visible=visible,
+            hovertemplate='%{y}<br>%{x}<br>Count: %{z}<extra>' + type_name + '</extra>',
+            colorbar=dict(title='Count'),
+        ))
+
+    # Add buttons for each type
+    buttons = []
+    for i, type_name in enumerate(type_names):
+        visibility = [False] * len(type_names)
+        visibility[i] = True
+        buttons.append(dict(
+            label=type_name,
+            method='update',
+            args=[{'visible': visibility}],
+        ))
+
+    # "All" button (sum all types)
+    all_pivot = sum(pivots[t] for t in type_names)
+    fig.add_trace(go.Heatmap(
+        z=all_pivot.values,
+        x=all_pivot.columns.tolist(),
+        y=all_pivot.index.tolist(),
+        colorscale='YlOrRd',
+        name='All',
+        visible=False,
+        hovertemplate='%{y}<br>%{x}<br>Count: %{z}<extra>All types</extra>',
+        colorbar=dict(title='Count'),
+    ))
+    all_visibility = [False] * len(type_names) + [True]
+    buttons.append(dict(
+        label='All',
+        method='update',
+        args=[{'visible': all_visibility}],
+    ))
+
+    # Update previous buttons to account for the extra "All" trace
+    for i in range(len(type_names)):
+        buttons[i]['args'][0]['visible'] = buttons[i]['args'][0]['visible'] + [False]
+
+    fig.update_layout(
+        title='Figure 0b. Creator Attribution Heatmap — MATSUlab Discourse Graph',
+        xaxis_title='Month',
+        yaxis_title='Researcher',
+        updatemenus=[dict(
+            type='buttons',
+            direction='right',
+            active=0,
+            x=0.0,
+            y=1.15,
+            buttons=buttons,
+            showactive=True,
+        )],
+        yaxis=dict(autorange='reversed'),
+        template='plotly_white',
+        width=max(900, len(months_sorted) * 28),
+        height=max(500, len(researchers_sorted) * 35),
+    )
+
+    path = output_dir / 'fig0b_creator_heatmap.html'
+    fig.write_html(str(path), include_plotlyjs='cdn')
+    print(f"  Saved: {path}")
+
+
+# ────────────────────────────────────────────────
+# Figure 0c – Discourse Node Composition Stacked Area
+# ────────────────────────────────────────────────
+def create_discourse_growth_figure(metrics: dict, output_dir: Path):
+    """
+    Stacked area chart showing growth of all discourse node types over time.
+    """
+    import matplotlib.dates as mdates
+    from datetime import datetime as dt
+
+    discourse_nodes = _collect_discourse_node_dates(metrics)
+    if not discourse_nodes:
+        print("  Skipping fig0c: no discourse node dates available")
+        return
+
+    # Also include experiment pages in the total
+    exp_dates = []
+    for exp in metrics['metrics']['conversion_rate'].get('claimed_experiment_list', []):
+        pc = exp.get('page_created')
+        if pc:
+            if isinstance(pc, str):
+                try:
+                    pc = dt.fromisoformat(pc)
+                except (ValueError, TypeError):
+                    continue
+            exp_dates.append(pc)
+    exp_dates.sort()
+
+    # Collect all dates to build a common timeline
+    all_dates = set()
+    for nodes in discourse_nodes.values():
+        for n in nodes:
+            all_dates.add(n['date'])
+    for d in exp_dates:
+        all_dates.add(d)
+    timeline = sorted(all_dates)
+
+    if not timeline:
+        print("  Skipping fig0c: no dates available")
+        return
+
+    # Merge HYP + CON into a single HYP category
+    hyp_nodes = discourse_nodes.get('HYP', []) + discourse_nodes.get('CON', [])
+    hyp_nodes.sort(key=lambda n: n['date'])
+    discourse_nodes['HYP'] = hyp_nodes
+    if 'CON' in discourse_nodes:
+        del discourse_nodes['CON']
+
+    # Node type colors — palette E (high-contrast greens, warm/cool separation)
+    type_colors = {
+        'QUE': '#DAA520',     # goldenrod
+        'EVD': '#E8254B',     # crimson red
+        'CLM': '#8FBF40',     # bright lime-green
+        'HYP': '#1B5E20',     # deep forest green
+        'ISS': '#1E88E5',     # bright blue
+        'Experiments': '#9E9E9E', # true grey
+        'RES': '#C62828',     # deep red crown
+    }
+
+    # Display names for legend (HYP includes merged CON)
+    display_names = {
+        'QUE': 'QUE', 'EVD': 'EVD', 'CLM': 'CLM',
+        'HYP': 'HYP+CON', 'ISS': 'ISS',
+        'Experiments': 'Experiments', 'RES': 'RES',
+    }
+
+    # Stacking order (bottom to top): questions → evidence → claims →
+    # hypotheses+conclusions → issues → experiments → results
+    type_names = ['QUE', 'EVD', 'CLM', 'HYP', 'ISS', 'Experiments', 'RES']
+    type_cum = {t: [] for t in type_names}
+
+    for d in timeline:
+        for t in type_names:
+            if t == 'Experiments':
+                count = sum(1 for ed in exp_dates if ed <= d)
+            else:
+                nodes = discourse_nodes.get(t, [])
+                count = sum(1 for n in nodes if n['date'] <= d)
+            type_cum[t].append(count)
+
+    # Stack them for area chart
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    y_stack = np.zeros(len(timeline))
+    for t in type_names:
+        y_vals = np.array(type_cum[t])
+        dn = display_names[t]
+        ax.fill_between(timeline, y_stack, y_stack + y_vals,
+                        alpha=0.85, label=f'{dn} ({y_vals[-1]})',
+                        color=type_colors.get(t, '#95a5a6'))
+        y_stack += y_vals
+
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Cumulative Node Count')
+    ax.set_title('Figure 0c. Discourse Graph Growth by Node Type — MATSUlab',
+                 fontsize=12, fontweight='bold', pad=12)
+
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %Y'))
+    ax.xaxis.set_major_locator(mdates.MonthLocator(interval=3))
+    plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right')
+
+    ax.legend(loc='upper left', fontsize=9, ncol=2, framealpha=0.9)
+
+    plt.tight_layout()
+    path = output_dir / 'fig0c_discourse_growth.png'
+    plt.savefig(path, bbox_inches='tight')
+    plt.close()
+    print(f"  Saved: {path}")
+
+
+# ────────────────────────────────────────────────
+# Figure 0 – Animated GIF
+# ────────────────────────────────────────────────
+def create_issue_timeline_gif(metrics: dict, output_dir: Path):
+    """
+    Animated GIF showing cumulative issue creation month by month.
+    """
+    import matplotlib.dates as mdates
+    from datetime import datetime as dt
+    from io import BytesIO
+
+    try:
+        from PIL import Image
+    except ImportError:
+        print("  Skipping fig0 GIF: pillow not installed (pip install pillow)")
+        return
+
+    issues = _collect_issue_dates(metrics)
+    if not issues:
+        print("  Skipping fig0 GIF: no issue dates available")
+        return
+
+    all_issue_dates = sorted([i['date'] for i in issues])
+    claimed_dates = sorted([i['date'] for i in issues if i['claimed']])
+    unclaimed_dates = sorted([i['date'] for i in issues if not i['claimed']])
+
+    # Group into months
+    from collections import OrderedDict
+    months = OrderedDict()
+    for d in all_issue_dates:
+        key = d.strftime('%Y-%m')
+        if key not in months:
+            months[key] = {'date': d.replace(day=1), 'claimed': 0, 'unclaimed': 0, 'total': 0}
+
+    for d in claimed_dates:
+        key = d.strftime('%Y-%m')
+        months[key]['claimed'] += 1
+    for d in unclaimed_dates:
+        key = d.strftime('%Y-%m')
+        months[key]['unclaimed'] += 1
+    for key in months:
+        months[key]['total'] = months[key]['claimed'] + months[key]['unclaimed']
+
+    month_keys = list(months.keys())
+    total_issues = len(all_issue_dates)
+    total_claimed = len(claimed_dates)
+
+    # Generate frames
+    frames = []
+    cum_claimed = 0
+    cum_unclaimed = 0
+    frame_dates = []
+    frame_cum_claimed = []
+    frame_cum_total = []
+
+    for i, key in enumerate(month_keys):
+        cum_claimed += months[key]['claimed']
+        cum_unclaimed += months[key]['unclaimed']
+        cum_total = cum_claimed + cum_unclaimed
+        frame_dates.append(months[key]['date'])
+        frame_cum_claimed.append(cum_claimed)
+        frame_cum_total.append(cum_total)
+
+        fig, ax = plt.subplots(figsize=(10, 5.5))
+
+        # Fill areas
+        if len(frame_dates) > 1:
+            ax.fill_between(frame_dates, 0, frame_cum_claimed, step='post',
+                           alpha=0.4, color=C_EXPLICIT)
+            ax.fill_between(frame_dates, frame_cum_claimed, frame_cum_total, step='post',
+                           alpha=0.3, color=C_UNCLAIMED)
+            ax.step(frame_dates, frame_cum_total, where='post', color='#2c3e50', linewidth=1.5)
+        else:
+            ax.bar(frame_dates, frame_cum_claimed, width=20, color=C_EXPLICIT, alpha=0.4)
+            ax.bar(frame_dates, [cum_unclaimed], bottom=frame_cum_claimed, width=20,
+                   color=C_UNCLAIMED, alpha=0.3)
+
+        ax.set_xlim(all_issue_dates[0], all_issue_dates[-1])
+        ax.set_ylim(0, total_issues * 1.15)
+        ax.set_xlabel('Date')
+        ax.set_ylabel('Cumulative Issues')
+        ax.set_title('Issue Creation Timeline — MATSUlab Discourse Graph',
+                     fontsize=12, fontweight='bold')
+
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %Y'))
+        ax.xaxis.set_major_locator(mdates.MonthLocator(interval=6))
+        plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right')
+
+        # Counter box
+        ax.text(0.98, 0.95, f'{cum_total} issues\n{cum_claimed} claimed',
+                transform=ax.transAxes, fontsize=14, fontweight='bold',
+                verticalalignment='top', horizontalalignment='right',
+                bbox=dict(boxstyle='round,pad=0.4', facecolor='white',
+                         edgecolor='#2c3e50', alpha=0.9))
+
+        # Month label
+        ax.text(0.02, 0.95, key,
+                transform=ax.transAxes, fontsize=12, fontweight='bold',
+                verticalalignment='top', color='#7f8c8d')
+
+        plt.tight_layout()
+
+        # Render to PIL Image
+        buf = BytesIO()
+        fig.savefig(buf, format='png', bbox_inches='tight', dpi=100)
+        plt.close(fig)
+        buf.seek(0)
+        img = Image.open(buf).copy()
+        buf.close()
+        frames.append(img)
+
+    if not frames:
+        print("  Skipping fig0 GIF: no frames generated")
+        return
+
+    # Duplicate last frame a few times to pause at end
+    for _ in range(5):
+        frames.append(frames[-1].copy())
+
+    # Save GIF
+    path = output_dir / 'fig0_issue_timeline_animated.gif'
+    frames[0].save(
+        str(path),
+        save_all=True,
+        append_images=frames[1:],
+        duration=200,  # 200ms per frame
+        loop=0,
+    )
+    print(f"  Saved: {path}")
+
+
+# ────────────────────────────────────────────────
 # Master entry point
 # ────────────────────────────────────────────────
 def generate_all_visualizations(metrics: dict, output_dir: Path):
@@ -630,6 +1485,16 @@ def generate_all_visualizations(metrics: dict, output_dir: Path):
 
     print("\nGenerating visualizations...")
 
+    # Figure 0: Issue creation timeline (introductory panel for EVD1)
+    create_issue_timeline_figure(metrics, output_dir)
+    create_issue_pct_figure(metrics, output_dir)
+    create_issue_timeline_interactive(metrics, output_dir)
+    create_issue_creator_heatmap(metrics, output_dir)
+    create_issue_creator_heatmap_interactive(metrics, output_dir)
+    create_discourse_growth_figure(metrics, output_dir)
+    create_issue_timeline_gif(metrics, output_dir)
+
+    # Figures 1-5: existing metrics visualizations
     create_conversion_rate_figure(metrics, output_dir)
     create_time_distributions_figure(metrics, output_dir)
     create_contributor_breadth_figure(metrics, output_dir)

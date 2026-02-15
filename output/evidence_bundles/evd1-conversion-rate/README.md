@@ -1,6 +1,24 @@
 # EVD 1 — Issue Conversion Rate
 
-### 29% of MATSUlab issues were claimed as experiments, and 38% of those produced at least one formal result node
+### 29% of MATSUlab issues (n=445) were claimed as experiments, and 15% of those were claimed by a different lab member than the issue creator
+
+---
+
+## Introductory Panel: Issue Creation Timeline
+
+![Figure 0. Issue creation timeline](fig0_issue_timeline.png)
+
+**Figure 0. Issue creation timeline and discourse graph growth in the MATSUlab discourse graph.** Cumulative issue creation over ~3 years (Sep 2022 – Feb 2026). Blue shading: claimed issues (n=130). Grey shading: unclaimed issues (n=315). Dark line: total cumulative issues (445). Dashed red line (right axis): issues as a percentage of total discourse nodes. The graph shows steady growth with acceleration in late 2023 and mid-2025.
+
+> An [interactive HTML version](fig0_issue_timeline.html) is included with hover tooltips and a toggle between "% of discourse nodes" and "% of all content pages."
+
+### Supplemental: Creator Attribution and Graph Growth
+
+| Figure | Description |
+|--------|-------------|
+| [`fig0b_creator_heatmap.png`](fig0b_creator_heatmap.png) | Issue creation by researcher and month. Matt Akamatsu is the dominant creator (especially Oct 2023 with 29 issues). [Interactive version](fig0b_creator_heatmap.html) has toggles for different discourse node types. |
+| [`fig0c_discourse_growth.png`](fig0c_discourse_growth.png) | Stacked area chart showing all discourse node types (ISS, RES, CLM, HYP, CON, EVD, QUE, Experiments) growing over time. |
+| [`fig0_issue_timeline_animated.gif`](fig0_issue_timeline_animated.gif) | Animated GIF showing month-by-month issue accumulation with running counter. |
 
 ---
 
@@ -8,7 +26,7 @@
 
 ![Figure 1. Issue conversion rate and claiming authorship](fig1_conversion_rate.png)
 
-**Figure 1. Issue conversion rate and claiming authorship in the MATSUlab discourse graph.** **(Left)** Stacked horizontal bar showing the composition of all 445 issues. Blue: explicitly claimed via `Claimed By::` metadata field (n=69). Green: inferred as claimed based on experimental log entries authored by the page creator (n=56). Amber: ISS pages with experimental log activity but no formal conversion to experiment format (n=5). Grey: unclaimed ISS pages with no evidence of active work (n=315). Bracket indicates total claimed issues (130, 29.2%). **(Right)** Donut chart showing claiming authorship breakdown among the 125 claimed experiments with known creator–claimer pairs. Orange: self-claimed where the issue creator and the person claiming were the same person (n=106, 85%). Purple: cross-person claiming where a different researcher claimed the issue (n=19, 15%).
+**Figure 1. 29% of MATSUlab issues (n=445) were claimed as experiments, and 15% of those were claimed by a different lab member than the issue creator.** **(Left)** Stacked horizontal bar showing the composition of all 445 issues. Blue: explicitly claimed via `Claimed By::` metadata field (n=69). Green: inferred as claimed based on experimental log entries authored by the page creator (n=56). Amber: ISS pages with experimental log activity but no formal conversion to experiment format (n=5). Grey: unclaimed ISS pages with no evidence of active work (n=315). Bracket indicates total claimed issues (130, 29.2%). **(Right)** Donut chart showing claiming authorship breakdown among the 125 claimed experiments with known creator–claimer pairs. Orange: self-claimed where the issue creator and the person claiming were the same person (n=106, 85%). Purple: cross-person claiming where a different researcher claimed the issue (n=19, 15%).
 
 > An [interactive HTML version](fig1_conversion_rate.html) is also included (download and open locally).
 
@@ -62,6 +80,7 @@ See [`docs/methods_excerpt.md`](docs/methods_excerpt.md) for detailed methodolog
 ## Data
 
 - [`data/conversion_data.json`](data/conversion_data.json) — Aggregated conversion rates, claiming type breakdown, and result statistics
+- [`data/issue_timeline_data.json`](data/issue_timeline_data.json) — Per-issue creation dates, monthly summary, and discourse node growth by type (supports Figure 0)
 
 ## Metadata
 

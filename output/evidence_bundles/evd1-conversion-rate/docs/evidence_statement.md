@@ -2,7 +2,7 @@
 
 ## Evidence Statement
 
-29% of MATSUlab issues (n=445) were claimed as experiments and 38% of those produced at least one formal result node, yielding 139 total RES nodes.
+29% of MATSUlab issues (n=445) were claimed as experiments, and 15% of those were claimed by a different lab member than the issue creator.
 
 ## Evidence Description
 
@@ -21,4 +21,4 @@ Among the 125 claimed experiments with known creator–claimer pairs, 85% (106) 
 
 ## Figure Legend
 
-**Figure 1. Issue conversion rate and claiming authorship in the MATSUlab discourse graph.** **(Left)** Stacked horizontal bar showing the composition of all 445 issues. Blue: explicitly claimed via `Claimed By::` metadata field (n=69). Green: inferred as claimed based on experimental log entries authored by the page creator (n=56). Amber: ISS pages with experimental log activity but no formal conversion to experiment format (n=5). Grey: unclaimed ISS pages with no evidence of active work (n=315). Bracket indicates total claimed issues (130, 29.2%). **(Right)** Donut chart showing claiming authorship breakdown among the 125 claimed experiments. Orange: self-claimed where the issue creator and the person claiming were the same person (n=106, 85%). Purple: cross-person claiming where a different researcher claimed the issue (n=19, 15%).
+**Figure 1. 29% of MATSUlab issues (n=445) were claimed as experiments, and 15% of those were claimed by a different lab member than the issue creator.** **(Left)** Stacked horizontal bar showing the composition of all 445 issues. Blue: explicitly claimed via `Claimed By::` metadata field (n=69). Green: inferred as claimed based on experimental log entries authored by the page creator (n=56). Amber: ISS pages with experimental log activity but no formal conversion to experiment format (n=5). Grey: unclaimed ISS pages with no evidence of active work (n=315). Bracket indicates total claimed issues (130, 29.2%). **(Right)** Donut chart showing claiming authorship breakdown among the 125 claimed experiments. Orange: self-claimed where the issue creator and the person claiming were the same person (n=106, 85%). Purple: cross-person claiming where a different researcher claimed the issue (n=19, 15%).

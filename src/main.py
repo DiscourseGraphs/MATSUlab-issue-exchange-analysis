@@ -25,6 +25,7 @@ from calculate_metrics import calculate_all_metrics, print_metrics_summary
 from generate_visualizations import generate_all_visualizations
 from handoff_visualizations import generate_all_handoff_visualizations
 from create_evidence_bundle import create_evd1_bundle, create_evd5_bundle
+from experiment_lifecycle_visualizations import generate_experiment_lifecycle_visualizations
 
 
 def generate_markdown_report(metrics: dict, output_path: Path):
@@ -322,6 +323,12 @@ def run_pipeline(
     print("-" * 40)
     generate_all_handoff_visualizations(metrics, viz_dir)
 
+    # Step 5c: Generate experiment lifecycle visualizations (Fig 6 series)
+    print("-" * 40)
+    print("STEP 5c: Generating experiment lifecycle visualizations...")
+    print("-" * 40)
+    generate_experiment_lifecycle_visualizations(metrics, viz_dir)
+
     # Step 6: Generate markdown report
     print("-" * 40)
     print("STEP 6: Generating report...")
@@ -343,11 +350,19 @@ def run_pipeline(
     print(f"\nOutput files:")
     print(f"  - {metrics_json_path}")
     print(f"  - {report_path}")
+    print(f"  - {viz_dir}/fig0_issue_timeline.png")
+    print(f"  - {viz_dir}/fig0_issue_timeline.html")
+    print(f"  - {viz_dir}/fig0b_creator_heatmap.png")
+    print(f"  - {viz_dir}/fig0b_creator_heatmap.html")
+    print(f"  - {viz_dir}/fig0c_discourse_growth.png")
+    print(f"  - {viz_dir}/fig0_issue_timeline_animated.gif")
     print(f"  - {viz_dir}/fig1_conversion_rate.png")
     print(f"  - {viz_dir}/fig2_time_distributions.png")
     print(f"  - {viz_dir}/fig3_contributor_breadth.png")
     print(f"  - {viz_dir}/fig4_idea_exchange.png")
     print(f"  - {viz_dir}/fig5_funnel.png")
+    print(f"  - {evd1_dir}/evidence.jsonld")
+    print(f"  - {evd1_dir}/data/issue_timeline_data.json")
     print(f"  - {bundle_dir}/evidence.jsonld")
     print(f"  - {bundle_dir}/ro-crate-metadata.json")
     print(f"  - {bundle_dir}/data/funnel_summary.json")
