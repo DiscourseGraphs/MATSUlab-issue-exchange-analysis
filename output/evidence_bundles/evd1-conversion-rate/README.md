@@ -97,7 +97,7 @@ Contact [The Discourse Graphs Project](mailto:discoursegraphsATgmailDOTcom) for 
 
 - **Analysis and evidence bundles:** [Matt Akamatsu](https://orcid.org/0000-0002-0286-5310) and [Claude](https://claude.ai) (Anthropic)
 - **Discourse graph system:** [Discourse Graphs Project](https://discoursegraphs.com/), [Joel Chan](https://orcid.org/0000-0003-3000-4160), [Matt Akamatsu](https://orcid.org/0000-0002-0286-5310)
-- **Lab discourse graph data:** [Akamatsu Lab](https://matsulab.org), University of Washington
+- **Lab discourse graph data:** [Akamatsu Lab](https://matsulab.com), University of Washington
 - **Discourse Graph extension:** [DiscourseGraphs](https://github.com/DiscourseGraphs/discourse-graph)
 
 ## License

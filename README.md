@@ -1,6 +1,6 @@
 # MATSUlab Issue Exchange Analysis
 
-Metrics and evidence bundles from an analysis of the [Akamatsu Lab](https://akamatsulab.org) (MATSUlab) discourse graph, built in [Roam Research](https://roamresearch.com) using the [Discourse Graph extension](https://github.com/DiscourseGraphs/discourse-graph).
+Metrics and evidence bundles from an analysis of the [Akamatsu Lab](https://matsulab.com) (MATSUlab) discourse graph, built in [Roam Research](https://roamresearch.com) using the [Discourse Graph extension](https://github.com/DiscourseGraphs/discourse-graph).
 
 This repository accompanies a study exploring how a shared issue board promotes idea exchange, structured knowledge production, and rapid researcher onboarding in a research lab.
 
@@ -139,6 +139,8 @@ Contact [The Discourse Graphs Project](mailto:discoursegraphsATgmailDOTcom) for 
 ](https://roamresearch.com/#/app/discourse-graphs/page/E5UYzWC6b)
 - [Result page: EVD 5
 ](https://roamresearch.com/#/app/discourse-graphs/page/EBoRlwI78)
+- [Result page: EVD 6
+](https://roamresearch.com/#/app/discourse-graphs/page/Iyef0kkul)
 - [Result page: EVD 7
 ](https://roamresearch.com/#/app/discourse-graphs/page/0FU6ssOwH)
 - Raw data: MATSU lab graph in JSON-LD and JSON
