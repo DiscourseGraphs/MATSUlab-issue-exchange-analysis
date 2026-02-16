@@ -59,7 +59,7 @@
     },
     {
       "@type": "schema:ImageObject",
-      "schema:contentUrl": "fig6c_swimmer_plot_log.png",
+      "schema:contentUrl": "figS6c_swimmer_plot_log.png",
       "schema:encodingFormat": "image/png",
       "dc:description": "Log-scale version of Figure 6c for resolving detail among experiments with short timelines."
     },

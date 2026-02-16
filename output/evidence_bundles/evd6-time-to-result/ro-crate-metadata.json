@@ -33,7 +33,7 @@
           "@id": "fig6c_swimmer_plot.png"
         },
         {
-          "@id": "fig6c_swimmer_plot_log.png"
+          "@id": "figS6c_swimmer_plot_log.png"
         },
         {
           "@id": "fig6c_swimmer_plot.html"
@@ -74,12 +74,12 @@
       "encodingFormat": "image/png"
     },
     {
-      "@id": "fig6c_swimmer_plot_log.png",
+      "@id": "figS6c_swimmer_plot_log.png",
       "@type": [
         "File",
         "ImageObject"
       ],
-      "name": "Figure 6c: Experiment Lifecycle Swimmer Plot (log scale)",
+      "name": "Figure S6c: Experiment Lifecycle Swimmer Plot (log scale, supplemental)",
       "description": "Log-scale version of the swimmer plot for resolving detail among experiments with short timelines (same-day to first-week results).",
       "encodingFormat": "image/png"
     },

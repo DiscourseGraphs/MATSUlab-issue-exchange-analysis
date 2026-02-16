@@ -4,21 +4,13 @@
 
 ---
 
-## Introductory Panel: Issue Creation Timeline
+## Supplemental: Issue Creation Timeline
 
-![Figure 0. Issue creation timeline](fig0_issue_timeline.png)
+![Figure S1. Issue creation timeline](figS1_issue_timeline.png)
 
-**Figure 0. Issue creation timeline and discourse graph growth in the MATSUlab discourse graph.** Cumulative issue creation over ~3 years (Sep 2022 – Feb 2026). Blue shading: claimed issues (n=130). Grey shading: unclaimed issues (n=315). Dark line: total cumulative issues (445). Dashed red line (right axis): issues as a percentage of total discourse nodes. The graph shows steady growth with acceleration in late 2023 and mid-2025.
+**Figure S1. Issue creation timeline and discourse graph growth in the MATSUlab discourse graph.** Cumulative issue creation over ~3 years (Sep 2022 – Feb 2026). Blue shading: claimed issues (n=130). Grey shading: unclaimed issues (n=315). Dark line: total cumulative issues (445). Dashed red line (right axis): issues as a percentage of total discourse nodes. The graph shows steady growth with acceleration in late 2023 and mid-2025.
 
-> An [interactive HTML version](fig0_issue_timeline.html) is included with hover tooltips and a toggle between "% of discourse nodes" and "% of all content pages."
-
-### Supplemental: Creator Attribution and Graph Growth
-
-| Figure | Description |
-|--------|-------------|
-| [`fig0b_creator_heatmap.png`](fig0b_creator_heatmap.png) | Issue creation by researcher and month. Matt Akamatsu is the dominant creator (especially Oct 2023 with 29 issues). [Interactive version](fig0b_creator_heatmap.html) has toggles for different discourse node types. |
-| [`fig0c_discourse_growth.png`](fig0c_discourse_growth.png) | Stacked area chart showing all discourse node types (ISS, RES, CLM, HYP, CON, EVD, QUE, Experiments) growing over time. |
-| [`fig0_issue_timeline_animated.gif`](fig0_issue_timeline_animated.gif) | Animated GIF showing month-by-month issue accumulation with running counter. |
+> An [interactive HTML version](figS1_issue_timeline.html) is included with hover tooltips and a toggle between "% of discourse nodes" and "% of all content pages." An [animated GIF version](figS1_issue_timeline_animated.gif) is also included.
 
 ---
 
