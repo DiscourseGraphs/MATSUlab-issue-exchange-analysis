@@ -9,9 +9,10 @@ data package using JSON-LD (native discourse graph vocabulary) and RO-Crate.
 Each bundle is a folder containing:
   - evidence.jsonld          (canonical metadata in JSON-LD)
   - ro-crate-metadata.json   (RO-Crate wrapper for FAIR sharing)
+  - README.md                (evidence statement, description, and figure legend)
+  - methods_excerpt.md       (relevant methods sections)
   - fig<N>_<name>.png        (the visualization)
   - data/                    (underlying data files)
-  - docs/                    (evidence statement + methods excerpt)
 
 Author: Matt Akamatsu (with Claude)
 Date: 2026-01-27
@@ -42,7 +43,6 @@ def create_evd5_bundle(metrics: dict, output_dir: Path, viz_dir: Path) -> Path:
     bundle_dir = output_dir / 'evidence_bundles' / 'evd5-issue-funnel'
     bundle_dir.mkdir(parents=True, exist_ok=True)
     (bundle_dir / 'data').mkdir(exist_ok=True)
-    (bundle_dir / 'docs').mkdir(exist_ok=True)
 
     # Copy the primary figure (alluvial flow diagram)
     alluvial_png = viz_dir / 'handoff_alluvial.png'
@@ -61,9 +61,8 @@ def create_evd5_bundle(metrics: dict, output_dir: Path, viz_dir: Path) -> Path:
     _write_funnel_summary(metrics, bundle_dir / 'data' / 'funnel_summary.json')
     _write_experiment_details(metrics, bundle_dir / 'data' / 'experiment_details.csv')
 
-    # Generate doc files
-    _write_evidence_statement(metrics, bundle_dir / 'docs' / 'evidence_statement.md')
-    _write_methods_excerpt(output_dir, bundle_dir / 'docs' / 'methods_excerpt.md')
+    # Generate methods excerpt at bundle root
+    _write_methods_excerpt(output_dir, bundle_dir / 'methods_excerpt.md')
 
     # Generate JSON-LD metadata
     _write_evidence_jsonld(metrics, bundle_dir / 'evidence.jsonld')
@@ -250,9 +249,9 @@ def _write_methods_excerpt(output_dir: Path, path: Path):
     ]
 
     if not methods_path.exists():
-        # Write a stub referencing the full methods
+        # Write a stub referencing the bundle data files
         with open(path, 'w') as f:
-            f.write("# Methods Excerpt\n\nSee `output/methods.md` for full methodological detail.\n")
+            f.write("# Methods Excerpt\n\nSee `data/funnel_summary.json` and `data/experiment_details.csv` for current counts.\n")
         return
 
     with open(methods_path, 'r') as f:
@@ -260,7 +259,7 @@ def _write_methods_excerpt(output_dir: Path, path: Path):
 
     lines = full_text.split('\n')
     extracted = ["# Methods Excerpt (EVD 5)\n"]
-    extracted.append("This excerpt contains the methods sections relevant to the issue-to-experiment-to-result conversion funnel analysis. For the complete methods document, see `output/methods.md`.\n")
+    extracted.append("This excerpt contains the methods sections relevant to the issue-to-experiment-to-result conversion funnel analysis. See `data/funnel_summary.json` and `data/experiment_details.csv` for current counts.\n")
     extracted.append("---\n")
 
     # Extract each target section
@@ -304,31 +303,32 @@ def _write_evidence_jsonld(metrics: dict, path: Path):
         "@type": "dge:EvidenceBundle",
         "@id": "evd5-issue-funnel",
         "dc:title": (
-            f"[[RES]] - {conv['conversion_rate_percent']:.0f}% of MATSUlab issues "
-            f"(n={conv['total_issues']}) were claimed as experiments "
-            f"and {round(ttr['count'] / conv['total_claimed'] * 100) if conv['total_claimed'] > 0 else 0}% "
-            f"of those claimed at least one formal result node, yielding "
-            f"{total_res} total RES nodes - [[@analysis/quantify issue claiming from MATSUlab]]"
+            f"[[RES]] - Of {conv['total_claimed']} claimed experiments in the MATSUlab, "
+            f"{ttr['count']} ({round(ttr['count'] / conv['total_claimed'] * 100) if conv['total_claimed'] > 0 else 0}%) "
+            f"produced at least one formal result node, yielding {total_res} total RES nodes, "
+            f"and 15% of claiming involved cross-person idea exchange "
+            f"- [[@analysis/quantify issue claiming from MATSUlab]]"
         ),
         "dc:creator": "Matt Akamatsu",
         "dc:date": datetime.now().strftime('%Y-%m-%d'),
         "dcterms:license": "https://creativecommons.org/licenses/by/4.0/",
         "dge:evidenceStatement": (
-            f"Of {conv['total_issues']} total issues in the MATSUlab discourse graph, "
-            f"{conv['total_claimed']} ({conv['conversion_rate_percent']:.0f}%) were claimed as experiments and "
-            f"{ttr['count']} ({round(ttr['count'] / conv['total_issues'] * 100) if conv['total_issues'] > 0 else 0}%) "
+            f"Of {conv['total_claimed']} claimed experiments in the MATSUlab discourse graph, "
+            f"{ttr['count']} ({round(ttr['count'] / conv['total_claimed'] * 100) if conv['total_claimed'] > 0 else 0}%) "
             f"produced at least one formal result node, yielding {total_res} total RES nodes "
-            f"(avg {round(total_res / ttr['count'], 1) if ttr['count'] > 0 else 0} per result-producing experiment)."
+            f"(avg {round(total_res / ttr['count'], 1) if ttr['count'] > 0 else 0} per result-producing experiment). "
+            f"{round(conv['cross_person_claims'] / (conv['self_claims'] + conv['cross_person_claims']) * 100) if (conv['self_claims'] + conv['cross_person_claims']) > 0 else 0}% "
+            f"of claiming involved cross-person idea exchange, where the issue creator and claimer were different researchers."
         ),
         "dge:observable": {
             "@type": "dge:Observable",
-            "dc:title": "Issue-to-experiment-to-result conversion rate",
+            "dc:title": "Result production and cross-person idea exchange in a discourse graph",
             "dc:description": (
-                f"The proportion of issues that progress through claiming and result "
-                f"production stages in a discourse graph, measuring the funnel from "
-                f"issue creation (n={conv['total_issues']}) through experiment claiming "
-                f"(n={conv['total_claimed']}) to formal "
-                f"result production (n={ttr['count']}, yielding {total_res} RES nodes)."
+                f"The proportion of claimed experiments that produce formal result nodes "
+                f"and the extent of cross-person idea exchange (where a different researcher "
+                f"claims an issue than the one who created it). Measured across "
+                f"{conv['total_claimed']} claimed experiments, {ttr['count']} result-producing "
+                f"experiments, and {total_res} RES nodes in the MATSUlab discourse graph."
             ),
         },
         "dge:method": {
@@ -365,39 +365,46 @@ def _write_evidence_jsonld(metrics: dict, path: Path):
             "schema:memberOf": "Akamatsu Lab, University of Washington",
             "dcterms:temporal": datetime.now().strftime('%Y-%m-%d'),
         },
-        "dge:figure": {
-            "@type": "schema:ImageObject",
-            "schema:contentUrl": "fig5_alluvial_flow.png",
-            "schema:encodingFormat": "image/png",
-            "schema:alternateName": "fig5_alluvial_flow.html",
-            "dge:figureLegend": (
-                f"Figure 5. Issue-to-experiment-to-result flow in the MATSUlab discourse "
-                f"graph. Alluvial (Sankey) diagram showing all {conv['total_claimed']} claimed "
-                f"experiments flowing through three stages: Issue Created (left, who created "
-                f"the issue), Claimed By (center, who claimed the experiment), and Result "
-                f"Created (right, who created the first formal result). Band width is "
-                f"proportional to number of experiments. Green bands indicate self-claiming; "
-                f"purple bands indicate cross-person claiming (idea exchange). Of the "
-                f"{conv['total_claimed']} claimed experiments, {ttr['count']} produced at "
-                f"least one formal result node. Researcher names are anonymized (R1–R11); "
-                f"PI (Matt Akamatsu) is identified. An interactive HTML version is included."
-            ),
-        },
-        "dge:supplementalFigure": {
-            "@type": "schema:ImageObject",
-            "schema:contentUrl": "fig5_funnel_supplemental.png",
-            "schema:encodingFormat": "image/png",
-            "dge:figureLegend": (
-                f"Supplemental Figure. Issue-to-experiment-to-result conversion funnel "
-                f"(aggregate view). (Left) Horizontal bar chart showing progressive "
-                f"attrition across three stages: all issues (n={conv['total_issues']}), "
-                f"claimed experiments (n={conv['total_claimed']}, "
-                f"{conv['conversion_rate_percent']:.0f}%), and experiments with at least one "
-                f"formal result (n={ttr['count']}, "
-                f"{round(ttr['count'] / conv['total_issues'] * 100) if conv['total_issues'] > 0 else 0}%). "
-                f"(Right) Stage-by-stage breakdown showing composition at each level."
-            ),
-        },
+        "dge:figure": [
+            {
+                "@type": "schema:ImageObject",
+                "schema:contentUrl": "fig5_alluvial_flow.png",
+                "schema:encodingFormat": "image/png",
+                "dge:figureLegend": (
+                    f"Figure 5. Issue-to-experiment-to-result flow in the MATSUlab discourse "
+                    f"graph. Alluvial (Sankey) diagram showing all {conv['total_claimed']} claimed "
+                    f"experiments flowing through three stages: Issue Created (left, who created "
+                    f"the issue), Claimed By (center, who claimed the experiment), and Result "
+                    f"Created (right, who created the first formal result). Band width is "
+                    f"proportional to number of experiments. Green bands indicate self-claiming; "
+                    f"purple bands indicate cross-person claiming (idea exchange). Of the "
+                    f"{conv['total_claimed']} claimed experiments, {ttr['count']} produced at "
+                    f"least one formal result node. Researcher names are anonymized (R1\u2013R11); "
+                    f"PI (Matt Akamatsu) is identified."
+                ),
+            },
+            {
+                "@type": "schema:WebPage",
+                "schema:contentUrl": "fig5_alluvial_flow.html",
+                "schema:encodingFormat": "text/html",
+                "dc:description": "Interactive Plotly version of the alluvial flow diagram with hover tooltips.",
+            },
+            {
+                "@type": "schema:ImageObject",
+                "schema:contentUrl": "fig5_funnel_supplemental.png",
+                "schema:encodingFormat": "image/png",
+                "dge:figureLegend": (
+                    f"Supplemental Figure. Issue-to-experiment-to-result conversion funnel "
+                    f"(aggregate view). (Left) Horizontal bar chart showing progressive "
+                    f"attrition across three stages: all issues (n={conv['total_issues']}), "
+                    f"claimed experiments (n={conv['total_claimed']}, "
+                    f"{conv['conversion_rate_percent']:.0f}%), and experiments with at least one "
+                    f"formal result (n={ttr['count']}, "
+                    f"{round(ttr['count'] / conv['total_issues'] * 100) if conv['total_issues'] > 0 else 0}%). "
+                    f"(Right) Stage-by-stage breakdown showing composition at each level."
+                ),
+            },
+        ],
         "dge:groundingData": [
             {
                 "@type": "schema:DataDownload",
@@ -415,12 +422,7 @@ def _write_evidence_jsonld(metrics: dict, path: Path):
         "dge:documentation": [
             {
                 "@type": "schema:TextDigitalDocument",
-                "schema:contentUrl": "docs/evidence_statement.md",
-                "dc:description": "Evidence statement, evidence description, and figure legend",
-            },
-            {
-                "@type": "schema:TextDigitalDocument",
-                "schema:contentUrl": "docs/methods_excerpt.md",
+                "schema:contentUrl": "methods_excerpt.md",
                 "dc:description": "Relevant methods sections for claiming detection, RES linking, and metric calculation",
             },
         ],
@@ -491,8 +493,7 @@ def _write_ro_crate_metadata(path: Path):
                     {"@id": "fig5_funnel_supplemental.png"},
                     {"@id": "data/funnel_summary.json"},
                     {"@id": "data/experiment_details.csv"},
-                    {"@id": "docs/evidence_statement.md"},
-                    {"@id": "docs/methods_excerpt.md"},
+                    {"@id": "methods_excerpt.md"},
                 ],
             },
             {
@@ -572,14 +573,7 @@ def _write_ro_crate_metadata(path: Path):
                 "encodingFormat": "text/csv",
             },
             {
-                "@id": "docs/evidence_statement.md",
-                "@type": "File",
-                "name": "Evidence Statement and Figure Legend",
-                "description": "EVD 5 evidence statement, evidence description, and figure legend in markdown.",
-                "encodingFormat": "text/markdown",
-            },
-            {
-                "@id": "docs/methods_excerpt.md",
+                "@id": "methods_excerpt.md",
                 "@type": "File",
                 "name": "Methods Excerpt",
                 "description": (
@@ -610,7 +604,6 @@ def create_evd7_bundle(output_dir: Path, viz_dir: Path, metrics: dict = None) ->
     bundle_dir = output_dir / 'evidence_bundles' / 'evd7-student-onboarding'
     bundle_dir.mkdir(parents=True, exist_ok=True)
     (bundle_dir / 'data').mkdir(exist_ok=True)
-    (bundle_dir / 'docs').mkdir(exist_ok=True)
 
     # Copy the figure
     fig_src = viz_dir / 'fig7_student_timelines.png'
@@ -624,16 +617,8 @@ def create_evd7_bundle(output_dir: Path, viz_dir: Path, metrics: dict = None) ->
     if milestones_src.exists():
         shutil.copy2(milestones_src, milestones_dst)
 
-    # Generate doc files
-    _write_evd7_evidence_statement(bundle_dir / 'docs' / 'evidence_statement.md')
-
     # Generate JSON-LD metadata
-    lab_avg = None
-    if metrics and 'metrics' in metrics:
-        ttr = metrics['metrics'].get('time_to_first_result', {})
-        if ttr.get('count', 0) > 0:
-            lab_avg = ttr['avg_days']
-    _write_evd7_evidence_jsonld(bundle_dir / 'evidence.jsonld', lab_avg_days_to_res=lab_avg)
+    _write_evd7_evidence_jsonld(bundle_dir / 'evidence.jsonld')
 
     # Generate RO-Crate metadata
     _write_evd7_ro_crate_metadata(bundle_dir / 'ro-crate-metadata.json')
@@ -674,7 +659,7 @@ The mean time-to-first-RES for undergraduate researchers (69 days) was faster th
         f.write(content)
 
 
-def _write_evd7_evidence_jsonld(path: Path, lab_avg_days_to_res: float = None):
+def _write_evd7_evidence_jsonld(path: Path):
     """Write the canonical JSON-LD evidence bundle metadata for EVD 7."""
     jsonld = {
         "@context": {
@@ -688,17 +673,16 @@ def _write_evd7_evidence_jsonld(path: Path, lab_avg_days_to_res: float = None):
         "@type": "dge:EvidenceBundle",
         "@id": "evd7-student-onboarding",
         "dc:title": (
-            "[[RES]] - All three undergraduate researchers generated an original result "
-            "from their analysis projects within ~4 months of joining the lab, with two "
-            "creating a result within ~1 month - [[@analysis/quantify researcher onboarding from MATSUlab]]"
+            "[[RES]] - Three undergraduate researchers tracked in this analysis each produced "
+            "a formal result within ~4 months, with two reaching their first result within "
+            "~1 month - [[@analysis/quantify researcher onboarding from MATSUlab]]"
         ),
         "dc:creator": "Matt Akamatsu",
         "dc:date": "2026-01-31",
         "dcterms:license": "https://creativecommons.org/licenses/by/4.0/",
         "dge:evidenceStatement": (
-            "All three undergraduate researchers generated an original result from their "
-            "analysis projects within ~4 months of joining the lab, with two creating a "
-            "result within ~1 month."
+            "Three undergraduate researchers tracked in this analysis each produced a formal "
+            "result within ~4 months, with two reaching their first result within ~1 month."
         ),
         "dge:observable": {
             "@type": "dge:Observable",
@@ -734,19 +718,22 @@ def _write_evd7_evidence_jsonld(path: Path, lab_avg_days_to_res: float = None):
             "schema:memberOf": "Akamatsu Lab, University of Washington",
             "dcterms:temporal": "2026-01-31",
         },
-        "dge:figure": {
-            "@type": "schema:ImageObject",
-            "schema:contentUrl": "fig7_student_timelines.png",
-            "schema:encodingFormat": "image/png",
-            "dge:figureLegend": (
-                "Figure 7. Undergraduate researcher onboarding timeline in the MATSUlab "
-                "discourse graph. Gantt-style chart showing the progression of three "
-                "anonymized undergraduate researchers (A, B, C) from lab start to first "
-                "formal result (RES node). Researcher A: 41 days to experiment, 125 days "
-                "to RES. Researcher B: 5 days to experiment, 47 days to RES. Researcher C: "
-                "7 days to experiment, 36 days to RES."
-            ),
-        },
+        "dge:figure": [
+            {
+                "@type": "schema:ImageObject",
+                "schema:contentUrl": "fig7_student_timelines.png",
+                "schema:encodingFormat": "image/png",
+                "dge:figureLegend": (
+                    "Figure 7. Three undergraduate researchers produced results in 125, 47, "
+                    "and 36 days from start date. Timeline showing the progression of three "
+                    "anonymized undergraduate researchers (A, B, C) from lab start to first "
+                    "formal result (RES node). Milestones tracked: first day in lab, first "
+                    "experiment, first plot, and first RES node. Researcher A: 42 days to "
+                    "experiment, 125 days to RES. Researcher B: 5 days to experiment, 47 days "
+                    "to RES. Researcher C: 7 days to experiment, 36 days to RES."
+                ),
+            },
+        ],
         "dge:groundingData": [
             {
                 "@type": "schema:DataDownload",
@@ -758,8 +745,8 @@ def _write_evd7_evidence_jsonld(path: Path, lab_avg_days_to_res: float = None):
         "dge:documentation": [
             {
                 "@type": "schema:TextDigitalDocument",
-                "schema:contentUrl": "docs/evidence_statement.md",
-                "dc:description": "Evidence statement, evidence description, and figure legend",
+                "schema:contentUrl": "methods_excerpt.md",
+                "dc:description": "Methods excerpt describing milestone tracing methodology and pathway classification",
             },
         ],
         "prov:wasGeneratedBy": {
@@ -781,7 +768,6 @@ def _write_evd7_evidence_jsonld(path: Path, lab_avg_days_to_res: float = None):
             "mean_days_to_res": 69.3,
             "min_days_to_res": 36,
             "max_days_to_res": 125,
-            "lab_average_days_to_res": lab_avg_days_to_res if lab_avg_days_to_res is not None else 88.3,
             "pathways_identified": [
                 "Self-directed exploration",
                 "Assigned entry project",
@@ -813,11 +799,10 @@ def _write_evd7_ro_crate_metadata(path: Path):
                     "MATSUlab Discourse Graph"
                 ),
                 "description": (
-                    "Evidence bundle for the finding that all three undergraduate "
-                    "researchers generated an original result from their analysis "
-                    "projects within ~4 months of joining the lab, with two creating "
-                    "a result within ~1 month. Contains the evidence statement, figure, "
-                    "underlying data, and methodological documentation."
+                    "Evidence bundle for the finding that three undergraduate researchers "
+                    "tracked in this analysis each produced a formal result within ~4 months, "
+                    "with two reaching their first result within ~1 month. Contains the "
+                    "evidence statement, figure, underlying data, and methodological documentation."
                 ),
                 "datePublished": "2026-01-31",
                 "creator": [
@@ -828,7 +813,7 @@ def _write_evd7_ro_crate_metadata(path: Path):
                     {"@id": "evidence.jsonld"},
                     {"@id": "fig7_student_timelines.png"},
                     {"@id": "data/student_milestones.json"},
-                    {"@id": "docs/evidence_statement.md"},
+                    {"@id": "methods_excerpt.md"},
                 ],
             },
             {
@@ -873,10 +858,10 @@ def _write_evd7_ro_crate_metadata(path: Path):
                 "encodingFormat": "application/json",
             },
             {
-                "@id": "docs/evidence_statement.md",
+                "@id": "methods_excerpt.md",
                 "@type": "File",
-                "name": "Evidence Statement and Figure Legend",
-                "description": "EVD 7 evidence statement, evidence description, and figure legend in markdown.",
+                "name": "Methods Excerpt",
+                "description": "Methodology for milestone tracing and pathway classification.",
                 "encodingFormat": "text/markdown",
             },
         ],
@@ -901,18 +886,14 @@ def create_evd1_bundle(metrics: dict, output_dir: Path, viz_dir: Path) -> Path:
     bundle_dir = output_dir / 'evidence_bundles' / 'evd1-conversion-rate'
     bundle_dir.mkdir(parents=True, exist_ok=True)
     (bundle_dir / 'data').mkdir(exist_ok=True)
-    (bundle_dir / 'docs').mkdir(exist_ok=True)
 
     # Copy figures
     fig_files = [
         'fig1_conversion_rate.png',
         'fig1_conversion_rate.html',
-        'fig0_issue_timeline.png',
-        'fig0_issue_timeline.html',
-        'fig0b_creator_heatmap.png',
-        'fig0b_creator_heatmap.html',
-        'fig0c_discourse_growth.png',
-        'fig0_issue_timeline_animated.gif',
+        'figS1_issue_timeline.png',
+        'figS1_issue_timeline.html',
+        'figS1_issue_timeline_animated.gif',
     ]
     for fname in fig_files:
         src = viz_dir / fname
@@ -924,9 +905,8 @@ def create_evd1_bundle(metrics: dict, output_dir: Path, viz_dir: Path) -> Path:
     _write_evd1_conversion_data(metrics, bundle_dir / 'data' / 'conversion_data.json')
     _write_evd1_timeline_data(metrics, bundle_dir / 'data' / 'issue_timeline_data.json')
 
-    # Generate doc files
-    _write_evd1_evidence_statement(metrics, bundle_dir / 'docs' / 'evidence_statement.md')
-    _write_evd1_methods_excerpt(output_dir, bundle_dir / 'docs' / 'methods_excerpt.md')
+    # Generate methods excerpt at bundle root
+    _write_evd1_methods_excerpt(output_dir, bundle_dir / 'methods_excerpt.md')
 
     # Generate JSON-LD metadata
     _write_evd1_evidence_jsonld(metrics, bundle_dir / 'evidence.jsonld')
@@ -941,8 +921,6 @@ def create_evd1_bundle(metrics: dict, output_dir: Path, viz_dir: Path) -> Path:
 def _write_evd1_conversion_data(metrics: dict, path: Path):
     """Write aggregated conversion rate data as JSON."""
     conv = metrics['metrics']['conversion_rate']
-    ttr = metrics['metrics']['time_to_first_result']
-    total_res = sum(d['total_linked_res'] for d in ttr['details']) if ttr['details'] else 0
 
     summary = {
         "description": "Aggregated conversion rate data for EVD 1: Issue Conversion Rate",
@@ -958,19 +936,6 @@ def _write_evd1_conversion_data(metrics: dict, path: Path):
             "explicitly_claimed": conv['explicit_claims'],
             "inferred_claiming": conv['inferred_claims'],
             "iss_with_activity": conv['iss_with_activity'],
-        },
-        "claiming_authorship": {
-            "self_claimed": conv['self_claims'],
-            "cross_person_claiming": conv['cross_person_claims'],
-            "claimed_experiments_with_known_authorship": conv['self_claims'] + conv['cross_person_claims'],
-            "idea_exchange_rate_percent": metrics['metrics']['cross_person_claims']['idea_exchange_rate'],
-        },
-        "result_production": {
-            "claimed_with_results": ttr['count'],
-            "claimed_without_results": conv['total_claimed'] - ttr['count'],
-            "claim_to_result_percent": round(ttr['count'] / conv['total_claimed'] * 100, 1) if conv['total_claimed'] > 0 else 0,
-            "total_res_nodes": total_res,
-            "avg_res_per_producing_experiment": round(total_res / ttr['count'], 1) if ttr['count'] > 0 else 0,
         },
         "issue_composition": {
             "formal_iss_nodes": conv['unclaimed_iss'] + conv['iss_with_activity'],
@@ -1137,7 +1102,7 @@ def _write_evd1_methods_excerpt(output_dir: Path, path: Path):
 
     if not methods_path.exists():
         with open(path, 'w') as f:
-            f.write("# Methods Excerpt\n\nSee `output/methods.md` for full methodological detail.\n")
+            f.write("# Methods Excerpt\n\nSee `data/conversion_data.json` for current data counts.\n")
         return
 
     with open(methods_path, 'r') as f:
@@ -1145,7 +1110,7 @@ def _write_evd1_methods_excerpt(output_dir: Path, path: Path):
 
     lines = full_text.split('\n')
     extracted = ["# Methods Excerpt (EVD 1)\n"]
-    extracted.append("This excerpt contains the methods sections relevant to the issue conversion rate analysis. For the complete methods document, see `output/methods.md`.\n")
+    extracted.append("This excerpt contains the methods sections relevant to the issue conversion rate analysis. See `data/conversion_data.json` for current data counts.\n")
     extracted.append("---\n")
 
     for section_header in sections_to_extract:
@@ -1189,28 +1154,23 @@ def _write_evd1_evidence_jsonld(metrics: dict, path: Path):
         "dc:title": (
             f"[[RES]] - {conv['conversion_rate_percent']:.0f}% of MATSUlab issues "
             f"(n={conv['total_issues']}) were claimed as experiments "
-            f"and {round(ttr['count'] / conv['total_claimed'] * 100) if conv['total_claimed'] > 0 else 0}% "
-            f"of those claimed at least one formal result node, yielding "
-            f"{total_res} total RES nodes - [[@analysis/quantify issue claiming from MATSUlab]]"
+            f"- [[@analysis/quantify issue claiming from MATSUlab]]"
         ),
         "dc:creator": "Matt Akamatsu",
         "dc:date": datetime.now().strftime('%Y-%m-%d'),
         "dcterms:license": "https://creativecommons.org/licenses/by/4.0/",
         "dge:evidenceStatement": (
             f"{conv['conversion_rate_percent']:.0f}% of MATSUlab issues "
-            f"(n={conv['total_issues']}) were claimed as experiments and "
-            f"{round(ttr['count'] / conv['total_claimed'] * 100) if conv['total_claimed'] > 0 else 0}% of "
-            f"those claimed at least one formal result node, yielding {total_res} total RES nodes."
+            f"(n={conv['total_issues']}) were claimed as experiments."
         ),
         "dge:observable": {
             "@type": "dge:Observable",
-            "dc:title": "Issue-to-experiment conversion rate and result production",
+            "dc:title": "Issue-to-experiment conversion rate",
             "dc:description": (
                 f"The proportion of issues posted to a discourse graph Issues board that "
-                f"are claimed as experiments, and the subsequent proportion of those claimed "
-                f"experiments that produce formal result nodes. Measured across "
-                f"{conv['total_issues']} issues, {conv['total_claimed']} claimed experiments, "
-                f"and {total_res} RES nodes in the MATSUlab discourse graph."
+                f"are claimed as experiments. Measured across "
+                f"{conv['total_issues']} issues and {conv['total_claimed']} claimed experiments "
+                f"in the MATSUlab discourse graph."
             ),
         },
         "dge:method": {
@@ -1254,8 +1214,9 @@ def _write_evd1_evidence_jsonld(metrics: dict, path: Path):
                 "schema:contentUrl": "fig1_conversion_rate.png",
                 "schema:encodingFormat": "image/png",
                 "dge:figureLegend": (
-                    f"Figure 1. Issue conversion rate and claiming authorship in the MATSUlab "
-                    f"discourse graph. (Left) Stacked horizontal bar showing the composition "
+                    f"Figure 1. {conv['conversion_rate_percent']:.0f}% of MATSUlab issues "
+                    f"(n={conv['total_issues']}) were claimed as experiments. "
+                    f"(Left) Stacked horizontal bar showing the composition "
                     f"of all {conv['total_issues']} issues: explicitly claimed ({conv['explicit_claims']}, blue), "
                     f"inferred claiming ({conv['inferred_claims']}, green), "
                     f"ISS with activity ({conv['iss_with_activity']}, amber), "
@@ -1293,15 +1254,10 @@ def _write_evd1_evidence_jsonld(metrics: dict, path: Path):
         "dge:documentation": [
             {
                 "@type": "schema:TextDigitalDocument",
-                "schema:contentUrl": "docs/evidence_statement.md",
-                "dc:description": "Evidence statement, evidence description, and figure legend",
-            },
-            {
-                "@type": "schema:TextDigitalDocument",
-                "schema:contentUrl": "docs/methods_excerpt.md",
+                "schema:contentUrl": "methods_excerpt.md",
                 "dc:description": (
                     "Relevant methods sections for node identification, claiming detection, "
-                    "and metric calculation"
+                    "and conversion rate calculation"
                 ),
             },
         ],
@@ -1326,13 +1282,6 @@ def _write_evd1_evidence_jsonld(metrics: dict, path: Path):
             "iss_with_activity": conv['iss_with_activity'],
             "unclaimed_iss": conv['unclaimed_iss'],
             "conversion_rate_percent": conv['conversion_rate_percent'],
-            "experiments_with_results": ttr['count'],
-            "claiming_to_result_percent": round(ttr['count'] / conv['total_claimed'] * 100, 1) if conv['total_claimed'] > 0 else 0,
-            "total_res_nodes": total_res,
-            "avg_res_per_producing_experiment": round(total_res / ttr['count'], 1) if ttr['count'] > 0 else 0,
-            "self_claimed": conv['self_claims'],
-            "cross_person_claiming": conv['cross_person_claims'],
-            "idea_exchange_rate_percent": metrics['metrics']['cross_person_claims']['idea_exchange_rate'],
         },
     }
 
@@ -1372,18 +1321,14 @@ def _write_evd1_ro_crate_metadata(path: Path):
                 "license": {"@id": "https://creativecommons.org/licenses/by/4.0/"},
                 "hasPart": [
                     {"@id": "evidence.jsonld"},
-                    {"@id": "fig0_issue_timeline.png"},
-                    {"@id": "fig0_issue_timeline.html"},
-                    {"@id": "fig0b_creator_heatmap.png"},
-                    {"@id": "fig0b_creator_heatmap.html"},
-                    {"@id": "fig0c_discourse_growth.png"},
-                    {"@id": "fig0_issue_timeline_animated.gif"},
+                    {"@id": "figS1_issue_timeline.png"},
+                    {"@id": "figS1_issue_timeline.html"},
+                    {"@id": "figS1_issue_timeline_animated.gif"},
                     {"@id": "fig1_conversion_rate.png"},
                     {"@id": "fig1_conversion_rate.html"},
                     {"@id": "data/conversion_data.json"},
                     {"@id": "data/issue_timeline_data.json"},
-                    {"@id": "docs/evidence_statement.md"},
-                    {"@id": "docs/methods_excerpt.md"},
+                    {"@id": "methods_excerpt.md"},
                 ],
             },
             {
@@ -1408,9 +1353,9 @@ def _write_evd1_ro_crate_metadata(path: Path):
                 "encodingFormat": "application/ld+json",
             },
             {
-                "@id": "fig0_issue_timeline.png",
+                "@id": "figS1_issue_timeline.png",
                 "@type": ["File", "ImageObject"],
-                "name": "Figure 0: Issue Creation Timeline (static)",
+                "name": "Figure S1: Issue Creation Timeline (static)",
                 "description": (
                     "Cumulative issue creation over time with dual y-axis. "
                     "Left axis: cumulative issue count (claimed vs unclaimed). "
@@ -1420,9 +1365,9 @@ def _write_evd1_ro_crate_metadata(path: Path):
                 "encodingFormat": "image/png",
             },
             {
-                "@id": "fig0_issue_timeline.html",
+                "@id": "figS1_issue_timeline.html",
                 "@type": ["File", "WebPage"],
-                "name": "Figure 0: Issue Creation Timeline (interactive)",
+                "name": "Figure S1: Issue Creation Timeline (interactive)",
                 "description": (
                     "Interactive Plotly version of the issue creation timeline. "
                     "Hover for date and count details. Toggle between discourse node "
@@ -1431,42 +1376,9 @@ def _write_evd1_ro_crate_metadata(path: Path):
                 "encodingFormat": "text/html",
             },
             {
-                "@id": "fig0b_creator_heatmap.png",
+                "@id": "figS1_issue_timeline_animated.gif",
                 "@type": ["File", "ImageObject"],
-                "name": "Figure 0b: Issue Creator Attribution Heatmap (static)",
-                "description": (
-                    "Heatmap showing issue creation by researcher and month. "
-                    "Rows are anonymized researchers, columns are months, cell "
-                    "intensity indicates number of issues created."
-                ),
-                "encodingFormat": "image/png",
-            },
-            {
-                "@id": "fig0b_creator_heatmap.html",
-                "@type": ["File", "WebPage"],
-                "name": "Figure 0b: Creator Attribution Heatmap (interactive)",
-                "description": (
-                    "Interactive heatmap with toggles for different discourse node types "
-                    "(ISS, RES, CLM, HYP, CON, EVD, QUE). Default shows issues; "
-                    "selecting other types reveals per-researcher creation patterns."
-                ),
-                "encodingFormat": "text/html",
-            },
-            {
-                "@id": "fig0c_discourse_growth.png",
-                "@type": ["File", "ImageObject"],
-                "name": "Figure 0c: Discourse Graph Growth by Node Type",
-                "description": (
-                    "Stacked area chart showing cumulative growth of all discourse "
-                    "node types (ISS, RES, CLM, HYP, CON, EVD, QUE, Experiments) "
-                    "over time. Issues' share of the graph visible as band thickness."
-                ),
-                "encodingFormat": "image/png",
-            },
-            {
-                "@id": "fig0_issue_timeline_animated.gif",
-                "@type": ["File", "ImageObject"],
-                "name": "Figure 0 (animated): Issue Creation Timeline",
+                "name": "Figure S1 (animated): Issue Creation Timeline",
                 "description": (
                     "Animated GIF showing cumulative issue creation month by month, "
                     "with running counter. Suitable for presentations."
@@ -1517,19 +1429,12 @@ def _write_evd1_ro_crate_metadata(path: Path):
                 "encodingFormat": "application/json",
             },
             {
-                "@id": "docs/evidence_statement.md",
-                "@type": "File",
-                "name": "Evidence Statement and Figure Legend",
-                "description": "EVD 1 evidence statement, evidence description, and figure legend in markdown.",
-                "encodingFormat": "text/markdown",
-            },
-            {
-                "@id": "docs/methods_excerpt.md",
+                "@id": "methods_excerpt.md",
                 "@type": "File",
                 "name": "Methods Excerpt",
                 "description": (
                     "Relevant sections from the full methods document covering "
-                    "node identification, claiming detection, and metric definitions."
+                    "node identification, claiming detection, and conversion rate calculation."
                 ),
                 "encodingFormat": "text/markdown",
             },
