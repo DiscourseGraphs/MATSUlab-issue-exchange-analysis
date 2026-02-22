@@ -1,6 +1,6 @@
 # EVD 7 — Undergraduate Researcher Onboarding Timeline
 
-### All three undergraduate researchers produced a formal result within ~4 months, with two reaching their first result within ~1 month
+### Three undergraduate researchers tracked in this analysis each produced a formal result within ~4 months, with two reaching their first result within ~1 month
 
 ---
 
@@ -24,8 +24,6 @@ Researcher B joined on October 10, 2024 and was assigned an entry project (`@ana
 
 Researcher C joined on June 23, 2025 and was assigned to an existing experiment (`@analysis/correlate segmented endocytic spots to cell location (apical, basal, lateral) in 3D`) via the "Possible Contributors" field. They began work on June 30, 2025 (7 days), produced first plots on July 7, 2025 (14 days), and created their first RES node on July 29, 2025 (36 days) — the fastest time-to-result among the three.
 
-The mean time-to-first-RES for undergraduate researchers (69 days) was faster than the overall lab average (88.3 days), suggesting that structured onboarding pathways — whether through assigned entry projects or direct experiment assignment — accelerate early productivity while maintaining result quality.
-
 ## Summary
 
 This evidence bundle quantifies how quickly undergraduate researchers produced formal results after joining the lab, comparing three different onboarding pathways through the discourse graph's issue board.
@@ -38,14 +36,6 @@ This evidence bundle quantifies how quickly undergraduate researchers produced f
 | **B** | Oct 10, 2024 | 5 | 5 | **47** | Assigned entry project |
 | **C** | Jun 23, 2025 | 7 | 14 | **36** | Direct assignment |
 
-### Comparison to lab average
-
-| Metric | Undergrad mean | Lab average |
-|--------|---------------:|------------:|
-| Days to first RES | **69** | 88 |
-
-All three undergraduates reached their first formal result faster than the lab-wide average of 88 days, suggesting that structured onboarding through the issue board accelerates early productivity.
-
 ### Onboarding pathways
 
 **Researcher A — Self-directed exploration (125 days)**
@@ -55,7 +45,7 @@ Browsed the issue board independently and chose an experiment matching their int
 Was assigned a specific experiment designed to introduce the lab's simulation and analysis framework. Began producing plots within 5 days of starting. The structured entry point provided a clear on-ramp.
 
 **Researcher C — Direct assignment (36 days)**
-Was added as a contributor to an existing experiment via the `Possible Contributors::` field. Fastest time to result (36 days), benefiting from existing infrastructure and clear deliverables.
+Was added as a contributor to an existing experiment via the `Possible Contributors::` field. Fastest time to result (36 days).
 
 ## Grounding context
 
@@ -64,11 +54,9 @@ The MATSUlab discourse graph uses an **Issues board** — a shared collection of
 Unlike EVD 1 and EVD 5, this analysis is a manually curated case study rather than an automated pipeline output. Readers should keep the following in mind:
 
 - **Milestone dates were manually extracted** by reviewing daily notes and experiment page metadata in Roam Research. They are not computationally derived from the graph export. Dates reflect the analyst's judgment about when each milestone was first reached.
-- **Small sample (n = 3).** The three researchers joined the lab at different times (Feb 2024, Oct 2024, Jun 2025) under potentially different lab conditions, mentorship availability, and issue board maturity. The sample size does not support statistical generalization.
 - **Pathway classification is post-hoc.** The labels "self-directed exploration," "assigned entry project," and "direct assignment" were assigned by the PI based on recollection of how each student was onboarded. They are not properties inferred from the discourse graph structure.
 - **Timeline measures elapsed days, not effort.** Researchers had varying course loads, lab hours, and prior experience. A shorter time-to-result does not necessarily indicate a more effective pathway — it may reflect more available time or more relevant prior skills.
 - **"First RES node" measures formal output, not quality.** The milestone tracks when a formal result page was created in the discourse graph, not whether the result was complete, correct, or publishable.
-- **Lab average comparison (88 days) is drawn from a different population.** The lab-wide average includes all researchers (faculty, graduate students, undergraduates) across the full history of the graph. The undergraduate mean (69 days) is not directly comparable because the populations and time periods differ.
 
 ## Methods
 
@@ -97,6 +85,7 @@ Contact [The Discourse Graphs Project](mailto:discoursegraphsATgmailDOTcom) for 
 ## Attribution
 
 - **Analysis and evidence bundles:** [Matt Akamatsu](https://orcid.org/0000-0002-0286-5310) and [Claude](https://claude.ai) (Anthropic)
+- **Review:** [Joel Chan](https://orcid.org/0000-0003-3000-4160)
 - **Discourse graph system:** [Discourse Graphs Project](https://discoursegraphs.com/), [Joel Chan](https://orcid.org/0000-0003-3000-4160), [Matt Akamatsu](https://orcid.org/0000-0002-0286-5310)
 - **Lab discourse graph data:** [Akamatsu Lab](https://matsulab.com), University of Washington
 - **Discourse Graph extension:** [DiscourseGraphs](https://github.com/DiscourseGraphs/discourse-graph)

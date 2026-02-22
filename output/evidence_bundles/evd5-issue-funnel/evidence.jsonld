@@ -9,11 +9,11 @@
   },
   "@type": "dge:EvidenceBundle",
   "@id": "evd5-issue-funnel",
-  "dc:title": "[[RES]] - 29% of MATSUlab issues (n=445) were claimed as experiments and 38% of those claimed at least one formal result node, yielding 139 total RES nodes - [[@analysis/quantify issue claiming from MATSUlab]]",
+  "dc:title": "[[RES]] - Of 130 claimed experiments in the MATSUlab discourse graph, 50 produced formal results (139 RES nodes), with 15% of claiming involving cross-person idea exchange - [[@analysis/quantify issue claiming from MATSUlab]]",
   "dc:creator": "Matt Akamatsu",
   "dc:date": "2026-02-14",
   "dcterms:license": "https://creativecommons.org/licenses/by/4.0/",
-  "dge:evidenceStatement": "Of 445 total issues in the MATSUlab discourse graph, 130 (29%) were claimed as experiments and 50 (11%) produced at least one formal result node, yielding 139 total RES nodes (avg 2.8 per result-producing experiment).",
+  "dge:evidenceStatement": "Of 130 claimed experiments in the MATSUlab discourse graph, 50 (38%) produced at least one formal result node, yielding 139 total RES nodes (avg 2.8 per result-producing experiment). 15% of claiming involved cross-person idea exchange, where a different researcher claimed an issue created by someone else.",
   "dge:observable": {
     "@type": "dge:Observable",
     "dc:title": "Issue-to-experiment-to-result conversion rate",
@@ -54,19 +54,20 @@
     "schema:memberOf": "Akamatsu Lab, University of Washington",
     "dcterms:temporal": "2026-02-14"
   },
-  "dge:figure": {
-    "@type": "schema:ImageObject",
-    "schema:contentUrl": "fig5_alluvial_flow.png",
-    "schema:encodingFormat": "image/png",
-    "schema:alternateName": "fig5_alluvial_flow.html",
-    "dge:figureLegend": "Figure 5. Issue-to-experiment-to-result flow in the MATSUlab discourse graph. Alluvial (Sankey) diagram showing all 130 claimed experiments flowing through three stages: Issue Created (left, who created the issue), Claimed By (center, who claimed the experiment), and Result Created (right, who created the first formal result). Band width is proportional to number of experiments. Green bands indicate self-claiming; purple bands indicate cross-person claiming (idea exchange). Of the 130 claimed experiments, 50 produced at least one formal result node. Researcher names are anonymized (R1–R11); PI (Matt Akamatsu) is identified. An interactive HTML version is included."
-  },
-  "dge:supplementalFigure": {
-    "@type": "schema:ImageObject",
-    "schema:contentUrl": "fig5_funnel_supplemental.png",
-    "schema:encodingFormat": "image/png",
-    "dge:figureLegend": "Supplemental Figure. Issue-to-experiment-to-result conversion funnel (aggregate view). (Left) Horizontal bar chart showing progressive attrition across three stages: all issues (n=445), claimed experiments (n=130, 29%), and experiments with at least one formal result (n=50, 11%). (Right) Stage-by-stage breakdown showing composition at each level."
-  },
+  "dge:figure": [
+    {
+      "@type": "schema:ImageObject",
+      "schema:contentUrl": "fig5_alluvial_flow.png",
+      "schema:encodingFormat": "image/png",
+      "dge:figureLegend": "Figure 5. Of 130 claimed experiments, 50 (38%) produced formal results (139 RES nodes), and 15% of claiming involved cross-person idea exchange. Alluvial (Sankey) diagram showing all 130 claimed experiments flowing through three stages: Issue Created (left, who created the issue), Claimed By (center, who claimed the experiment), and Result Created (right, who created the first formal result). Band width is proportional to number of experiments. Green bands indicate self-claiming; purple bands indicate cross-person claiming (idea exchange). Researcher names are anonymized (R1\u2013R11); PI (Matt Akamatsu) is identified."
+    },
+    {
+      "@type": "schema:ImageObject",
+      "schema:contentUrl": "fig5_funnel_supplemental.png",
+      "schema:encodingFormat": "image/png",
+      "dge:figureLegend": "Supplemental Figure. Of 130 claimed experiments, 50 (38%) produced formal results, from an initial pool of 445 issues (29% claimed). (Left) Horizontal bar chart showing progressive attrition across three stages. (Right) Stage-by-stage composition breakdown."
+    }
+  ],
   "dge:groundingData": [
     {
       "@type": "schema:DataDownload",
@@ -84,12 +85,7 @@
   "dge:documentation": [
     {
       "@type": "schema:TextDigitalDocument",
-      "schema:contentUrl": "docs/evidence_statement.md",
-      "dc:description": "Evidence statement, evidence description, and figure legend"
-    },
-    {
-      "@type": "schema:TextDigitalDocument",
-      "schema:contentUrl": "docs/methods_excerpt.md",
+      "schema:contentUrl": "methods_excerpt.md",
       "dc:description": "Relevant methods sections for claiming detection, RES linking, and metric calculation"
     }
   ],

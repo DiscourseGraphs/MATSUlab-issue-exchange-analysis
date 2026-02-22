@@ -15,7 +15,7 @@
       "@id": "./",
       "@type": "Dataset",
       "name": "EVD 7: Undergraduate Researcher Onboarding Timeline — MATSUlab Discourse Graph",
-      "description": "Evidence bundle for the finding that all three undergraduate researchers generated an original result from their analysis projects within ~4 months of joining the lab, with two creating a result within ~1 month. Contains the evidence statement, figure, underlying data, and methodological documentation.",
+      "description": "Evidence bundle for the finding that three undergraduate researchers tracked in this analysis each produced a formal result within ~4 months, with two reaching their first result within ~1 month. Contains the evidence statement, figure, underlying data, and methodological documentation.",
       "datePublished": "2026-01-31",
       "creator": [
         {
@@ -81,7 +81,7 @@
       "@id": "methods_excerpt.md",
       "@type": "File",
       "name": "Methods Excerpt",
-      "description": "Methodology for milestone tracing, pathway classification, and lab average comparison.",
+      "description": "Methodology for milestone tracing and pathway classification.",
       "encodingFormat": "text/markdown"
     }
   ]

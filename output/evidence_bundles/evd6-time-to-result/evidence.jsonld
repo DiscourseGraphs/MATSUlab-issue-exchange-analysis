@@ -21,8 +21,8 @@
   },
   "dge:method": {
     "@type": "dge:Method",
-    "dc:title": "Time-to-result interval analysis with bootstrap confidence intervals",
-    "dc:description": "Automated pipeline computing three timing intervals from actual timestamps in the MATSUlab discourse graph: (1) issue creation to claim (page_created to claimed_timestamp), (2) issue creation to first result (page_created to earliest RES node created date), (3) claim to first result (claimed_timestamp to earliest RES node). All intervals use a unified page-creation origin for the swimmer plot visualization. Bootstrap 95% CIs computed from 10,000 resamples.",
+    "dc:title": "Time-to-result interval analysis",
+    "dc:description": "Automated pipeline computing three timing intervals from actual timestamps in the MATSUlab discourse graph: (1) issue creation to claim (page_created to claimed_timestamp), (2) issue creation to first result (page_created to earliest RES node created date), (3) claim to first result (claimed_timestamp to earliest RES node). All intervals use a unified page-creation origin for the swimmer plot visualization.",
     "prov:used": [
       {
         "@id": "src/calculate_metrics.py",
@@ -75,7 +75,14 @@
       "@type": "schema:DataDownload",
       "schema:contentUrl": "data/time_to_result_data.json",
       "schema:encodingFormat": "application/json",
-      "dc:description": "Summary statistics (mean, median, 95% bootstrap CIs, IQR) for all three timing intervals, plus per-experiment anonymized timing data"
+      "dc:description": "Summary statistics (mean, median, IQR) for all three timing intervals, plus per-experiment anonymized timing data"
+    }
+  ],
+  "dge:documentation": [
+    {
+      "@type": "schema:TextDigitalDocument",
+      "schema:contentUrl": "methods_excerpt.md",
+      "dc:description": "Relevant methods sections for timestamp handling, RES node linking, and time-to-result metric calculation"
     }
   ],
   "prov:wasGeneratedBy": {
@@ -107,7 +114,6 @@
     "issue_to_result_median_days": 38,
     "issue_to_result_mean_days": 127.5,
     "claim_to_result_median_days": 12,
-    "claim_to_result_mean_days": 47.6,
-    "ci_method": "10000 bootstrap resamples, percentile method"
+    "claim_to_result_mean_days": 47.6
   }
 }

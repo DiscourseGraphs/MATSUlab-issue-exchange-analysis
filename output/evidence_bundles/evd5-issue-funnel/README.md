@@ -1,6 +1,6 @@
 # EVD 5 — Issue-to-Experiment-to-Result Flow
 
-### 130 of 445 issues were claimed as experiments; 50 produced formal results, with cross-person idea exchange accounting for 15% of claiming
+### Of 130 claimed experiments, 50 produced formal results (139 RES nodes), with 15% of claiming involving cross-person idea exchange
 
 ---
 
@@ -8,7 +8,7 @@
 
 ![Figure 5. Issue-to-experiment-to-result flow](fig5_alluvial_flow.png)
 
-**Figure 5. Of 445 issues, 130 were claimed as experiments with 50 subsequently producing formal results.** Alluvial (Sankey) diagram showing all 130 claimed experiments flowing through three stages: Issue Created (left), Issue Claimed (center), and Result Created (right). Band width is proportional to the number of experiments. Green bands indicate self-claimed; purple bands indicate cross-person claiming (idea exchange). Researcher names are anonymized (R1–R11); the PI (Matt Akamatsu) is identified.
+**Figure 5. Of 130 claimed experiments, 50 (38%) produced formal results (139 RES nodes), and 15% of claiming involved cross-person idea exchange.** Alluvial (Sankey) diagram showing all 130 claimed experiments flowing through three stages: Issue Created (left), Issue Claimed (center), and Result Created (right). Band width is proportional to the number of experiments. Green bands indicate self-claiming; purple bands indicate cross-person claiming (idea exchange). Researcher names are anonymized (R1–R11); the PI (Matt Akamatsu) is identified.
 
 > An [interactive HTML version](fig5_alluvial_flow.html) allows hovering to inspect individual flows (download and open locally).
 
@@ -16,7 +16,7 @@
 
 ![Supplemental. Aggregate funnel view](fig5_funnel_supplemental.png)
 
-**Supplemental Figure. Progressive attrition from 445 issues to 130 claimed experiments (29%) to 50 with formal results (38% of claimed).** Right panel shows composition at each stage.
+**Supplemental Figure. Of 130 claimed experiments, 50 (38%) produced formal results, from an initial pool of 445 issues (29% claimed).** (Left) Horizontal bar chart showing progressive attrition. (Right) Stage-by-stage composition breakdown.
 
 ---
 
@@ -78,7 +78,7 @@ Funnel chart: [`src/generate_visualizations.py`](../../../src/generate_visualiza
 Bundle generator: [`src/create_evidence_bundle.py`](../../../src/create_evidence_bundle.py)
 Full pipeline trace: [`notebooks/evd1_evd7_analysis.ipynb`](../../../notebooks/evd1_evd7_analysis.ipynb)
 
-See [`docs/methods_excerpt.md`](docs/methods_excerpt.md) for detailed methodology covering node identification, claiming detection, and RES linking.
+See [`methods_excerpt.md`](methods_excerpt.md) for detailed methodology covering node identification, claiming detection, and RES linking.
 
 ## Data
 
@@ -100,6 +100,7 @@ Contact [The Discourse Graphs Project](mailto:discoursegraphsATgmailDOTcom) for 
 ## Attribution
 
 - **Analysis and evidence bundles:** [Matt Akamatsu](https://orcid.org/0000-0002-0286-5310) and [Claude](https://claude.ai) (Anthropic)
+- **Review:** [Joel Chan](https://orcid.org/0000-0003-3000-4160)
 - **Discourse graph system:** [Discourse Graphs Project](https://discoursegraphs.com/), [Joel Chan](https://orcid.org/0000-0003-3000-4160), [Matt Akamatsu](https://orcid.org/0000-0002-0286-5310)
 - **Lab discourse graph data:** [Akamatsu Lab](https://matsulab.com), University of Washington
 - **Discourse Graph extension:** [DiscourseGraphs](https://github.com/DiscourseGraphs/discourse-graph)

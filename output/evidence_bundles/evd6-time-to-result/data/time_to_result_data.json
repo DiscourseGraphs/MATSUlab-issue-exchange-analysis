@@ -3,15 +3,7 @@
     "issue_to_claim": {
       "n": 125,
       "mean": 52.8,
-      "mean_95ci": [
-        33.1598,
-        74.592
-      ],
       "median": 0.0,
-      "median_95ci": [
-        0.0,
-        0.0
-      ],
       "iqr": [
         0.0,
         28.0
@@ -22,15 +14,7 @@
     "issue_to_first_result": {
       "n": 50,
       "mean": 127.5,
-      "mean_95ci": [
-        81.5,
-        179.582
-      ],
       "median": 38.0,
-      "median_95ci": [
-        23.0,
-        63.0
-      ],
       "iqr": [
         7.25,
         183.75
@@ -41,15 +25,7 @@
     "claim_to_first_result": {
       "n": 50,
       "mean": 47.6,
-      "mean_95ci": [
-        11.0195,
-        86.00099999999999
-      ],
       "median": 12.0,
-      "median_95ci": [
-        2.5,
-        31.5
-      ],
       "iqr": [
         0.0,
         50.5
@@ -58,7 +34,6 @@
       "max": 433
     }
   },
-  "ci_method": "10,000 bootstrap resamples, percentile method, seed=42",
   "per_experiment": [
     {
       "experiment_id": "Exp_1",

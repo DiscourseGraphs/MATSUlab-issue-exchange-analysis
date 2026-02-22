@@ -15,7 +15,7 @@
       "@id": "./",
       "@type": "Dataset",
       "name": "EVD 6: Time to Result — MATSUlab Discourse Graph",
-      "description": "Evidence bundle for the finding that among 50 experiments in the MATSUlab that produced formal results, the median time from issue claiming to first result was 12 days, with wide variance (n=50, IQR 0\u201350 days). Contains swimmer plot visualization, summary statistics with bootstrap CIs, and per-experiment timing data.",
+      "description": "Evidence bundle for the finding that among 50 experiments in the MATSUlab that produced formal results, the median time from issue claiming to first result was 12 days, with wide variance (n=50, IQR 0\u201350 days). Contains swimmer plot visualization, summary statistics, and per-experiment timing data.",
       "datePublished": "2026-02-15",
       "creator": [
         {
@@ -40,6 +40,9 @@
         },
         {
           "@id": "data/time_to_result_data.json"
+        },
+        {
+          "@id": "methods_excerpt.md"
         }
       ]
     },
@@ -97,8 +100,15 @@
       "@id": "data/time_to_result_data.json",
       "@type": "File",
       "name": "Time-to-Result Summary Data",
-      "description": "Summary statistics (mean, median, 95% bootstrap CIs, IQR, min, max) for three timing intervals (issue-to-claim, issue-to-result, claim-to-result), plus per-experiment anonymized timing records.",
+      "description": "Summary statistics (mean, median, IQR, min, max) for three timing intervals (issue-to-claim, issue-to-result, claim-to-result), plus per-experiment anonymized timing records.",
       "encodingFormat": "application/json"
+    },
+    {
+      "@id": "methods_excerpt.md",
+      "@type": "File",
+      "name": "Methods Excerpt",
+      "description": "Relevant methods sections for timestamp handling, RES node linking, and time-to-result metric calculation.",
+      "encodingFormat": "text/markdown"
     }
   ]
 }

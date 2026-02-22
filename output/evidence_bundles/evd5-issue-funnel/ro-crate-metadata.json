@@ -15,7 +15,7 @@
       "@id": "./",
       "@type": "Dataset",
       "name": "EVD 5: Issue-to-Experiment-to-Result Conversion Funnel — MATSUlab Discourse Graph",
-      "description": "Evidence bundle for the finding that 29% of MATSUlab issues (n=445) were claimed as experiments and 11% produced at least one formal result node, yielding 139 total RES nodes. Contains the evidence statement, figure, underlying data, and methodological documentation.",
+      "description": "Evidence bundle for the finding that of 130 claimed experiments, 50 produced formal results (139 RES nodes), with 15% of claiming involving cross-person idea exchange. Contains figures, underlying data, and methodological documentation.",
       "datePublished": "2026-02-14",
       "creator": [
         {
@@ -45,10 +45,7 @@
           "@id": "data/experiment_details.csv"
         },
         {
-          "@id": "docs/evidence_statement.md"
-        },
-        {
-          "@id": "docs/methods_excerpt.md"
+          "@id": "methods_excerpt.md"
         }
       ]
     },
@@ -117,14 +114,7 @@
       "encodingFormat": "text/csv"
     },
     {
-      "@id": "docs/evidence_statement.md",
-      "@type": "File",
-      "name": "Evidence Statement and Figure Legend",
-      "description": "EVD 5 evidence statement, evidence description, and figure legend in markdown.",
-      "encodingFormat": "text/markdown"
-    },
-    {
-      "@id": "docs/methods_excerpt.md",
+      "@id": "methods_excerpt.md",
       "@type": "File",
       "name": "Methods Excerpt",
       "description": "Relevant sections from the full methods document covering node identification, claiming detection, RES linking, and metric definitions.",

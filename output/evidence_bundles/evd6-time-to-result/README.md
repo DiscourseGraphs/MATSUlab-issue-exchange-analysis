@@ -16,13 +16,11 @@
 
 ## Summary Statistics
 
-| Metric | n | Mean (days) | 95% CI | Median (days) | 95% CI | IQR |
-|--------|--:|------------:|-------:|--------------:|-------:|----:|
-| Issue creation → Claim | 125 | 52.8 | [33.2, 73.7] | 0 | [0, 0] | 0–28 |
-| Issue creation → First result | 50 | 127.5 | [81.6, 179.6] | 38 | [23, 63] | 7–184 |
-| Claim → First result | 50 | 47.6 | [10.7, 87.1] | 12 | [2, 31] | 0–50 |
-
-*95% confidence intervals computed via 10,000 bootstrap resamples (percentile method).*
+| Metric | n | Mean (days) | Median (days) | IQR |
+|--------|--:|------------:|--------------:|----:|
+| Issue creation → Claim | 125 | 52.8 | 0 | 0–28 |
+| Issue creation → First result | 50 | 127.5 | 38 | 7–184 |
+| Claim → First result | 50 | 47.6 | 12 | 0–50 |
 
 ---
 
@@ -55,11 +53,13 @@ Time-to-result calculation: [`src/calculate_metrics.py`](../../../src/calculate_
 Swimmer plot visualization: [`src/experiment_lifecycle_visualizations.py`](../../../src/experiment_lifecycle_visualizations.py) — `create_swimmer_plot()`, `_create_swimmer_plot_static()`
 Full pipeline trace: [`notebooks/evd1_evd7_analysis.ipynb`](../../../notebooks/evd1_evd7_analysis.ipynb)
 
+See [`methods_excerpt.md`](methods_excerpt.md) for detailed methodology.
+
 ## Metadata
 
 - [`evidence.jsonld`](evidence.jsonld) — Canonical JSON-LD metadata (evidence statement, observable, method, provenance)
 - [`ro-crate-metadata.json`](ro-crate-metadata.json) — RO-Crate 1.1 manifest
-- [`data/time_to_result_data.json`](data/time_to_result_data.json) — Summary statistics with bootstrap CIs, and per-experiment timing intervals (anonymized)
+- [`data/time_to_result_data.json`](data/time_to_result_data.json) — Summary statistics and per-experiment timing intervals (anonymized)
 
 ## Source material
 
@@ -71,6 +71,7 @@ Contact [The Discourse Graphs Project](mailto:discoursegraphsATgmailDOTcom) for 
 ## Attribution
 
 - **Analysis and evidence bundles:** [Matt Akamatsu](https://orcid.org/0000-0002-0286-5310) and [Claude](https://claude.ai) (Anthropic)
+- **Review:** [Joel Chan](https://orcid.org/0000-0003-3000-4160)
 - **Discourse graph system:** [Discourse Graphs Project](https://discoursegraphs.com/), [Joel Chan](https://orcid.org/0000-0003-3000-4160), [Matt Akamatsu](https://orcid.org/0000-0002-0286-5310)
 - **Lab discourse graph data:** [Akamatsu Lab](https://matsulab.com), University of Washington
 - **Discourse Graph extension:** [DiscourseGraphs](https://github.com/DiscourseGraphs/discourse-graph)
