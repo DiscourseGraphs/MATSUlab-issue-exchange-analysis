@@ -9,11 +9,11 @@
   },
   "@type": "dge:EvidenceBundle",
   "@id": "evd1-conversion-rate",
-  "dc:title": "[[RES]] - 29% of MATSUlab issues (n=445) were claimed as experiments, and 15% of those were claimed by a different lab member than the issue creator - [[@analysis/quantify issue claiming from MATSUlab]]",
+  "dc:title": "[[RES]] - 29% of MATSUlab issues (n=445) were claimed as experiments - [[@analysis/quantify issue claiming from MATSUlab]]",
   "dc:creator": "Matt Akamatsu",
   "dc:date": "2026-02-14",
   "dcterms:license": "https://creativecommons.org/licenses/by/4.0/",
-  "dge:evidenceStatement": "29% of MATSUlab issues (n=445) were claimed as experiments, and 15% of those were claimed by a different lab member than the issue creator.",
+  "dge:evidenceStatement": "29% of MATSUlab issues (n=445) were claimed as experiments.",
   "dge:observable": {
     "@type": "dge:Observable",
     "dc:title": "Issue-to-experiment conversion rate and result production",
@@ -75,13 +75,8 @@
   "dge:documentation": [
     {
       "@type": "schema:TextDigitalDocument",
-      "schema:contentUrl": "docs/evidence_statement.md",
-      "dc:description": "Evidence statement, evidence description, and figure legend"
-    },
-    {
-      "@type": "schema:TextDigitalDocument",
-      "schema:contentUrl": "docs/methods_excerpt.md",
-      "dc:description": "Relevant methods sections for node identification, claiming detection, and metric calculation"
+      "schema:contentUrl": "methods_excerpt.md",
+      "dc:description": "Relevant methods sections for node identification, claiming detection, and conversion rate calculation"
     }
   ],
   "prov:wasGeneratedBy": {
@@ -112,13 +107,6 @@
     "inferred_claiming": 56,
     "iss_with_activity": 5,
     "unclaimed_iss": 315,
-    "conversion_rate_percent": 29.2,
-    "experiments_with_results": 50,
-    "claiming_to_result_percent": 38.5,
-    "total_res_nodes": 139,
-    "avg_res_per_producing_experiment": 2.8,
-    "self_claimed": 106,
-    "cross_person_claiming": 19,
-    "idea_exchange_rate_percent": 15.2
+    "conversion_rate_percent": 29.2
   }
 }

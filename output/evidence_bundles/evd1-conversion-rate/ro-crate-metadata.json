@@ -15,7 +15,7 @@
       "@id": "./",
       "@type": "Dataset",
       "name": "EVD 1: Issue Conversion Rate — MATSUlab Discourse Graph",
-      "description": "Evidence bundle for the finding that 29% of MATSUlab issues (n=445) were claimed as experiments, and 15% of those were claimed by a different lab member than the issue creator. Contains the evidence statement, static and interactive figures, underlying data, and methodological documentation.",
+      "description": "Evidence bundle for the finding that 29% of MATSUlab issues (n=445) were claimed as experiments. Contains the evidence statement, static and interactive figures, underlying data, and methodological documentation.",
       "datePublished": "2026-02-14",
       "creator": [
         {
@@ -51,10 +51,7 @@
           "@id": "data/issue_timeline_data.json"
         },
         {
-          "@id": "docs/evidence_statement.md"
-        },
-        {
-          "@id": "docs/methods_excerpt.md"
+          "@id": "methods_excerpt.md"
         }
       ]
     },
@@ -143,17 +140,10 @@
       "encodingFormat": "application/json"
     },
     {
-      "@id": "docs/evidence_statement.md",
-      "@type": "File",
-      "name": "Evidence Statement and Figure Legend",
-      "description": "EVD 1 evidence statement, evidence description, and figure legend in markdown.",
-      "encodingFormat": "text/markdown"
-    },
-    {
-      "@id": "docs/methods_excerpt.md",
+      "@id": "methods_excerpt.md",
       "@type": "File",
       "name": "Methods Excerpt",
-      "description": "Relevant sections from the full methods document covering node identification, claiming detection, and metric definitions.",
+      "description": "Relevant sections from the full methods document covering node identification, claiming detection, and conversion rate calculation.",
       "encodingFormat": "text/markdown"
     }
   ]

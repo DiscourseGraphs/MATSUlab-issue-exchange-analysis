@@ -1,6 +1,6 @@
 # Methods Excerpt (EVD 1)
 
-This excerpt contains the methods sections relevant to the issue conversion rate analysis. For the complete methods document, see `output/methods.md`.
+This excerpt contains the methods sections relevant to the issue conversion rate analysis. See `data/conversion_data.json` for current data counts.
 
 ---
 
@@ -25,19 +25,6 @@ Issue nodes are identified by `[[ISS]]` appearing in the page title.
 **Pattern:** `re.search(r'\[\[ISS\]\]', title)` — `src/parse_jsonld.py`, `extract_nodes_by_type()` (line 30)
 
 These represent Issues that remain in their original, unclaimed state (i.e., they were never converted to an Experiment page).
-
-### 2.3 Result (RES) Nodes
-
-Result nodes are identified by `[[RES]]` appearing in the page title. Example:
-
-`[[RES]] - some result description - [[@analysis/experiment name]]`
-
-RES titles frequently contain a backreference to their source experiment in `[[@type/name]]` format.
-
-**Pattern:** `re.search(r'\[\[RES\]\]', title)` — `src/parse_jsonld.py`, `extract_nodes_by_type()` (line 30)
-
----
-
 
 ---
 
@@ -102,9 +89,6 @@ ISS pages with no experimental log entries are considered unclaimed.
 
 ---
 
-
----
-
 ## 6. Metric Definitions and Calculations
 
 ### 6.1 Metric 1: Issue Conversion Rate
@@ -132,106 +116,3 @@ Conversion Rate = Total Claimed / Total Issues × 100
 **Result:** 29.2%
 
 **Implementation:** `src/calculate_metrics.py`, `calculate_conversion_rate()` (line 165)
-
-### 6.2 Metric 2: Time-to-Claiming
-
-**Definition:** Duration (in days) from when an Issue was created to when it was claimed.
-
-**Formula:**
-
-```
-Time-to-Claiming = Claiming Timestamp − Issue Creation Date
-```
-
-Where:
-- **Claiming Timestamp** = `create-time` of the `Claimed By::` block (explicitly claimed) or earliest experimental log entry (inferred)
-- **Issue Creation Date** = minimum of (JSON-LD `created`, Roam page `create-time`, earliest block `create-time`) — see Section 4.1
-
-**Inclusion criteria:** Only experiments with both a known claiming timestamp and a known issue creation date are included. This yields 125 experiments (out of 130 claimed).
-
-**Results:**
-| Statistic | Value |
-|-----------|-------|
-| Average | 53.5 days |
-| Median | 0 days |
-| Min | 0 days |
-| Max | 483 days |
-
-The high frequency of 0-day values reflects cases where an issue was created and immediately claimed (same day).
-
-**Implementation:** `src/calculate_metrics.py`, `calculate_time_to_claim()` (line 221)
-
-### 6.3 Metric 3: Time-to-First-Result
-
-**Definition:** Duration (in days) from when an experiment was claimed to when the first linked Result (RES) node was created.
-
-**Formula:**
-
-```
-Time-to-First-Result = Earliest Linked RES Creation Date − Reference Timestamp
-```
-
-Where:
-- **Reference Timestamp** =
-  - For explicitly claimed: `Claimed By::` block `create-time`
-  - For inferred claiming: Issue creation date (page_created), since there is no formal claiming event
-- **Earliest Linked RES** = the RES node with the earliest `created` date among those linked to the experiment (see Section 5 for linking methods)
-
-**Inclusion criteria:** Only claimed experiments that have at least one linked RES node with a parseable creation date. This yields 50 experiments.
-
-**Results:**
-| Statistic | Value |
-|-----------|-------|
-| Average | 88.3 days |
-| Min | −1 days |
-| Max | 754 days |
-
-The single −1 day case represents a RES node created approximately 6 minutes before the `Claimed By::` block was populated — likely filled in during the same session.
-
-**Implementation:** `src/calculate_metrics.py`, `calculate_time_to_first_result()` (line 371)
-
-### 6.4 Metric 4: Unique Contributors per Issue Chain
-
-**Definition:** Count of distinct researchers involved in the full Issue → Experiment → Result chain for each claimed experiment.
-
-**Contributors include:**
-- `Issue Created By::` person
-- `Claimed By::` person
-- Page `creator` (from JSON-LD)
-- `creator` of each linked RES node
-
-**Results:**
-| Contributors | Experiments |
-|-------------|-------------|
-| 1 | 90 |
-| 2 | 29 |
-| 3 | 3 |
-| **Average** | **1.29** |
-
-**Implementation:** `src/calculate_metrics.py`, `calculate_unique_contributors()` (line 446)
-
-### 6.5 Metric 5: Cross-Person Claiming (Idea Exchange)
-
-**Definition:** Cases where the person who claimed an issue (`Claimed By::`) is different from the person who created the issue (`Issue Created By::`). This is the key metric demonstrating transfer of ideas between researchers.
-
-**Formula:**
-
-```
-Idea Exchange Rate = Cross-Person Claiming / (Cross-Person Claiming + Self-Claiming) × 100
-```
-
-Only experiments where both `Issue Created By` and `Claimed By` are known are included in the denominator. Experiments with unknown issue creators are excluded from the rate calculation.
-
-**Results:**
-| Metric | Value |
-|--------|-------|
-| Cross-Person Claiming | 19 |
-| Self-Claiming | 106 |
-| Idea Exchange Rate | 15.2% |
-
-**Implementation:** `src/calculate_metrics.py`, `calculate_cross_person_claims()` (line 524)
-
----
-
-
----
