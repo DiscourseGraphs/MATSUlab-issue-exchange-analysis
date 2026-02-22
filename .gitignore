@@ -18,6 +18,9 @@ __pycache__/
 .claude/
 CLAUDE_CODE_PROMPT.md
 
+# Name mapping (contains real researcher names)
+src/name_mapping.json
+
 # Output files not tracked (contain real names or are intermediate)
 output/metrics_report.md
 output/executive_summary.md

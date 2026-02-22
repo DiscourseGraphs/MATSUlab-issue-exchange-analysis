@@ -9,27 +9,34 @@ before sharing data publicly.
 The PI (Matt Akamatsu) remains identified as the evidence bundle creator.
 All other lab members are anonymized as R1, R2, R3, etc.
 
+The actual name-to-pseudonym mapping is loaded from ``name_mapping.json``,
+which is gitignored to protect researcher identities. See
+``name_mapping.example.json`` for the expected format.
+
 Author: Matt Akamatsu (with Claude)
 Date: 2026-02-12
 """
 
+import json
+from pathlib import Path
+
+_MAPPING_PATH = Path(__file__).parent / 'name_mapping.json'
+
+
+def _load_mapping() -> dict:
+    """Load the name-to-pseudonym mapping from the JSON file."""
+    if not _MAPPING_PATH.exists():
+        raise FileNotFoundError(
+            f"Name mapping file not found: {_MAPPING_PATH}\n"
+            f"Copy name_mapping.example.json to name_mapping.json and fill in real names."
+        )
+    with open(_MAPPING_PATH) as f:
+        return json.load(f)
+
+
 # Mapping from real names to pseudonyms
 # PI stays identified; all others anonymized
-NAME_TO_PSEUDONYM = {
-    'Matt Akamatsu': 'Matt Akamatsu',  # PI stays identified
-    'R1': 'R1',
-    'R2': 'R2',
-    'R3': 'R3',
-    'R4': 'R4',
-    'R5': 'R5',
-    'R5': 'R5',  # Same person as R5
-    'R6': 'R6',
-    'R7': 'R7',
-    'R8': 'R8',
-    'R9': 'R9',
-    'R10': 'R10',
-    'R11': 'R11',
-}
+NAME_TO_PSEUDONYM = _load_mapping()
 
 # Reverse mapping for reference (pseudonym -> real name)
 # NOT used in pipeline outputs; only for internal reference
@@ -45,10 +52,10 @@ def anonymize_name(name: str) -> str:
     Returns None if input is None.
 
     Args:
-        name: Real researcher name (e.g., 'R3')
+        name: Real researcher name
 
     Returns:
-        Pseudonym (e.g., 'R3') or original name if not in map
+        Pseudonym or original name if not in map
     """
     if name is None:
         return None
@@ -58,63 +65,79 @@ def anonymize_name(name: str) -> str:
     if name in NAME_TO_PSEUDONYM:
         return NAME_TO_PSEUDONYM[name]
 
-    # Try normalizing R5_surname variants
-    if 'R5_surname' in name:
-        return NAME_TO_PSEUDONYM.get('R5', name)
+    # Try partial match on last name for variant spellings
+    for full_name, pseudonym in NAME_TO_PSEUDONYM.items():
+        parts = full_name.split()
+        if len(parts) >= 2 and parts[-1] in name:
+            return pseudonym
 
     return name
+
+
+def _build_first_name_map() -> dict:
+    """
+    Build a first-name/nickname replacement map from the loaded mapping.
+
+    Automatically derives first names and common nicknames from the
+    full names in NAME_TO_PSEUDONYM. This avoids hardcoding any
+    researcher names in source code.
+    """
+    result = {}
+
+    for full_name, pseudonym in NAME_TO_PSEUDONYM.items():
+        if full_name == pseudonym:
+            continue  # Skip PI (identity preserved)
+
+        parts = full_name.split()
+        if not parts:
+            continue
+
+        first_name = parts[0]
+
+        # Add "FirstName " and "FirstName's" patterns
+        result[f"{first_name}'s"] = f"{pseudonym}'s"
+        result[f"{first_name} "] = f"{pseudonym} "
+        result[f"{first_name}-"] = f"{pseudonym}-"
+
+    # Add common nickname overrides (keyed by pseudonym for safety)
+    # These map short names to the same pseudonym as the full name
+    _nickname_overrides = {
+        'R2': ['Ben'],
+        'R4': ['Abhi'],
+    }
+    for target_pseudonym, nicknames in _nickname_overrides.items():
+        for nick in nicknames:
+            result[f"{nick}'s"] = f"{target_pseudonym}'s"
+            result[f"{nick} "] = f"{target_pseudonym} "
+            result[f"{nick}-"] = f"{target_pseudonym}-"
+
+    return result
 
 
 def anonymize_title(title: str) -> str:
     """
     Anonymize researcher names that appear embedded within experiment titles.
 
-    Handles cases like "R1's updates to the pipeline..." or
-    "R4 -Run image analysis pipeline..." where first names appear
-    as part of the title text rather than in a structured name field.
+    Handles cases where first names appear as part of the title text
+    rather than in a structured name field.
 
     Args:
         title: Experiment title string
 
     Returns:
-        Title with embedded first names replaced by pseudonyms
+        Title with embedded names replaced by pseudonyms
     """
     if title is None:
         return None
 
-    # Map first names / nicknames to their full-name pseudonyms
-    FIRST_NAME_MAP = {
-        "R1's": f"{NAME_TO_PSEUDONYM['R1']}'s",
-        "R1 ": f"{NAME_TO_PSEUDONYM['R1']} ",
-        "R4 ": f"{NAME_TO_PSEUDONYM['R4']} ",
-        "R4-": f"{NAME_TO_PSEUDONYM['R4']}-",
-        "R3's": f"{NAME_TO_PSEUDONYM['R3']}'s",
-        "R3 ": f"{NAME_TO_PSEUDONYM['R3']} ",
-        "R11's": f"{NAME_TO_PSEUDONYM['R11']}'s",
-        "R11 ": f"{NAME_TO_PSEUDONYM['R11']} ",
-        "R2 ": f"{NAME_TO_PSEUDONYM['R2']} ",
-        "R2's": f"{NAME_TO_PSEUDONYM['R2']}'s",
-        "R2's": f"{NAME_TO_PSEUDONYM['R2']}'s",
-        "R6's": f"{NAME_TO_PSEUDONYM['R6']}'s",
-        "R6 ": f"{NAME_TO_PSEUDONYM['R6']} ",
-        "R5's": f"{NAME_TO_PSEUDONYM['R5']}'s",
-        "R5 ": f"{NAME_TO_PSEUDONYM['R5']} ",
-        "R7's": f"{NAME_TO_PSEUDONYM['R7']}'s",
-        "R7 ": f"{NAME_TO_PSEUDONYM['R7']} ",
-        "R8's": f"{NAME_TO_PSEUDONYM['R8']}'s",
-        "R9's": f"{NAME_TO_PSEUDONYM['R9']}'s",
-        "R9 ": f"{NAME_TO_PSEUDONYM['R9']} ",
-        "R10's": f"{NAME_TO_PSEUDONYM['R10']}'s",
-        "R10 ": f"{NAME_TO_PSEUDONYM['R10']} ",
-    }
-
-    # Also replace full names that might appear in titles
+    # Replace full names that might appear in titles
     for full_name, pseudonym in NAME_TO_PSEUDONYM.items():
         if full_name in title and full_name != 'Matt Akamatsu':
             title = title.replace(full_name, pseudonym)
 
     # Replace first names / nicknames
-    for fragment, replacement in FIRST_NAME_MAP.items():
+    first_name_map = _build_first_name_map()
+    for fragment, replacement in first_name_map.items():
         if fragment in title:
             title = title.replace(fragment, replacement)
 
