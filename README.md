@@ -19,19 +19,18 @@ Each bundle contains:
 | `fig*.png` | Static figure (primary visualization) |
 | `fig*.html` | Interactive figure (Plotly or HTML/JS, where applicable) |
 | `data/` | Underlying data files (JSON or CSV) sufficient to regenerate the figure |
-| `docs/evidence_statement.md` | Human-readable evidence statement, description, and figure legend |
-| `docs/methods_excerpt.md` | Relevant methods sections for the specific analysis |
+| `methods_excerpt.md` | Relevant methods sections for the specific analysis |
 
 #### EVD 1 — Issue Conversion Rate (`evd1-conversion-rate/`)
 
-> 18% of MATSUlab issues (n=389) were claimed as experiments and 36% of those produced at least one formal result node, yielding 44 total RES nodes.
+> 29% of MATSUlab issues (n=445) were claimed as experiments.
 
-- **Figure:** Stacked bar chart showing issue composition + donut chart for self vs. cross-person claiming
+- **Figure:** Stacked bar chart showing the composition of all 445 issues (explicitly claimed, inferred, unclaimed)
 - **Data:** `conversion_data.json`
 
-#### EVD 5 — Issue-to-Result Flow (`evd5-issue-funnel/`)
+#### EVD 5 — Issue-to-Experiment-to-Result Flow (`evd5-issue-funnel/`)
 
-> Of 389 total issues, 69 (18%) were claimed as experiments and 25 (6%) produced at least one formal result node, yielding 44 total RES nodes.
+> Of 130 claimed experiments, 50 produced formal results (139 RES nodes), with 15% of claiming involving cross-person idea exchange.
 
 - **Primary figure:** Alluvial (Sankey) diagram showing researcher-level flow from Issue Created → Claimed By → Result Created
 - **Supplemental figure:** Aggregate conversion funnel bar chart
@@ -42,11 +41,11 @@ Each bundle contains:
 > Among 50 experiments in the MATSUlab that produced formal results, the median time from issue claiming to first result was 12 days, with wide variance (n=50, IQR 0–50 days).
 
 - **Figure:** Swimmer plot showing experiment lifecycles from issue creation through claiming to result production (linear, log-scale, and interactive versions)
-- **Data:** `data/time_to_result_data.json` (summary statistics with bootstrap CIs and per-experiment timing intervals)
+- **Data:** `data/time_to_result_data.json` (summary statistics and per-experiment timing intervals)
 
 #### EVD 7 — Undergraduate Researcher Onboarding (`evd7-student-onboarding/`)
 
-> All three undergraduate researchers generated an original result from their analysis projects within ~4 months of joining the lab, with two creating a result within ~1 month.
+> Three undergraduate researchers tracked in this analysis each produced a formal result within ~4 months, with two reaching their first result within ~1 month.
 
 - **Figure:** Pin/stem timeline showing four milestones (lab start, first experiment, first plot, first result) for three researchers
 - **Data:** `student_milestones.json`
