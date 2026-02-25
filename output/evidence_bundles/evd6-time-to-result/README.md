@@ -10,7 +10,7 @@
 
 **Figure 6c. Among 50 experiments in the MATSUlab that produced formal results, the median time from issue claiming to first result was 12 days, with wide variance (n=50, IQR 0–50 days).** Each horizontal lane represents one experiment (n=50), sorted by time from issue creation to first result. Grey circle: issue creation (day 0). Blue diamond: date the experiment was claimed. Red star: first formal result (RES node). Light red circles: subsequent results. Orange background bars: self-claimed experiments. Purple background bars: cross-person claiming. The x-axis shows days from issue creation (page creation date), providing a unified timeline for all milestones.
 
-[Narrative post](https://experiment.com/u/Hd2AYg#:~:text=3.%20Three%20students%20generated%20a%20result%201%2D3%20months%20after%20joining%20the%20lab)
+[Narrative post](https://experiment.com/u/Hd2AYg#:~:text=4.%20Researchers%20spent%20a%20variable%20amount%20of%20time%20after%20claiming%20an%20issue%20until%20their%20first%20result%2C%20with%20a%20median%20of%2012%20days)
 
 ---
 
