@@ -4,13 +4,13 @@
 
 ---
 
-## Figure
+## Key figure
 
 ![Figure 6c. Experiment lifecycle swimmer plot](fig6c_swimmer_plot.png)
 
 **Figure 6c. Among 50 experiments in the MATSUlab that produced formal results, the median time from issue claiming to first result was 12 days, with wide variance (n=50, IQR 0–50 days).** Each horizontal lane represents one experiment (n=50), sorted by time from issue creation to first result. Grey circle: issue creation (day 0). Blue diamond: date the experiment was claimed. Red star: first formal result (RES node). Light red circles: subsequent results. Orange background bars: self-claimed experiments. Purple background bars: cross-person claiming. The x-axis shows days from issue creation (page creation date), providing a unified timeline for all milestones.
 
-> A [log-scale supplemental version](figS6c_swimmer_plot_log.png) and an [interactive HTML version](fig6c_swimmer_plot.html) with hover tooltips are also included.
+[Narrative post](https://experiment.com/u/Hd2AYg#:~:text=3.%20Three%20students%20generated%20a%20result%201%2D3%20months%20after%20joining%20the%20lab)
 
 ---
 
@@ -46,6 +46,8 @@ Readers should be aware of the following when interpreting the numbers above:
 - **Sample is conditioned on result production.** The 50 experiments analyzed here are those that produced at least one RES node. The 80 claimed experiments without results are not included. Time-to-result for the full population is right-censored (the Kaplan-Meier survival analysis in Fig 6f addresses this).
 - **Unified x-axis correction.** An earlier version of the swimmer plot used mixed origins for claim vs. result markers (claim days from page creation, result days from claim timestamp for explicit claims). This was corrected so that all markers use page creation as day 0.
 - **Snapshot date.** All timestamps reflect a February 2026 export of the MATSUlab discourse graph.
+
+> A [log-scale supplemental version of the key figure](figS6c_swimmer_plot_log.png) and an [interactive HTML version](fig6c_swimmer_plot.html) with hover tooltips are also included.
 
 ## Methods
 
