@@ -14,13 +14,13 @@
 
 ---
 
-## Figure
+## Key figure
 
 ![Figure 1. Issue conversion rate and claiming authorship](fig1_conversion_rate.png)
 
 **Figure 1. 29% of MATSUlab issues (n=445) were claimed as experiments.** Stacked horizontal bar showing the composition of all 445 issues. Blue: explicitly claimed via `Claimed By::` metadata field (n=69). Green: inferred as claimed based on experimental log entries authored by the page creator (n=56). Amber: ISS pages with experimental log activity but no formal conversion to experiment format (n=5). Grey: unclaimed ISS pages with no evidence of active work (n=315). Bracket indicates total claimed issues (130, 29.2%).
 
-> An [interactive HTML version](fig1_conversion_rate.html) is also included (download and open locally).
+[Narrative post](https://experiment.com/u/Hd2AYg#:~:text=1.%20The%20lab%20has%20created%20445%20issues%20in%20the%20last%2040%20months%2C%20with%2029%25%20claimed%20as%20experiments)
 
 ---
 
@@ -53,6 +53,8 @@ Readers should be aware of the following when interpreting the numbers above:
 - **Issue count depends on naming conventions.** The 445 total issues comprise 320 formal `[[ISS]]` pages plus 125 experiment pages identified by the `@type/` prefix. Research questions articulated in other formats (e.g. daily notes, meeting notes) are not counted.
 - **Result linking uses a three-tier fallback.** RES nodes are matched to experiments via (1) explicit JSON-LD relation instances, (2) backreferences in RES titles, or (3) substring matching on experiment descriptions (≥20 characters). Results stored informally — in daily notes, figures without RES pages, or external tools — are not captured. The 38% result rate is therefore a lower bound.
 - **Snapshot date.** All counts reflect a single February 2026 export. Work in progress at the time of export is counted as "no result yet."
+
+> An [interactive HTML version of the key figure](fig1_conversion_rate.html) is also included (download and open locally).
 
 ## Methods
 
