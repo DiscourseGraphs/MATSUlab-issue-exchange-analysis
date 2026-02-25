@@ -4,13 +4,13 @@
 
 ---
 
-## Figure
+## Key figure
 
 ![Figure 7. Undergraduate researcher onboarding timeline](fig7_student_timelines.png)
 
 **Figure 7. Use of the issues board led to three undergraduate researchers producing results in 125, 47, and 36 days from start date.** Timeline showing the progression of three anonymized undergraduate researchers (A, B, C) from lab start to first formal result (RES node). Milestones tracked: first day in lab, first experiment, first plot, and first RES node. Numbers indicate days from lab start. Researcher A followed a self-directed exploration pathway (125 days to RES). Researcher B was assigned an entry project (47 days). Researcher C was directly assigned to an existing experiment (36 days).
 
-> An [interactive HTML version](fig7_student_timelines.html) is also included (download and open locally).
+[Narrative post](https://experiment.com/u/Hd2AYg#:~:text=3.%20Three%20students%20generated%20a%20result%201%2D3%20months%20after%20joining%20the%20lab)
 
 ---
 
@@ -57,6 +57,8 @@ Unlike EVD 1 and EVD 5, this analysis is a manually curated case study rather th
 - **Pathway classification is post-hoc.** The labels "self-directed exploration," "assigned entry project," and "direct assignment" were assigned by the PI based on recollection of how each student was onboarded. They are not properties inferred from the discourse graph structure.
 - **Timeline measures elapsed days, not effort.** Researchers had varying course loads, lab hours, and prior experience. A shorter time-to-result does not necessarily indicate a more effective pathway — it may reflect more available time or more relevant prior skills.
 - **"First RES node" measures formal output, not quality.** The milestone tracks when a formal result page was created in the discourse graph, not whether the result was complete, correct, or publishable.
+
+> An [interactive HTML version of the key figure](fig7_student_timelines.html) is also included (download and open locally).
 
 ## Methods
 
