@@ -3,21 +3,19 @@
 ### Of 130 claimed experiments, 50 produced formal results (139 RES nodes), with 15% of claiming involving cross-person idea exchange
 
 ---
-
-## Figure
-
 ![Figure 5. Issue-to-experiment-to-result flow](fig5_alluvial_flow.png)
 
 **Figure 5. Of 130 claimed experiments, 50 (38%) produced formal results (139 RES nodes), and 15% of claiming involved cross-person idea exchange.** Alluvial (Sankey) diagram showing all 130 claimed experiments flowing through three stages: Issue Created (left), Issue Claimed (center), and Result Created (right). Band width is proportional to the number of experiments. Green bands indicate self-claiming; purple bands indicate cross-person claiming (idea exchange). Researcher names are anonymized (R1–R11); the PI (Matt Akamatsu) is identified.
 
-> An [interactive HTML version](fig5_alluvial_flow.html) allows hovering to inspect individual flows (download and open locally).
+[Narrative post](https://experiment.com/u/Hd2AYg#:~:text=2.%2038%25%20of%20claimed%20issues%20led%20to%20a%20new%20research%20result)
 
 ### Supplemental
+
+> An [interactive HTML version of the key figure](fig5_alluvial_flow.html) allows hovering to inspect individual flows (download and open locally).
 
 ![Supplemental. Aggregate funnel view](fig5_funnel_supplemental.png)
 
 **Supplemental Figure. Of 130 claimed experiments, 50 (38%) produced formal results, from an initial pool of 445 issues (29% claimed).** (Left) Horizontal bar chart showing progressive attrition. (Right) Stage-by-stage composition breakdown.
-
 ---
 
 ## Evidence description
